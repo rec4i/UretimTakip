@@ -1,0 +1,115 @@
+﻿@model WebIU.Models.Setting.SystemUserLogListSearchViewModel
+@{
+    ViewData["Title"] = "SystemUserLogListSearch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header text-right bg-white">
+                @if (AuthorizationService.AuthorizeAsync(User, Permission.Setting.SystemUserLogListSearch).Result.Succeeded)
+                {
+                    <input type="button" value="@Language["ExportManager"]" class=" btn btn-primary" />
+                }
+            </div>
+        </div>
+    </div>
+    @using (Html.BeginForm("SystemUserLogListSearch", "Setting", FormMethod.Post, new { @class = "form-group", @enctype = "multipart/form-data", @id = "searchForm" }))
+    {
+        <div class="col-md-12 ">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2 mb-2">
+                            <input asp-for="Search.Id" class="form-control" placeholder="LogId" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <input asp-for="Search.UserId" class="form-control" placeholder="UserId" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <input asp-for="Search.ActionName" class="form-control" placeholder="ActionName" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <input asp-for="Search.ControllerName" class="form-control" placeholder="ControllerName" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <input asp-for="Search.IPAdress" class="form-control" placeholder="IPAdress" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <input asp-for="Search.Log" class="form-control" placeholder="Log" />
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <div class="form-group">
+                                <select asp-for="Search.TrxResult" class="form-control">
+                                    <option value="@null">Choose trxResult status...</option>
+                                    <option value="Success">Success</option>
+                                    <option value="Fail">Fail</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">LogDate</span>
+                                </div>
+                                <input type="text" class="form-control float-right" asp-for="Search.LogDate" id="reservation">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-right">
+                        <input type="submit" value="@Language["Search"]" form="searchForm" class="btn btn-primary" />
+                        <a asp-action="SystemUserLogListSearch" asp-controller="Setting" class="btn btn-warning"><i class="fa-solid fa-broom"></i> @Language["Clear"]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-md-12">
+        <div class="card ">
+            @if (Model.SystemUserLogs != null)
+            {
+                <div class="card-body" style="max-height:500px; overflow:scroll">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>@Language["SystemUserId"]</th>
+                                    <th>@Language["ActionName"]</th>
+                                    <th>@Language["ControllerName"]</th>
+                                    <th>IPAdress</th>
+                                    <th>@Language["Log"]</th>
+                                    <th>TrxResult</th>
+                                    <th>@Language["LogDate"]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.SystemUserLogs)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.SystemUserId</td>
+                                        <td>@item.ActionName</td>
+                                        <td>@item.ControllerName</td>
+                                        <td>@item.IPAdress</td>
+                                        <td>@item.Log</td>
+                                        <td>@item.TrxResult</td>
+                                        <td>@item.LogDate</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card-body">
+                    <p>@Language["NoRecordFound"]</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+﻿@model WebIU.Models.Profile.ProfileListViewModel
+
+
+<div class="row">
+    <div class="col">
+        <div class="card card-outline card-primary">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <a href="/Profile/AddProfile" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="table">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Profile Name</th>
+                                        <th>User Id</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Profiles.Count() > 0)
+                                    {
+                                        @foreach (var item in Model.Profiles)
+                                        {
+                                            <tr>
+                                                <td>@item.ProfileName</td>
+                                                <td>@item.UserId</td>
+                                                <td class="text-center">
+                                                    <a href="/Profile/EditProfile/@item.Id" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                                    <a onclick="entityDelete('/Profile/DeleteProfile/@item.Id', '@item.ProfileName')" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="text-center" colspan="3">There is no item</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

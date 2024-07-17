@@ -1,0 +1,47 @@
+﻿@using Entities.Concrete
+@using Tools.Concrete.HelperClasses.EntityHelpers
+@model WebIU.Models.ViewComponentModels.SideBarMenuItemViewModel
+
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a asp-action="Index" asp-controller="Home" class="brand-link">
+        @*C:\Users\Recai\source\repos\EdisPortal\WebUI\wwwroot\images\logo2.png*@
+        <img src="../../images/logo1.jpg" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">RPC-NeoVoc Systems</span>
+    </a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="~/images/UserImages/@Model.UserImage" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <h5><a asp-action="AccountInformation" asp-controller="Account"  class="d-block">@Model.UserName</a></h5>
+@*                <h6 class="d-block text-white ">@Model.UserRoleName</h6>
+                <h6 class="d-block text-white">@Model.LastLoginDate</h6>*@
+            </div>
+        </div>
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2" id="NavBar">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <partial name="Partials/_sideBarMenuRecursivePartial" model="@Model.MenuItems" />
+            </ul>
+            @*<li class="nav-header">EXAMPLES</li>*@
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

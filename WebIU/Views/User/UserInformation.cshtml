@@ -1,0 +1,179 @@
+﻿@model WebIU.Models.User.UserInformationViewModel
+@{
+    ViewData["Title"] = "UserInformation";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="border-bottom">Kişisel Bilgiler</h4>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <img src="~/Images/UserImages/@Model.User.Image" class="img-circle shadow-sm align-middle my-3" width="200" height="200" /><br>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label asp-for="User.UserName"></label>
+                                        <h5>@Model.User.UserName</h5>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label asp-for="User.Email"></label>
+                                        <h5>@Model.User.Email</h5>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label asp-for="User.PhoneNumber"></label>
+                                        <h5>@Model.User.PhoneNumber</h5>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label asp-for="User.Job"></label>
+                                        <h5>@Model.User.Job</h5>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label asp-for="User.CultureName"></label>
+                                        <h5>@Model.CultureName</h5>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label asp-for="User.CountryId"></label>
+                                        <h5>@Model.CountryName</h5>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label asp-for="User.RoleNames"></label>
+                                        <h5>
+                                            <ul>
+                                                @foreach (var role in Model.User.RoleNames)
+                                                {
+                                                    <li>@role</li>
+                                                }
+                                            </ul>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="border-bottom">Sistem Bilgileri</h4>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group my-3">
+                                <label asp-for="User.AddedDate"></label>
+                                <h5>@Model.User.AddedDate.GetValueOrDefault().ToString("dd.MMM.yy")</h5>
+                                @if (!String.IsNullOrEmpty(Model.AddedUserName))
+                                {
+                                    <span>Ekleyen kullanıcı: @Model.AddedUserName</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group my-3">
+                                <label asp-for="User.UpdateDate"></label>
+                                <h5>@Model.User.UpdateDate.GetValueOrDefault().ToString("dd.MMM.yy")</h5>
+                                @if (!String.IsNullOrEmpty(Model.UpdatedUserName))
+                                {
+                                    <span>Güncelleyen kullanıcı: @Model.UpdatedUserName</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group my-3">
+                                <label asp-for="User.LastLoginDate"></label>
+                                <h5>@Model.User.LastLoginDate.GetValueOrDefault().ToString("dd.MMM.yy")</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="border-bottom">Engel Bilgileri</h4>
+                        </div>
+                        @if (Model.User.BanStatus)
+                        {
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <label asp-for="User.BanStart"></label>
+                                    <h5>@Model.User.BanStart.GetValueOrDefault().ToString("dd.MMM.yy")</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <label asp-for="User.BanEnd"></label>
+                                    <h5>@Model.User.BanEnd.GetValueOrDefault().ToString("dd.MMM.yy")</h5>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group my-3">
+                                    <label asp-for="User.BanComment"></label>
+                                    <p>@Html.Raw(Model.User.BanComment)</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <input type="hidden" asp-for="User.Id" />
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-sm-12">
+                                <div class="form-group my-3">
+                                    <h6>Engel bilgisi bulunmamaktadır.</h6>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-footer text-right bg-white">
+                <a asp-action="AllUserList" asp-controller="User" class="btn btn-warning text-white"><i class="fa-solid fa-arrow-rotate-left "></i> Geri</a>
+                @if (AuthorizationService.AuthorizeAsync(User, Permission.User.EditUserInformation).Result.Succeeded)
+                {
+                    <a asp-action="EditUserInformation" asp-controller="User" asp-route-userId="@Model.User.Id" class="btn btn-primary"><i class="far fa-edit"></i> Düzenle</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,167 @@
+﻿@model WebIU.Models.User.EditUserInformationViewModel
+@{
+    ViewData["Title"] = "EditUserInformation";
+}
+<div class="row">
+    @using (Html.BeginForm("EditUserInformation", "User", FormMethod.Post, new { @class = "form-group", @enctype = "multipart/form-data" }))
+    {
+        <div class="col-md-12">
+            <div class="card card-primary card-outline">
+
+                <div class="card-body">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="border-bottom">Kişisel Bilgiler</h4>
+                            </div>
+                            <div class="col-12 mt-2 text-right">
+                                <label asp-for="User.Status"></label>
+                                <input asp-for="User.Status" />
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="form-group my-3">
+                                    <label asp-for="User.Image" class="mt-2"></label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input onchange="loadFile(event)" asp-for="ImageFile" class="mt-2 custom-file-input" type="file" />
+                                            <label class="custom-file-label" asp-for="ImageFile">Choose file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img src="~/Images/UserImages/@Model.User.Image" class="img-circle shadow-lg align-middle UploadImage my-3" width="200" height="200" /><br>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group my-3">
+                                            <label asp-for="User.UserName"></label>
+                                            <input asp-for="User.UserName" class="form-control" required placeholder="UserName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group my-3">
+                                            <label asp-for="User.Email"></label>
+                                            <input asp-for="User.Email" class="form-control" required placeholder="Email" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group my-3">
+                                            <label asp-for="User.PhoneNumber"></label>
+                                            <input asp-for="User.PhoneNumber" class="form-control" required placeholder="PhoneNumber" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group my-3">
+                                            <label asp-for="User.Job"></label>
+                                            <input asp-for="User.Job" class="form-control" required placeholder="Job" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group my-3">
+                                            <label asp-for="User.CultureName"></label>
+                                            <select asp-for="User.CultureName" class="form-control">
+                                                @foreach (var culture in Model.Cultures)
+                                                {
+                                                    <option value="@culture.Name">@culture.Text<span>(@culture.Name)</span></option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group my-3">
+                                            <label asp-for="User.CountryId"></label>
+                                            <select asp-for="User.CountryId" class="form-control">
+                                                @foreach (var country in Model.Countries)
+                                                {
+                                                    <option value="@country.Id">@country.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group my-3">
+                                            <label>Profile :</label>
+                                            <select asp-for="User.ProfileId" class="form-control">
+                                                @foreach (var country in Model.Profiles)
+                                                {
+                                                    <option value="@country.Id">@country.ProfileName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group my-3">
+                                            <label asp-for="RoleNames"></label>
+                                            <select class="select2" multiple="multiple" asp-for="RoleNames" data-placeholder="Select Role(s)" style="width: 100%;">
+                                                @foreach (var role in Model.Roles)
+                                                {
+                                                    <option value="@role.Name">@role.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <input type="hidden" asp-for="User.Id" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4 class="border-bottom">Engel Bilgileri</h4>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group my-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input asp-for="User.BanStatus" class="custom-control-input custom-control-input-danger custom-control-input-outline LockoutEnabledCheckbox" type="checkbox">
+                                        <label asp-for="User.BanStatus" class="custom-control-label">Kullanıcıyı yasakla</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 LockoutEndArea">
+                                <div class="form-group my-3">
+                                    <label asp-for="User.BanEnd"></label>
+                                    <input asp-for="User.BanEnd" class="form-control" type="date"><br />
+                                </div>
+                            </div>
+                            <div class="col-sm-8 LockoutEndArea">
+                                <div class="form-group my-3">
+                                    <label asp-for="User.BanComment"></label>
+                                    <textarea asp-for="User.BanComment" class="form-control ckeditor" id="ckeditor1"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <input type="hidden" asp-for="User.Id" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-footer text-right">
+                    <a asp-action="AllUserList" asp-controller="User" class="btn btn-warning text-white"><i class="fa-solid fa-arrow-rotate-left "></i> Geri</a>
+                    <input type="submit" value="Değişiklikleri Kaydet" class=" btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

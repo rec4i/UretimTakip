@@ -1,0 +1,174 @@
+﻿@model WebIU.Models.UrunViewModels.UrunIndexViewModel
+
+
+
+@{
+    int counter = 0;
+}
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="card" style="position: relative; left: 0px; top: 0px;">
+                    <div class="card-header ui-sortable-handle">
+                        <h3 class="card-title">
+                            <i class="ion ion-clipboard mr-1"></i>
+                            Yapılacak İşler
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <ul class="todo-list ui-sortable" data-widget="todo-list">
+                            @foreach (var item in Model.UrunAşamalarıs)
+                            {
+                                if (item.TamamlanmaDurumu)
+                                {
+                                    <li class="">
+                                        <span class="handle ui-sortable-handle">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </span>
+                                        <div class="icheck-primary d-inline ml-2">
+                                            <input UrunAşamaId="@item.Id" type="checkbox" value="" name="todo@(counter)" id="todoCheck@(counter)" checked="">
+                                            <label for="todoCheck@(counter)"></label>
+                                        </div>
+                                        <span class="text">@item.Iş.IşAdı</span>
+                                        @if (item.İşeBaşlamaZamanı != null)
+                                        {
+                                            <small class="badge badge-danger"><i class="far fa-clock"></i> @item.İşeBaşlamaZamanı</small>
+                                        }
+                                        @if (item.İşiBitirmeZamanı != null)
+                                        {
+                                            <small class="badge badge-success"><i class="far fa-clock"></i>@item.İşiBitirmeZamanı</small>
+                                        }
+                                        @if (item.İşiÜstlenenKullanıcı != null)
+                                        {
+                                            <small class="badge badge-warning"><i class="far fa-user"></i>@item.İşiÜstlenenKullanıcı.UserName</small>
+                                        }
+                                        @*@if (item.İşiÜstlenenKullanıcı != null)
+                                        {
+                                            <small class="badge badge-warning"><i class="far fa-user"></i>@Model.Tezgahs.Where(o => o.Id == item.Iş.TezgahId).FirstOrDefault().TezgahAdı</small>
+                                        }*@
+
+                                        <div class="tools">
+                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-trash-o"></i>
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="">
+                                        <span class="handle ui-sortable-handle">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </span>
+
+                                        <div class="icheck-primary d-inline ml-2">
+                                            <input UrunAşamaId="@item.Id" type="checkbox" value="" name="todo@(counter)" id="todoCheck@(counter)">
+                                            <label for="todoCheck@(counter)"></label>
+                                        </div>
+
+                                        <span class="text">@item.Iş.IşAdı</span>
+                                        @if (item.İşeBaşlamaZamanı != null)
+                                        {
+                                            <small class="badge badge-danger"><i class="far fa-clock"></i> @item.İşeBaşlamaZamanı</small>
+                                        }
+                                        @if (item.İşiBitirmeZamanı != null)
+                                        {
+                                            <small class="badge badge-success"><i class="far fa-clock"></i>@item.İşiBitirmeZamanı</small>
+                                        }
+                                        @if (item.İşiÜstlenenKullanıcı != null)
+                                        {
+                                            <small class="badge badge-warning"><i class="far fa-user"></i>@item.İşiÜstlenenKullanıcı.UserName</small>
+                                        }
+                                        @if (item.İşiÜstlenenKullanıcı != null)
+                                        {
+                                            <small class="badge badge-warning"><i class="far fa-user"></i>@item.İşiÜstlenenKullanıcı.UserName</small>
+                                        }
+
+                                        <div class="tools">
+                                            <i class="fas fa-edit"></i>
+                                        </div>
+                                    </li>
+
+                                }
+                                counter++;
+
+                            }
+
+
+
+
+
+
+                        </ul>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        <button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('input[id*="todoCheck"]').each(function () {
+            $(this).change(function () {
+                var UrunAşamaId = $(this).attr('UrunAşamaId');
+                var checked = $(this).is(':checked');
+
+
+
+
+                Swal.fire({
+                    title: "Urunun İş Aşaması Güncellenecek Onayluyormusunuz !",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Evet",
+                    denyButtonText: `Hayır`,
+                    cancelButtonText: "Vazgeç"
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        var data = new FormData();
+                        data.append('Id', UrunAşamaId)
+                        data.append('TamamlanmaDurumu', checked)
+
+                        $.ajax({
+                            url: "/Urun/SetUrunAşama",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                successAlert(data)
+                            },
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Değişklikler Kaydedilmedi", "", "info");
+                    }
+                });
+
+
+
+
+
+            })
+        })
+
+
+
+
+    })
+</script>

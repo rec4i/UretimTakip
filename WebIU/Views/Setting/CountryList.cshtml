@@ -1,0 +1,173 @@
+﻿@model WebIU.Models.Setting.CountryListViewModel
+@{
+    ViewData["Title"] = "CountryList";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <a asp-action="CountryAddAndEdit" asp-controller="Setting" class="btn btn-primary mb-2"><i class="fa-solid fa-plus"></i>Add New Country</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="CountryTable"
+                           data-toolbar="#UserListToolBar"
+                           data-pagination="true"
+                           data-side-pagination="server"
+                           data-id-field="id"
+                           data-page-list="[10, 25, 50, 100, all]"
+                           data-locale="@Language["locale"]
+                           data-search="true"
+                           data-show-refresh="true"
+                           data-show-export="true">
+                        <thead>
+                            <tr>
+                                <th data-field="id" data-sortable="true" >Id</th>
+                                <th data-field="name" data-title="@Language["Name"]" data-sortable="true" >Name</th>
+                                <th data-field="shortName" data-title="@Language["ShortName"]" data-sortable="true" >ShortName</th>
+                                <th data-field="row" data-title="@Language["Row"]" data-sortable="true" >Row</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function operateFormatter(value, row, index) {
+        return [
+            ' @if (AuthorizationService.AuthorizeAsync(User, Permission.Setting.CountryAddAndEdit).Result.Succeeded)
+           {
+               var anchor = new TagBuilder("a");
+               anchor.MergeAttribute("href", "/Setting/CountryAddAndEdit?Id=%ENTITYID");
+               anchor.MergeAttribute("class", "btn btn-primary btn-sm mx-1");
+
+               var Icon = new TagBuilder("i");
+               Icon.MergeAttribute("class", "far fa-edit  p-1");
+
+               anchor.InnerHtml.AppendHtml(Icon);
+
+                @anchor
+            }'
+
+            ,
+
+            ' @if (AuthorizationService.AuthorizeAsync(User, Permission.Setting.CountryDelete).Result.Succeeded)
+            {
+                var anchor = new TagBuilder("a");
+                anchor.MergeAttribute("onclick", "entityDelete('/Setting/CountryDelete?id=%ENTITYID','')");
+                anchor.MergeAttribute("class", "btn btn-danger btn-sm mx-1");
+
+                var Icon = new TagBuilder("i");
+                Icon.MergeAttribute("class", "far fa-trash-alt  p-1");
+
+                anchor.InnerHtml.AppendHtml(Icon);
+
+                @anchor
+
+            }'
+        ].join('').replaceAll("%ENTITYID", row["id"])
+    }
+    $(document).ready(function () {
+        $('#CountryTable').bootstrapTable({
+            url: "/Setting/TableWithJson_CountryList?",
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {
+                        field: 'operate',
+                        title: 'Item Operate',
+                        align: 'center',
+                        clickToSelect: false,
+                        formatter: operateFormatter
+                    }]
+            ]
+        })
+
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a asp-action="CountryAddAndEdit" asp-controller="Setting" class="btn btn-primary mb-2"><i class="fa-solid fa-plus"></i>Add New Country</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                     <th>ShortName</th>
+                                    <th>Row</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var country in Model.Countries)
+                                {
+                                    <tr>
+                                        <td>@country.Id</td>
+                                        <td>@country.Name</td>
+                                        <td>@country.ShortName</td>
+                                        <td>@country.Row</td>
+                                        <td class="text-right">
+                                            <div class="btn-group" role="group">
+                                                @if (AuthorizationService.AuthorizeAsync(User, Permission.Setting.CountryAddAndEdit).Result.Succeeded)
+                                                {
+                                                    <a asp-action="CountryAddAndEdit" asp-controller="Setting" asp-route-Id="@country.Id" class="btn btn-primary btn-sm mx-1"><i class="far fa-edit  p-1"></i></a>
+                                                }
+                                                @if (AuthorizationService.AuthorizeAsync(User, Permission.Setting.CountryDelete).Result.Succeeded)
+                                                {
+                                                    <a onclick="entityDelete('/Setting/CountryDelete?Id=@country.Id','@country.Name')" class="btn btn-danger btn-sm mx-1"><i class="far fa-trash-alt  p-1"></i></a>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+

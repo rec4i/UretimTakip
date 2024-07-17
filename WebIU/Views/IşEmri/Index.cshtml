@@ -1,0 +1,472 @@
+﻿@model WebIU.Models.IşEmriViewModels.IşEmriIndexViewModel
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-primary" id="İşEmriOluşturModalAçBtn"><i class="fa fa-plus"></i> İş Emri Oluştur</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="OrderList"
+                               data-toolbar="#OrderListToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="İşEmriAdı" data-title="İş Emri Adı" data-sortable="false"></th>
+                                    <th data-field="hedefÜretim" data-title="Hedeflenen Adet" data-sortable="false"></th>
+                                    <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="IşEmriEkleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">Tezhag Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="IşEmriEkleModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>İş Emri Adı:</label>
+                        <input type="text" id="İşEmriAdı" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Açıklama:</label>
+                        <textarea class="form-control" id="Açıklama" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Hedeflenen Adet:</label>
+                        <input data-Mask="numeric" type="text" id="HedeflenenAdet" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label>Reçete :</label>
+                        <select style="width:100%" id="ReçeteSelect" class="form-control">
+                            @foreach (var item in Model.Reçetes)
+                            {
+                                <option açıklama="@item.Açıklama" value="@item.Id">@item.ReçeteAdı</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="YeniTezgahEkleBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="QrKodBastırModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">QrKod Bastır</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="IşEmriEkleModalBody">
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-primary" id="SeçiliOlanlarıİndir"><i class="fa fa-download"></i> Seçili Olanları İndir</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="QrKodListesi"
+                                               data-toolbar="#QrKodListesiToolBar"
+                                               data-pagination="true"
+                                               data-side-pagination="server"
+                                               data-id-field="id"
+                                               data-page-list="[10, 25, 50, 100, all]"
+                                               data-locale="Tr-tr"
+                                               data-search="true"
+                                               data-click-to-select="true"
+                                               data-show-refresh="true"
+                                               data-show-export="true">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                                    <th data-field="guid" data-title="Guid" data-sortable="false"></th>
+                                                    @*<th data-field="hedefÜretim" data-title="Hedeflenen Adet" data-sortable="false"></th>
+                                                        <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>*@
+                                                    <th data-title="Actions" data-sortable="false"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+@*<script>
+        function convertHTMLtoPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Hello world!", 100, 100);
+            doc.save("newFile.pdf");
+        }
+    </script>*@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#SeçiliOlanlarıİndir').click(function () {
+
+            const { jsPDF } = window.jspdf;
+            const canvas = document.createElement('canvas');
+            const qrDataList = [
+              
+            ];
+
+            for (var i = 0; i < $("#QrKodListesi").bootstrapTable('getSelections').length; i++) {
+                var guid = $("#QrKodListesi").bootstrapTable('getSelections')[i].guid
+
+                qrDataList.push("1-"+guid)
+
+            }
+
+            const qrSize = 50; // QR kodu boyutu
+            const margin = 10; // Kenar boşluğu
+            const pageHeight = 297; 
+            const pdf = new jsPDF();
+
+            let currentX = margin;
+            let currentY = margin;
+
+            qrDataList.forEach((qrData, index) => {
+                // QR kodunu oluşturmak için bir canvas elemanı oluşturun
+                const canvas = document.createElement('canvas');
+
+                var qrcode = new QRCode(canvas, {
+                    text: qrData,
+                    width: 128,
+                    height: 128,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                pdf.addImage(qrcode._oDrawing._elCanvas.toDataURL("image/png"), 'PNG', currentX, currentY, qrSize, qrSize);
+
+                // X ve Y koordinatlarını güncelle
+                if ((index + 1) % 3 === 0) {
+                    // Yeni satıra geç
+                    currentX = margin;
+                    currentY += qrSize + margin;
+
+                    if (currentY + qrSize + margin > pageHeight) {
+                        pdf.addPage();
+                        currentY = margin; // Yeni sayfa başlangıcı
+                    }
+                } else {
+                    // Aynı satırda bir sonraki QR koduna geç
+                    currentX += qrSize + margin;
+                }
+
+                // Son QR koddan sonra PDF'i kaydet
+                if (index === qrDataList.length - 1) {
+                    pdf.save('qrcodes.pdf');
+                }
+              
+            });
+
+
+        })
+
+        $('#İşEmriOluşturModalAçBtn').click(function () {
+            $('#IşEmriEkleModal').modal('show')
+        })
+
+        OrderTablosuDoldur()
+
+
+
+        $('#YeniTezgahEkleBtn').click(function () {
+            var data = new FormData();
+            data.append('İşEmriAdı', $('#İşEmriAdı').val())
+            data.append('Açıklama', $('#Açıklama').val())
+            data.append('HedefAdet', $('#HedeflenenAdet').val())
+            data.append('ReçeteId', $('#ReçeteSelect').find(':selected').val())
+
+
+
+            $.ajax({
+                url: "/IşEmri/IşEmriEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    successAlert(data)
+                    OrderTablosuDoldur()
+                },
+            });
+
+        })
+
+
+    })
+    function QrTablosuDoldur(İşEmriId) {
+        $('#QrKodListesi').bootstrapTable("destroy")
+        $('#QrKodListesi').bootstrapTable({
+            url: "/IşEmri/GetUrunPagination?İşEmriId=" + İşEmriId,
+            columns: [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+            value += "<button id='TezgahDüzenleModalAçBtn' guid='" + row["guid"] + "' TezgahId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-qrcode'></i> Qr Kodu Bastır</button> ";
+
+            return value
+        }
+        function afterLoad() {
+            $('#TezgahSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('TezgahId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/Tezgah/TezgahSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                successAlert(data)
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+            })
+
+
+
+
+            $('#TezgahDüzenleModalAçBtn').click(function () {
+
+
+                const { jsPDF } = window.jspdf;
+                const canvas = document.createElement('canvas');
+                var qrcode = new QRCode(canvas, {
+                    text: "1-" + $(this).attr('guid'),
+                    width: 128,
+                    height: 128,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+
+                console.log(canvas.querySelector("img").src);
+                console.log(canvas);
+                console.log($(canvas).children().html());
+
+                const pdf = new jsPDF();
+                //var _data = $(canvas).find('img').attr('src')
+                // QR kodunu canvas üzerinden veriyi alarak PDF'e ekle
+                const imgData = canvas.toDataURL("image/jpeg");
+                console.log(qrcode._oDrawing._elCanvas.toDataURL("image/png"));
+                pdf.addImage(qrcode._oDrawing._elCanvas.toDataURL("image/png"), 'PNG', 10, 10, 50, 50);
+
+                // PDF dosyasını indir
+                pdf.save('qrcode.pdf');
+
+
+            })
+
+        }
+
+    }
+
+
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/IşEmri/GetIşEmriPagination",
+            columns: [
+                [
+
+                    {},
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+            value += "<button id='TezgahDüzenleModalAçBtn' TezgahId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-qrcode'></i> Qr Kodu Bastır</button> ";
+            value += "<button id='TezgahSil' TezgahId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+            return value
+        }
+        function afterLoad() {
+            $('*#TezgahSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('TezgahId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/IşEmri/İşEmriSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                successAlert(data)
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+            $('#TezgahDüzenleModalAçBtn').click(function () {
+                $('#QrKodBastırModal').modal('show')
+                var data = new FormData();
+                data.append('Id', $(this).attr('TezgahId'))
+                $('#YeniTezgahDüzenleBtn').attr('TezgahId', $(this).attr('TezgahId'))
+
+
+                QrTablosuDoldur($(this).attr('TezgahId'))
+                //$.ajax({
+                //    url: "/IşEmri/İşEmriSil",
+                //    type: "POST",
+                //    processData: false,
+                //    contentType: false,
+                //    async: false,
+                //    data: data,
+                //    success: function (data) {
+
+
+                //    },
+                //});
+
+            })
+
+        }
+
+    }
+
+
+
+</script>

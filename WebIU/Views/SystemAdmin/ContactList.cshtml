@@ -1,0 +1,61 @@
+﻿@model WebIU.Models.SystemAdmin.ContactListViewModel
+@{
+    ViewData["Title"] = "ContactList";
+    int row = 1;
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="ContactTable" class="table table-hover" data-locale="@Language["locale"]>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>@Language["SubjectType"]</th>
+                                <th style="width:30%">@Language["Subject"]</th>
+                                <th>@Language["Date"]</th>
+                                <th>@Language["Users"]</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var contact in Model.ContactList)
+                            {
+                                var user = Model.Users.Where(p => p.Id == contact.AddedUserId).FirstOrDefault();
+                                <tr>
+                                    <td class="align-middle">
+                                        @row @{
+                                            row++;
+                                        }
+                                    </td>
+                                    <td class="align-middle">@contact.SubjecTtype</td>
+                                    <td class="align-middle">@contact.Subject</td>
+                                    <td class="align-middle">@contact.AddedDate.ToString("dd/MMM/yy")</td>
+                                    <td class="align-middle">
+                                        <img src="~/images/UserImages/@user.Image" class="img-circle elevation-2" width="50" alt="User Image">
+                                        @user.UserName <span class="text-muted">(@user.Email)</span>
+                                    </td>
+                                    <td class="text-right align-middle">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="ContactInformation" asp-controller="SystemAdmin" asp-route-Id="@contact.Id" class="btn btn-success btn-sm mx-1"><i class="fas fa-info p-1"></i></a>
+                                            <a onclick="entityDelete('/SystemAdmin/ContactDelete?Id=@contact.Id','@contact.Subject')" class="btn btn-danger btn-sm mx-1"><i class="far fa-trash-alt  p-1"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ContactTable').bootstrapTable();
+    })
+</script>
+

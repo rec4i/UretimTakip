@@ -1,0 +1,95 @@
+﻿@model WebIU.Models.Announcement.UpdateAnnouncementViewModel
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <label>@Language["Updateannouncement"]</label>
+            </div>
+            <div class="card-body">
+                <form action="/Announcement/UpdateAnnouncement" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label asp-for="announcement.Subject"></label>
+                            <input class="form-control" asp-for="announcement.Subject" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>@Language["ReleaseDate"]</label>
+                            <input class="form-control float-right" asp-for="announcement.ReleaseDate">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>@Language["AnnouncementRolesList"]</label>
+                            <select style="width:100%" class="select2" name="announcement.AnnouncementRolesList" multiple>
+                                @foreach (var role in Model.announcement.AnnouncementRolesList)
+                                {
+                                    @if (Model.announcement.AnnouncementRoles != null && Model.announcement.AnnouncementRoles.Any(x => x.Role == role))
+                                    {
+                                        <option selected="selected" value="@role">@role</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@role">@role</option>
+
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>@Language["AnnouncementUsers"]</label>
+                            <select style="width:100%" class="select2" name="announcement.AnnouncementUsersList" multiple>
+                                @foreach (var user in Model.announcement.AnnouncementUsersList)
+                                {
+                                    @if (Model.announcement.AnnouncementUsers != null && Model.announcement.AnnouncementUsers.Any(x => x.UserId == user))
+                                    {
+                                        <option selected="selected" value="@user">@user</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@user">@user</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>@Language["Contents"]</label>
+                            <textarea asp-for="announcement.Context" class="summernote"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex flex-row-reverse">
+                                <div class="p-2">
+                                    <input type="hidden" asp-for="announcement.Id" />
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> @Language["SaveChanges"]</button>
+                                    <a href="/Announcement/AnnouncementList" class="btn  btn-warning"><i class="fa-solid fa-arrow-rotate-left"></i>@Language["BackToList"]</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" defer>
+    $(document).ready(function () {
+        @*@Model.announcement.Context*@
+        $('.summernote').summernote("code", "@Model.announcement.Context");
+    });
+</script>

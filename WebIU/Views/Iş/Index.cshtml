@@ -1,0 +1,475 @@
+﻿@model WebIU.Models.IşModels.IşIndexViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button class="btn btn-primary" id="IşOluşturModalAçBtn"><i class="fa fa-plus"></i> Yeni iş Oluştur</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="OrderList"
+                               data-toolbar="#OrderListToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="işAdı" data-title="İş Adı" data-sortable="false"></th>
+                                    <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="IşEkleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">İş Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="TezgahEkleModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>İş Adı:</label>
+                        <input type="text" id="IşAdı" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Açıklama:</label>
+                        <textarea class="form-control" id="Açıklama" rows="3"></textarea>
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col">
+                        <div class="card card-danger">
+                            <div class="card-header">
+                                <label>Işlerin Yapıldığı Tezgahlar</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <select style="width:100%" id="IşSelectEkle" class="form-control select2">
+                                            @foreach (var item in Model.Tezgahs)
+                                            {
+                                                <option açıklama="@item.Açıklama" value="@item.Id">@item.TezgahAdı</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-2">
+                                        <button class="btn btn-primary btn-block" id="TezgahtaYapılanİşEkle"><i class="fa fa-plus"></i> Ekle</button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th> Tezgah Adı</th>
+                                                        <th> Açıklama</th>
+                                                        <th> İşlemler</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="YapılanIşBody">
+                                                    <tr id="IşSilinecek">
+                                                        <td class="text-center" colspan="3"> Hiç Veri Bulunamadı</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="İşEkleBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="IşDüzenleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">İş Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="TezgahEkleModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>İş Adı:</label>
+                        <input type="text" id="IşAdıDüzenle" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Açıklama:</label>
+                        <textarea class="form-control" id="AçıklamaDüzenle" rows="3"></textarea>
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col">
+                        <div class="card card-danger">
+                            <div class="card-header">
+                                <label>Işlerin Yapıldığı Tezgahlar</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <select style="width:100%" id="IşSelectDüzenle" class="form-control select2">
+                                            @foreach (var item in Model.Tezgahs)
+                                            {
+                                                <option açıklama="@item.Açıklama" value="@item.Id">@item.TezgahAdı</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-2">
+                                        <button class="btn btn-primary btn-block" id="TezgahtaYapılanİşEkleDüzenle"><i class="fa fa-plus"></i> Ekle</button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th> Tezgah Adı</th>
+                                                        <th> Açıklama</th>
+                                                        <th> İşlemler</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="YapılanIşBodyDüzenle">
+                                                    <tr id="IşSilinecekDüzenle">
+                                                        <td class="text-center" colspan="3"> Hiç Veri Bulunamadı</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="İşDüzenleBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+        $('#TezgahtaYapılanİşEkle').click(function () {
+            var boş = '' +
+                '  <tr id="IşSilinecek">' +
+                '        <td class="text-center" colspan="3"> Hiç Veri Bulunamadı</td>' +
+                '    </tr>' +
+                '';
+            var data = '' +
+                '   <tr id="Işdata" IşId="' + $('#IşSelectEkle').find(':selected').val() + '">' +
+                '        <td>' + $('#IşSelectEkle').find(':selected').html() + '</td>' +
+                '        <td>' + $('#IşSelectEkle').find(':selected').attr('açıklama') + '</td>' +
+                '        <td><button class="btn btn-danger" id="YapılanIşSilBtn"><i class="fa fa-trash"></i></button></td>' +
+                '    </tr>' +
+                '';
+
+            var silinecekCounter = $('#IşSilinecek').each(function () { }).length
+            if (silinecekCounter >= 1) {
+                var varmı = $('tr[id="Işdata"][IşId="' + $('#IşSelectEkle').find(':selected').val() + '"]').each(function () { }).length
+
+                if (varmı <= 0) {
+                    $('#YapılanIşBody').empty();
+                    $('#YapılanIşBody').append(data);
+                }
+
+            }
+            else {
+                var varmı = $('tr[id="Işdata"][IşId="' + $('#IşSelectEkle').find(':selected').val() + '"]').each(function () { }).length
+
+
+
+                if (varmı <= 0) {
+                    $('#YapılanIşBody').append(data);
+                }
+            }
+
+            $('#YapılanIşSilBtn').click(function () {
+                $(this).parent().parent().remove();
+                var dataCounter = $('#Işdata').each(function () { }).length
+                var silinecekCounter = $('#IşSilinecek').each(function () { }).length
+                if (dataCounter <= 0) {
+                    if (silinecekCounter <= 0) {
+                        $('#YapılanIşBody').append(boş);
+                    }
+                }
+            })
+        })
+
+
+
+        $('#TezgahtaYapılanİşEkleDüzenle').click(function () {
+            var boş = '' +
+                '  <tr id="IşSilinecekDüzenle">' +
+                '        <td class="text-center" colspan="3"> Hiç Veri Bulunamadı</td>' +
+                '    </tr>' +
+                '';
+            var data = '' +
+                '   <tr id="IşdataDüzenle"  IşId="' + $('#IşSelectDüzenle').find(':selected').val() + '">' +
+                '        <td>' + $('#IşSelectDüzenle').find(':selected').html() + '</td>' +
+                '        <td>' + $('#IşSelectDüzenle').find(':selected').attr('açıklama') + '</td>' +
+                '        <td><button IşId="' + $('#IşSelectDüzenle').find(':selected').val() + '" class="btn btn-danger" id="YapılanIşSilBtnDüzenle"><i class="fa fa-trash"></i></button></td>' +
+                '    </tr>' +
+                '';
+
+            var silinecekCounter = $('#IşSilinecekDüzenle').each(function () { }).length
+            if (silinecekCounter <= 1) {
+
+                var varmı = $('tr[id="IşdataDüzenle"][IşId="' + $('#IşSelectDüzenle').find(':selected').val() + '"]').each(function () { }).length
+                if (varmı <= 0) {
+                    $('#YapılanIşBodyDüzenle').empty();
+                    $('#YapılanIşBodyDüzenle').append(data);
+                }
+
+
+            }
+            else {
+                var varmı = $('tr[id="IşdataDüzenle"][IşId="' + $('#IşSelectDüzenle').find(':selected').val() + '"]').each(function () { }).length
+                if (varmı <= 0) {
+                    $('#YapılanIşBodyDüzenle').append(data);
+                }
+            }
+
+            $('button[id="YapılanIşSilBtnDüzenle"][IşId="' + $('#IşSelectDüzenle').find(':selected').val() + '"]').click(function () {
+                $(this).parent().parent().remove();
+
+                var dataCounter = $('#IşdataDüzenle').each(function () { }).length
+                var silinecekCounter = $('#IşSilinecekDüzenle').each(function () { }).length
+                if (dataCounter <= 0) {
+                    if (silinecekCounter <= 0) {
+                        $('#YapılanIşBodyDüzenle').append(boş);
+                    }
+
+
+
+                }
+
+            })
+
+
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        OrderTablosuDoldur()
+        $('#IşSelectEkle').select2({
+            dropdownParent: $("#IşEkleModal")
+        })
+
+        $('#IşSelectDüzenle').select2({
+            dropdownParent: $("#IşDüzenleModal")
+        })
+
+        $('#IşOluşturModalAçBtn').click(function () {
+            $('#IşEkleModal').modal('show')
+        })
+
+
+        $('#İşEkleBtn').click(function () {
+            var data = new FormData();
+            data.append('IşAdı', $('#IşAdı').val())
+            data.append('Açıklama', $('#Açıklama').val())
+
+            $.ajax({
+                url: "/Iş/IşEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    successAlert(data)
+                    OrderTablosuDoldur()
+                },
+            });
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    })
+
+
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/Iş/IşGetPagination",
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+            value += "<button id='IşDüzenleModalAçBtn' IşId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button> ";
+            value += "<button id='IşSil' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+            $('#IşSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/Iş/IşSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                successAlert(data)
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+            $('#IşDüzenleModalAçBtn').click(function () {
+                $('#IşDüzenleModal').modal('show')
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                $('#İşDüzenleBtn').attr('IşId', $(this).attr('IşId'))
+
+                $.ajax({
+                    url: "/Iş/GetIş",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        $('#IşAdıDüzenle').val(data[0].işAdı)
+                        $('#AçıklamaDüzenle').val(data[0].açıklama)
+                    },
+                });
+
+            })
+
+        }
+    }
+
+</script>

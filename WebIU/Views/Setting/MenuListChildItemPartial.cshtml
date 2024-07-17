@@ -1,0 +1,58 @@
+﻿@model WebIU.Models.Setting.MenuListChildItemViewModel
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="MenuItemTable_@Model.ParentId"
+                       data-unique-id="id"
+                       data-detail-formatter="MenuItemdetailFormatter"
+                       data-detail-view="true">
+                    <thead style="text-align:center">
+                        <tr>
+                            <th>Id</th>
+                            <th>@Language["Name"]</th>
+                            <th>Url</th>
+                            <th>@Language["Order"]</th>
+                            <th>@Language["Actions"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var parentItem in Model.IsParents)
+                        {
+
+                            <tr>
+                                <td>@parentItem.Id</td>
+                                <td><i class="@parentItem.IconCss"></i> @parentItem.Name</td>
+                                <td>@parentItem.Url</td>
+                                <th>
+                                    @parentItem.Order
+                                </th>
+                                <td class="text-right">
+                                    <div class="d-flex justify-content-center">
+                                        <a asp-action="EditMenuItem" asp-controller="Setting" asp-route-Id="@parentItem.Id" class="btn btn-primary btn-sm mx-1"><i class="far fa-edit  p-1"></i></a>
+                                        <a onclick="entityDelete('/Setting/DeleteMenuItem?MenuItemId=@parentItem.Id', '')" class="btn btn-danger btn-sm mx-1"><i class="far fa-trash-alt  p-1"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex flex-row-reverse">
+    <div class="p-2">
+        <a href="/Setting/AddNewMenuItem?ParentId=@Model.ParentId" class="btn btn-primary mb-2"><i class="fa-solid fa-plus"></i>@Language["AddNewMenuItem"]</a>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#MenuItemTable_@Model.ParentId').bootstrapTable()
+    })
+</script>
+

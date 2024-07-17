@@ -1,0 +1,40 @@
+﻿<script>
+    $(document).ready(function () {
+
+        $(document).ready(function () {
+            $("button[type='submit'],input[type='submit']").one("click", function () {
+                var _this = $(this);
+                $(this).closest("form").submit()
+                $('#spinner-div').show();
+                _this.attr('disabled', 'true')
+                setTimeout(function () {
+                    _this.removeAttr('disabled')
+                    $('#spinner-div').hide();
+                }, 2000);
+
+
+            });
+
+
+        });
+    })
+</script>
+
+<style>
+    #spinner-div {
+        position: fixed;
+        display: none;
+        width: 100% !important;
+        height: 100% !important;
+        top: 10%;
+        left: auto;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        z-index: 10;
+    }
+</style>
+
+<div id="spinner-div" class="pt-5">
+    <div class="spinner-border text-primary" role="status">
+    </div>
+</div>

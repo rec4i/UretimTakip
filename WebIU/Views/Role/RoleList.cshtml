@@ -1,0 +1,52 @@
+﻿@model WebIU.Models.Role.AllRolesViewModel
+
+@{
+    ViewData["Title"] = "RoleList";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="border-bottom">@Language["RoleList"]</h4>
+                    </div>
+                    <div class="col-12 text-right my-2">
+                        @if (AuthorizationService.AuthorizeAsync(User, Permission.Role.CreateRole).Result.Succeeded)
+                        {
+                            <a href="/Role/CreateRole" class="btn btn-primary mb-2">@Language["AddRole"]<span class="fa fa-plus"></span></a>
+                        }
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            @foreach (var item in Model.Roles)
+                            {
+                                <div class="col-6">
+                                    <div class="card mb-4">
+                                        <div class="card-header bg-white textColor ">
+                                            <h5 class="card-title">Role Id: @item.Id</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">Role Adı: <b>@item.Name</b></p>
+                                        </div>
+                                        <div class="card-footer text-right bg-white">
+                                            @if (AuthorizationService.AuthorizeAsync(User, Permission.Role.RoleEdit).Result.Succeeded)
+                                            {
+                                                <a asp-controller="Role" asp-action="RoleEdit" asp-route-id="@item.Id" class="btn btn-primary ">@Language["Edit"] <span class="fa fa-edit"></span></a>
+                                            }
+                                            @if (AuthorizationService.AuthorizeAsync(User, Permission.Role.RoleDelete).Result.Succeeded)
+                                            {
+                                                <a asp-controller="Role" asp-action="RoleDelete" asp-route-id="@item.Id" class="btn btn-danger">@Language["Delete"] <span class="fa fa-trash-alt"></span></a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

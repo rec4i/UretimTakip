@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <label>@Language["announcement"]</label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="AnnouncementTable"
+                               data-toolbar="#AllTransactionsToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="@Language["locale"]"
+                               data-search="true"
+                               data-detail-formatter="detailFormatter"
+                               data-detail-view="true"
+                               data-show-refresh="true"
+                               data-show-export="false">
+                            <thead>
+                                <tr>
+                                    @*<th data-field="type" data-width="10" data-width-unit="%" data-sortable="true">Type</th>*@
+                                    <th data-field="releaseDate" data-title="@Language["ReleaseDate"]" data-width="10" data-width-unit="%" data-sortable="true">Release Date</th>
+                                    <th data-field="subject"@Language["Subject"] data-sortable="true">Subject</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function detailFormatter(index, row) {
+        var response = "";
+        $.ajax({
+            type: 'GET',
+            url: "/Announcement/AnnouncementContext/" + row["id"],
+            async: false,
+            success: function (res) {
+                response = res;
+            }
+        });
+        return response;
+    }
+
+
+    $(document).ready(function () {
+        $('#AnnouncementTable').bootstrapTable({
+            url: "/Home/TableWith_Announcments",
+            columns: [
+                [
+                    {},
+                    {},
+                ]
+            ]
+        })
+
+    })
+</script>

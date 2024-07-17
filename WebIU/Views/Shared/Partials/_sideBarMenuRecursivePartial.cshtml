@@ -1,0 +1,37 @@
+﻿@using Entities.Concrete
+@using Tools.Concrete.HelperClasses.EntityHelpers
+@model IEnumerable<TreeItem<SideBarMenuItem>>
+
+
+
+@foreach (var childNode in Model)
+{
+    @if (childNode.Item.IsParent == false)
+    {
+        <li class="nav-item">
+            <a href="@childNode.Item.Url" class="nav-link @(childNode.Item.IsOpen == true ? "active" :"")">
+                <i class="@childNode.Item.IconCss"></i>
+                <p>
+                    @childNode.Item.Name
+                </p>
+            </a>
+        </li>
+    }
+    else if (childNode.Item.IsParent == true)
+    {
+        <li class="nav-item @(childNode.Item.IsOpen == true ? "menu-is-opening menu-open" :"")" id="Nav_Item ">
+            <a href="@childNode.Item.Url" class="nav-link">
+                <i class="@childNode.Item.IconCss"></i>
+                <p>
+                    @childNode.Item.Name
+                    <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <partial name="Partials/_sideBarMenuRecursivePartial" model="@childNode.Children" />
+            </ul>
+        </li>
+    }
+}
+
+

@@ -1,0 +1,198 @@
+﻿@model WebIU.Models.Account.ChangeMyAccountInformationViewModel
+@{
+    ViewData["Title"] = "ChangeMyAccountInformation";
+    Layout = "~/Views/Shared/_LayoutMyAccount.cshtml";
+}
+<div class="row">
+    @using (Html.BeginForm("ChangeMyAccountInformation", "Account", FormMethod.Post, new { @class = "form-group", @enctype = "multipart/form-data" }))
+    {
+        <div class="col-md-12">
+            <div class="card card-primary card-outline">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="border-bottom">@Language["PersonalInformation"]</h4>
+                        </div>
+                        <div class="col-xl-3 text-center">
+                            <div class="form-group my-3">
+                                <label asp-for="User.Image" class="mt-2"></label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input onchange="loadFile(event)" asp-for="ImageFile" id="exampleInputFile" class="mt-2 custom-file-input" type="file" />
+                                        <label class="custom-file-label" asp-for="ImageFile">@Language["ChooseFile"]</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <img src="~/Images/UserImages/@Model.User.Image" class="img-circle shadow-lg align-middle UploadImage my-3" width="200" height="200" /><br>
+                        </div>
+                        <div class="col-xl-9">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label>@Language["UserName"]</label>
+                                        <input asp-for="User.UserName" class="form-control" required placeholder="@Language["UserName"]" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label >@Language["Email"]</label>
+                                        <input asp-for="User.Email" class="form-control" required placeholder="@Language["Email"]" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label>@Language["PhoneNumber"]</label>
+                                        <input asp-for="User.PhoneNumber" class="form-control" required placeholder="@Language["PhoneNumber"]" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label >@Language["Job"]</label>
+                                        <input asp-for="User.Job" class="form-control" required placeholder="@Language["Job"]" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label >@Language["CultureName"]</label>
+                                        <select asp-for="User.CultureName" class="form-control">
+                                            @foreach (var culture in Model.Cultures)
+                                            {
+                                                <option value="@culture.Name">@culture.Text <span class="text-muted">(@culture.Name)</span></option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group my-3">
+                                        <label >@Language["CountryName"]</label>
+                                        <select asp-for="User.CountryId" class="form-control">
+                                            @foreach (var country in Model.Countries)
+                                            {
+                                                <option value="@country.Id">@country.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group my-3">
+                                <input type="hidden" asp-for="User.Id" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right bg-white">
+                    <input asp-for="User.Status" type="hidden" />
+
+                    <a asp-action="MyAccount" asp-controller="Account" class="btn btn-warning text-white"><i class="fa-solid fa-arrow-rotate-left "></i> @Language["Geri"]</a>
+                    <input type="submit" value="@Language["SaveChanges"]" class=" btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+@*@model WebIU.Models.User.UserDetailViewModel
+
+    <!-- Modal -->
+    <div class="modal fade" id="changeUserInformation" tabindex="-1" role="dialog" aria-labelledby="changeUserInformation" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Change User Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @using (Html.BeginForm("ChangeUserInformation", "User", FormMethod.Post, new { @class = "form-group", @enctype = "multipart/form-data" }))
+                {
+                    <div class="modal-body">
+                        <div asp-validation-summary="All"></div>
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <label asp-for="ChangeUserInformationViewModel.UserName"></label>
+                                    <input asp-for="ChangeUserInformationViewModel.UserName" class="form-control" required placeholder="UserName" />
+                                    <span asp-validation-for="ChangeUserInformationViewModel.UserName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <label asp-for="ChangeUserInformationViewModel.Email"></label>
+                                    <input asp-for="ChangeUserInformationViewModel.Email" class="form-control" required placeholder="Email" />
+                                    <span asp-validation-for="ChangeUserInformationViewModel.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <label asp-for="ChangeUserInformationViewModel.PhoneNumber"></label>
+                                    <input asp-for="ChangeUserInformationViewModel.PhoneNumber" class="form-control" required placeholder="PhoneNumber" />
+                                    <span asp-validation-for="ChangeUserInformationViewModel.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <label asp-for="ChangeUserInformationViewModel.Language"></label>
+                                    <select asp-for="ChangeUserInformationViewModel.Language" class="form-control">
+                                        <option value="tr">Tr</option>
+                                        <option value="en">En</option>
+                                        <option value="fr">Fr</option>
+                                    </select>
+                                    <span asp-validation-for="ChangeUserInformationViewModel.Language" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <label asp-for="ChangeUserInformationViewModel.Country"></label>
+                                    <select asp-for="ChangeUserInformationViewModel.Country" class="form-control">
+                                        <option value="Turkey">Turkey</option>
+                                        <option value="USA">USA</option>
+                                        <option value="France">France</option>
+                                    </select>
+                                    <span asp-validation-for="ChangeUserInformationViewModel.Country" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="my-3">
+                                    <label asp-for="ChangeUserInformationViewModel.ImageFile"></label>
+                                    <div class="row">
+                                        <div class="col-5 text-center">
+                                            <img src="~/Images/UserImages/@Model.ChangeUserInformationViewModel.Image" class="rounded rounded-circle align-middle" width="90" height="100" />
+                                        </div>
+                                        <div class="col-7">
+                                            <input asp-for="ChangeUserInformationViewModel.ImageFile" class="form-control-file" type="file" placeholder="Image" />
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="ChangeUserInformationViewModel.ImageFile" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group my-3">
+                                    <input type="hidden" asp-for="ChangeUserInformationViewModel.Id" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["showChangePersonalInformationModal"] != null)
+    {
+        <script>
+            $(function() {
+                $("#changeUserInformation").modal("show");
+            });
+        </script>
+    }
+*@

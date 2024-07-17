@@ -1,0 +1,76 @@
+﻿@model WebIU.Models.Announcement.AddAnnouncementViewModel
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <label>@Language["addannouncement"]</label>
+            </div>
+            <div class="card-body">
+                <form action="/Announcement/AddAnnouncement" method="post">
+                    <div class="row">
+                        <div class="col">
+                            <label>@Language["Subject"]</label>
+                            <input class="form-control" asp-for="announcement.Subject" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>@Language["ReleaseDate"]</label>
+                            <input class="form-control float-right" asp-for="announcement.ReleaseDate">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label >@Language["AnnouncementRolesList"]</label>
+                            <select style="width:100%" class="select2" name="announcement.AnnouncementRolesList" multiple>
+                                @if (Model.announcement.AnnouncementRolesList != null)
+                                    @foreach (var role in Model.announcement.AnnouncementRolesList)
+                                    {
+                                        <option value="@role">@role</option>
+                                    }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label >@Language["AnnouncementUsers"]</label>
+                            <select style="width:100%" class="select2" name="announcement.AnnouncementUsersList" multiple>
+                                @if (Model.announcement.AnnouncementUsersList != null)
+                                    @foreach (var user in Model.announcement.AnnouncementUsersList)
+                                    {
+                                        <option value="@user">@user</option>
+                                    }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label >@Language["Contents"]</label>
+                            <textarea asp-for="announcement.Context" class="summernote"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex flex-row-reverse">
+                                <div class="p-2">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> @Language["SaveChanges"]</button>
+                                    <a href="/Announcement/AnnouncementList" class="btn  btn-warning"><i class="fa-solid fa-arrow-rotate-left"></i>@Language["BackToList"]</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" defer>
+    $(document).ready(function () {
+        @*@Model.announcement.Context*@
+        $('.summernote').summernote("code", "" );
+    });
+</script>

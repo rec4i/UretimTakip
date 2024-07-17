@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+
+    <partial name="Partials\_ValidationCssPartial" />
+</head>
+<body class="hold-transition sidebar-mini">
+    <partial name="Partials\_LoadingSpinnerPartial" />
+
+    @{
+        await Html.RenderPartialAsync("_GenericModal");
+    }
+    <!-- Site wrapper -->
+    <div class="wrapper">
+        <!-- Navbar -->
+        @await Component.InvokeAsync("Navbar")
+        <!-- Sidebar -->
+        @await Component.InvokeAsync("SideBar")
+        <div class="content-wrapper">
+            <section class="content">
+                <div class="row">
+                    <div class="col-sm-3 mt-2">
+                        @await Component.InvokeAsync("AccountInformationSideBar",new {outsideUserId=ViewBag.OutsideUserId})
+                    </div>
+                    <div class="col-sm-9 ">
+                        @if (TempData["message"] != null)
+                        {
+                            <div class="alert alert-primary mt-2">
+                                @TempData["message"]
+                            </div>
+                        }
+                        @RenderBody()
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer class="main-footer">
+            @await Component.InvokeAsync("Footer")
+        </footer>
+    </div>
+    @RenderSection("Scripts", required: false)
+    <partial name="Partials\_ValidationScriptsPartial" />
+</body>
+</html>

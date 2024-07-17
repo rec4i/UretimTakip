@@ -1,0 +1,154 @@
+﻿@model WebIU.Models.Setting.MenuListViewModel
+@{
+    ViewData["Title"] = "MenuList";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="MenuItemTable"
+                               data-unique-id="id"
+                               data-detail-formatter="MenuItemdetailFormatter"
+                               data-detail-view="true">
+                            <thead style="text-align:center">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>@Language["Name"]</th>
+                                    <th>Url</th>
+                                    <th>@Language["Order"]</th>
+                                    <th>@Language["Actions"]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var parentItem in Model.IsParents)
+                                {
+                                    <tr>
+                                        <td>@parentItem.Id</td>
+                                        <td><i class="@parentItem.IconCss"></i> @parentItem.Name</td>
+                                        <td>@parentItem.Url</td>
+                                        <th>
+                                            @parentItem.Order
+                                        </th>
+                                        <td class="text-right">
+                                            <div class="d-flex justify-content-center">
+                                                <a href="/Setting/EditMenuItem?id=@parentItem.Id" class="btn btn-primary btn-sm mx-1"><i class="far fa-edit  p-1"></i></a>
+                                                <a onclick="entityDelete('/Setting/DeleteMenuItem?MenuItemId=@parentItem.Id', '')" class="btn btn-danger btn-sm mx-1"><i class="far fa-trash-alt  p-1"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <a href="/Setting/AddNewMenuItem?ParentId=0" class="btn btn-primary mb-2"><i class="fa-solid fa-plus"></i>@Language["AddNewMenuItem"]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function MenuItemdetailFormatter(index, row) {
+        var Data = "";
+        $.ajax('/Setting/MenuListChildItem?ParentId=' + row[0],
+            {
+                async: false,
+                type: 'GET',  // http method
+                success: function (data, status, xhr) {
+                    Data = data;
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    Data = errorMessage
+                }
+            });
+        return Data
+    }
+    $(document).ready(function () {
+
+
+        $('#MenuItemTable').bootstrapTable()
+    })
+</script>
+
+
+
+
+
+
+@*<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a asp-action="AddAndEditMenuItem" asp-controller="Setting" class="btn btn-primary mb-2"><i class="fa-solid fa-plus"></i>Add New Menu Item</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Url</th>
+                                    <th>Row</th>
+                                    <th>ChildList</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var parentItem in Model.IsParents)
+                                {
+                                    <tr>
+                                        <td><i class="@parentItem.IconCss"></i> @parentItem.Name</td>
+                                        <td>@parentItem.Url</td>
+                                        <td>@parentItem.Row</td>
+                                        <td>
+                                            <table class="table table-sm table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Url</th>
+                                                        <th>Row</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @foreach (var childItem in Model.Childs.Where(p => p.ParentId == parentItem.Id))
+                                                    {
+                                                        <tr>
+                                                            <td><i class="@childItem.IconCss"></i> @childItem.Name</td>
+                                                            <td>@childItem.Url</td>
+                                                            <td>@childItem.Row</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td class="text-right">
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="EditMenuItem" asp-controller="Setting" asp-route-Id="@parentItem.Id" class="btn btn-primary btn-sm mx-1"><i class="far fa-edit  p-1"></i></a>
+                                                <a onclick="entityDelete('/User/UserDelete?userId=','')" class="btn btn-danger btn-sm mx-1"><i class="far fa-trash-alt  p-1"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@

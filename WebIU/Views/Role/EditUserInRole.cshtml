@@ -1,0 +1,43 @@
+﻿@model WebIU.Models.Role.EditUserInRoleViewModel
+
+@{
+    ViewData["Title"] = "EditUserInRole";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-outline card-primary ">
+            @using (Html.BeginForm("EditUserInRole", "Role", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+            {
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="border-bottom">@Language["EditRoleUserInformation"]</h4>
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="row">
+                                @for (int i = 0; i < Model.Users.Count(); i++)
+                                {
+                                    <div class="col-3">
+                                        <div class="form-check m-1">
+                                            <input type="hidden" asp-for="@Model.Users[i].Id" />
+                                            <input asp-for="@Model.Users[i].IsSelected" class="form-check-input" />
+                                            <label class="form-check-label" asp-for="@Model.Users[i].IsSelected">
+                                                @Model.Users[i].UserName <span>@Model.Users[i].Email</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                                <input type="hidden" asp-for="RoleId" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right bg-white">
+                    <input type="submit" class="btn btn-success" value="@Language["SaveChanges"]" />
+                    <a asp-action="RoleEdit" asp-controller="Role" asp-route-id="@Model.RoleId" class="btn btn-danger">@Language["Back"]</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+﻿@model WebIU.Models.Account.UserLoginViewModel
+@using WebIU
+@using WebIU.Languages
+@using WebIU.Models
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<Lang> Language
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<div class="hold-transition login-page">
+    <div class="login-box">
+        <div  class="text-danger">
+            
+        </div>
+        <div class="login-logo">
+            <img style="min-height:250px" src="~/images/ÇBVCX.webp" />
+        </div>
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-primary">
+                @TempData["message"]
+                <div asp-validation-summary="All"></div>
+            </div>
+        }
+        <!-- /.login-logo -->
+        <div class="card card-outline card-primary">
+            <div class="card-body text-white">
+                <section>
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                    {
+                        <div class="input-group mb-3">
+                            <input asp-for="UserName" class="form-control" placeholder="@Language["UserName"]">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-solid fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input asp-for="Password" Id="Password" class="form-control" placeholder="@Language["Password"]">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock toggle-password"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="icheck-primary">
+                                    <input asp-for="RememberMe">
+                                    <label for="RememberMe" class="text-dark">
+                                        @Language["RememberMe"]
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <input asp-for="ReturnUrl" type="hidden" />
+
+                        <div>
+                            <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">@Language["Login"]</button>
+                        </div>
+                        <div class="text-center my-3">
+                            <p>
+                                <a id="forgot-password" asp-action="ForgotPassword" asp-controller="Account">@Language["ForgotYourPassword"]</a>
+                            </p>
+                        </div>
+                    }
+                </section>
+            </div>
+        </div>
+    </div>
+</div>

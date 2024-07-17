@@ -1,0 +1,57 @@
+﻿@model WebIU.Models.ViewComponentModels.MyAccountSideBarViewModel
+<section class="content ">
+    <div class="container-fluid">
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle" src="~/images/UserImages/@Model.User.Image" alt="User profile picture">
+                </div>
+                <h3 class="profile-username text-center">@Model.User.UserName</h3>
+                <span class="text-muted text-center d-block">@Model.User.Job</span>
+                <span class="text-muted text-center d-block">@Model.User.Email</span>
+            </div>
+        </div>
+
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">@Language["AboutMe"]</h3>
+            </div>
+            <div class="card-body">
+                <strong><i class="fa-solid fa-user-gear mr-1"></i> @Language["Roles"]</strong>
+                <ul>
+                    @foreach (var role in Model.Roles)
+                    {
+                        <li class="text-muted">@role</li>
+                    }
+                </ul>
+                <hr>
+                <strong><i class="fas fa-map-marker-alt mr-1"></i> @Language["Location"]</strong>
+                <p class="text-muted">@Model.CountryName</p>
+
+                <hr>
+                <strong><i class="fa-solid fa-language mr-1"></i> @Language["Language"]</strong>
+                <p class="text-muted">@Model.Culture.Text<span class="text-muted"> (@Model.Culture.Name)</span></p>
+
+                <hr>
+                <strong><i class="far fa-file-alt mr-1"></i> @Language["Notes"]</strong>
+                <ul>
+                    <li class="text-muted">Last Login Date: @Model.User.LastLoginDate.GetValueOrDefault().ToString("dd/MMM/yy")</li>
+                    <li class="text-muted">Added Date: @Model.User.AddedDate.GetValueOrDefault().ToString("dd/MMM/yy")</li>
+                </ul>
+            </div>
+        </div>
+        @if (Model.ItSelf)
+        {
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">@Language["AccountSettings"]</h3>
+                </div>
+                <div class="card-body">
+                    <strong class="d-block"><a class="text-dark" asp-action="ChangePassword" asp-controller="Account"><i class="fa-solid fa-lock mr-1"></i> @Language["ChangePassword"]</a></strong><hr />
+                    <strong class="d-block"><a class="text-dark" asp-action="ChangeMyAccountInformation" asp-controller="Account"><i class="fa-solid fa-lock mr-1"></i> @Language["ChangePersonalInformation"]</a></strong>
+                </div>
+            </div>
+        }
+    </div>
+
+</section>

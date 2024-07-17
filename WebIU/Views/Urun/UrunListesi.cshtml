@@ -1,0 +1,45 @@
+﻿@model WebIU.Models.UrunViewModels.UrulListViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label class="text-red">* Tezgahta Aktif Olan İş Emirleri Aşağıda Listelenmektedir</label>
+                    </div>
+                </div>
+
+                @foreach (var item in Model.Uruns)
+                {
+                    <div class="row" qr="@item.Guid" id="İşEmiriDiv">
+                        <div class="col">
+                            <div class="info-box shadow">
+                                <span class="info-box-icon bg-warning"><i class="fa fa-gear"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">İş Emri Adı: @item.İşEmri.İşEmriAdı</span>
+                                    <span class="info-box-text">Son Yapılan İşlem: @item.UrunAşamalarıs.OrderBy(o => o.İşiBitirmeZamanı).FirstOrDefault().Iş.IşAdı</span>
+                                    <span class="info-box-number"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#İşEmiriDiv').click(function () {
+
+            window.location.href = "/Urun/Index?qr=" + $(this).attr("qr")
+
+
+
+        })
+    })
+</script>

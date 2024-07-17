@@ -1,0 +1,54 @@
+﻿@model WebIU.Models.Setting.CountryAddAndEditViewModel
+@{
+    ViewData["Title"] = "CountryAddAndEdit";
+}
+
+<div class="card">
+    @using (Html.BeginForm("CountryAddAndEdit", "Setting", FormMethod.Post, new { @class = "form-group", @enctype = "multipart/form-data" }))
+    {
+        <div class="card-body">
+            <div class="row justify-content-center">
+
+                <div class="col-md-12">
+                    <h4 class="border-bottom">Ulke Bilgileri</h4>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group my-3">
+                                <label >@Language["CountryName"]</label>
+                                <input asp-for="Country.Name" class="form-control" required placeholder="@Language["CountryName"]" />
+                            </div>
+                        </div>
+                          <div class="col-sm-6">
+                            <div class="form-group my-3">
+                                <label >@Language["ShortName"]</label>
+                                <input asp-for="Country.ShortName" class="form-control" required placeholder="@Language["ShortName"]" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group my-3">
+                                <label >@Language["Row"]</label>
+                                <input asp-for="Country.Row" class="form-control" required placeholder="@Language["Row"]" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group my-3">
+                        <input type="hidden" asp-for="Country.Id" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-footer text-right bg-white">
+            <a asp-action="CountryList" asp-controller="Setting" class="btn btn-warning text-white"><i class="fa-solid fa-arrow-rotate-left "></i> @Language["Back"]</a>
+            <input type="submit" value="Değişiklikleri Kaydet" class=" btn btn-primary" />
+        </div>
+    }
+</div>
+
+
+
+

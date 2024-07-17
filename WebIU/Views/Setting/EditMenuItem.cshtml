@@ -1,0 +1,117 @@
+﻿@model WebIU.Models.Setting.MenuEditViewModel
+@{
+    ViewData["Title"] = "EditMenuItem";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" action="EditMenuItem">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span>@Language["Name"] :</span>
+                            <input class="form-control" name="Name" value=" @Model.Name" type="text" />
+                        </div>
+                        <div class="col-md-6">
+                            <span>@Language["IconCss"] :</span>
+                            <input class="form-control" name="IconCss" value=" @Model.IconCss" type="text" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span>@Language["Url"] (@Language["PutSharpİfYouWantToBeParent"]): </span>
+                            <input class="form-control" name="Url" value="@Model.Url" type="text" />
+                        </div>
+                        <div class="col-md-6">
+                            <span>@Language["Order"] :</span>
+                            <select class="select2" name="Order" style="width:100%">
+                                @for (int i = 0; i < Model.OrderCount; i++)
+                                {
+                                    @if ((i + 1) != Model.Order)
+                                    {
+                                        <option value="@(i+1)">@(i+1)</option>
+                                    }
+                                    else
+                                    {
+                                        <option selected value="@(i+1)">@(i+1)</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex flex-row-reverse">
+                                <div class="p-2">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> @Language["Save"]</button>
+                                </div>
+                                <div class="p-2">
+                                    <a href="/Setting/MenuList" class="btn btn-warning"><i class="fa-solid fa-arrow-rotate-left"></i>@Language["BackToList"]</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                @using (Html.BeginForm("EditMenuItem", "Setting", FormMethod.Post, new { @class = "form-group", @enctype = "multipart/form-data" }))
+                {
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Icon</th>
+                                        <th>Url</th>
+                                        <th>Row</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        <tr>
+                                            <td><input asp-for="@Model[i].Name" class="form-control"></td>
+                                            <td><input asp-for="@Model[i].IconCss" class="form-control"></td>
+                                            <td><input asp-for="@Model[i].Url" class="form-control"></td>
+                                            <td><input asp-for="@Model[i].Row" class="form-control"></td>
+                                            <td><input asp-for="@Model[i].Id" type="hidden"></td>
+                                            <td><input asp-for="@Model[i].ParentId" type="hidden"></td>
+                                            <td>
+                                                <a onclick="entityDelete('/Setting/MenuItemDelete?id=@Model[i].Id','@Model[i].Name')" class="btn btn-danger btn-sm mx-1"><i class="far fa-trash-alt p-1"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right bg-white">
+                        <a asp-action="MenuList" asp-controller="Setting" class="btn btn-warning text-white"><i class="fa-solid fa-arrow-rotate-left "></i> Geri</a>
+                        <input type="submit" value="Değişiklikleri Kaydet" class=" btn btn-primary" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+
+
+

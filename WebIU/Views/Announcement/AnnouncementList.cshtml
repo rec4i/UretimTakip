@@ -1,0 +1,141 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card-primary card card-outline">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <a href="/Announcement/AddAnnouncement" class="btn btn-primary"><i class="fa fa-solid fa-plus"></i> Add New Announcement</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <label>@Language["announcement"]</label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="AnnouncementTable"
+                               data-toolbar="#AllTransactionsToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="@Language["locale"]"
+                               data-search="true"
+                               data-detail-formatter="detailFormatter"
+                               data-detail-view="true"
+                               data-show-refresh="true"
+                               data-show-export="false">
+                            <thead>
+                                <tr>
+                                    @*<th data-field="type" data-width="10" data-width-unit="%" data-sortable="true">Type</th>*@
+                                    <th data-field="releaseDate" data-width="10" data-width-unit="%" data-sortable="true">Release Date</th>
+                                    <th data-field="subject" data-width="80" data-width-unit="%" data-sortable="true">Subject</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    function operateFormatter(value, row, index) {
+        return [
+
+            @*' @if (AuthorizationService.AuthorizeAsync(User, Permission.Announcement.ListTransactions).Result.Succeeded)
+
+           {
+               var anchor = new TagBuilder("a");
+               anchor.MergeAttribute("href", "/Implementer/ImplementerInformation?id=%ENTITYID");
+               anchor.MergeAttribute("class", "btn btn-success btn-sm mx-1");
+
+               var Icon = new TagBuilder("i");
+               Icon.MergeAttribute("class", "fas fa-info p-1");
+
+               anchor.InnerHtml.AppendHtml(Icon);
+
+                @anchor
+            }'
+            ,*@
+            ,
+
+            ' @if (AuthorizationService.AuthorizeAsync(User, Permission.Announcement.UpdateAnnouncement).Result.Succeeded)
+           {
+               var anchor = new TagBuilder("a");
+               anchor.MergeAttribute("href", "/Announcement/UpdateAnnouncement/%ENTITYID");
+               anchor.MergeAttribute("class", "btn btn-primary btn-sm mx-1");
+
+               var Icon = new TagBuilder("i");
+               Icon.MergeAttribute("class", "far fa-edit  p-1");
+
+               anchor.InnerHtml.AppendHtml(Icon);
+
+                @anchor
+            }'
+
+            ,
+
+
+            ' @if (AuthorizationService.AuthorizeAsync(User, Permission.Announcement.DeleteAnnouncement).Result.Succeeded)
+
+            {
+                var anchor = new TagBuilder("a");
+                anchor.MergeAttribute("onclick", "entityDelete('/Announcement/DeleteAnnouncement?id=%ENTITYID','')");
+                anchor.MergeAttribute("class", "btn btn-danger btn-sm mx-1");
+
+                var Icon = new TagBuilder("i");
+                Icon.MergeAttribute("class", "far fa-trash-alt  p-1");
+
+                anchor.InnerHtml.AppendHtml(Icon);
+
+                @anchor
+
+            }'
+        ].join('').replaceAll("%ENTITYID", row["id"])
+    }
+    function detailFormatter(index, row) {
+        var response = "";
+        $.ajax({
+            type: 'GET',
+            url: "/Announcement/AnnouncementContext/" + row["id"],
+            async: false,
+            success: function (res) {
+                response =res;
+            }
+        });
+        return response;
+    }
+
+    $(document).ready(function () {
+        $('#AnnouncementTable').bootstrapTable({
+            url: "/Announcement/TableWith_AnnouncementList",
+            columns: [
+                [
+                    { title:'@Language["ReleaseDate"]' },
+                    { title:'@Language["Subject"]' },
+                    {
+
+                        field: 'operate',
+                       title:'@Language["ItemOperate"]',
+                        align: 'center',
+                        clickToSelect: false,
+                        formatter: operateFormatter
+                    }
+                ]
+            ]
+        })
+
+    })
+</script>
+
+

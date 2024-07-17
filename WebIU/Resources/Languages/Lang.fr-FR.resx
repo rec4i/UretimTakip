@@ -1,0 +1,549 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutMe" xml:space="preserve">
+    <value>À propos de moi</value>
+  </data>
+  <data name="AccountInfo" xml:space="preserve">
+    <value>Informations de compte</value>
+  </data>
+  <data name="AccountName" xml:space="preserve">
+    <value>Nom du compte</value>
+  </data>
+  <data name="AccountNumber" xml:space="preserve">
+    <value>Numéro de compte</value>
+  </data>
+  <data name="AccountSettings" xml:space="preserve">
+    <value>Paramètres du compte</value>
+  </data>
+  <data name="ActionName" xml:space="preserve">
+    <value>Action Nom</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="addannouncement" xml:space="preserve">
+    <value>Ajouter une annonce</value>
+  </data>
+  <data name="AddedDate" xml:space="preserve">
+    <value>Date d'ajout</value>
+  </data>
+  <data name="AddNewMenuItem" xml:space="preserve">
+    <value>Ajouter un nouvel élément de menu</value>
+  </data>
+  <data name="AddNewUser" xml:space="preserve">
+    <value>Ajouter Un Nouvel Utilisateur</value>
+  </data>
+  <data name="Adress" xml:space="preserve">
+    <value>Une robe</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>âge</value>
+  </data>
+  <data name="AllowableDelayTime" xml:space="preserve">
+    <value>Temps de retard autorisé</value>
+  </data>
+  <data name="AllowFingerPrintRegistration" xml:space="preserve">
+    <value>Autoriser l'enregistrement des empreintes digitales</value>
+  </data>
+  <data name="AndroidUID" xml:space="preserve">
+    <value>AndroidUID</value>
+  </data>
+  <data name="announcement" xml:space="preserve">
+    <value>Annonces</value>
+  </data>
+  <data name="AnnouncementRolesList" xml:space="preserve">
+    <value>Liste des rôles d'annonce</value>
+  </data>
+  <data name="AnnouncementUsers" xml:space="preserve">
+    <value>Utilisateurs d'annonces</value>
+  </data>
+  <data name="AssingEvent" xml:space="preserve">
+    <value>Événement d'association</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Retour à la liste</value>
+  </data>
+  <data name="BankID" xml:space="preserve">
+    <value>Identifiant bancaire</value>
+  </data>
+  <data name="BankName" xml:space="preserve">
+    <value>Nom de banque</value>
+  </data>
+  <data name="Beneficiary" xml:space="preserve">
+    <value>Bénéficiaire</value>
+  </data>
+  <data name="BeneficiaryLogList" xml:space="preserve">
+    <value>Journal des bénéficiaires</value>
+  </data>
+  <data name="BeneficiaryName" xml:space="preserve">
+    <value>Nom du bénéficiaire</value>
+  </data>
+  <data name="CardHolderId" xml:space="preserve">
+    <value>Identifiant du titulaire de la carte</value>
+  </data>
+  <data name="CardNubmer" xml:space="preserve">
+    <value>Numéro de carte</value>
+  </data>
+  <data name="CardUid" xml:space="preserve">
+    <value>UID de la carte</value>
+  </data>
+  <data name="ChangeInformation" xml:space="preserve">
+    <value>Modifier les informations</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Changer le mot de passe</value>
+  </data>
+  <data name="ChangePersonalInformation" xml:space="preserve">
+    <value>Modifier les informations personnelles</value>
+  </data>
+  <data name="ChangingBeneficiaryStatus" xml:space="preserve">
+    <value>Modification du statut de bénéficiaire</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Choisir le fichier</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Ville</value>
+  </data>
+  <data name="Click" xml:space="preserve">
+    <value>Cliquez sur</value>
+  </data>
+  <data name="Community" xml:space="preserve">
+    <value>Communauté</value>
+  </data>
+  <data name="Complaint" xml:space="preserve">
+    <value>Plainte</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmez le mot de passe</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Informations de contact</value>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Personne de contact</value>
+  </data>
+  <data name="Contents" xml:space="preserve">
+    <value>Contenu</value>
+  </data>
+  <data name="ContractNumber" xml:space="preserve">
+    <value>Numéro de contrat</value>
+  </data>
+  <data name="ControllerName" xml:space="preserve">
+    <value>Nom du contrôleur</value>
+  </data>
+  <data name="CountryName" xml:space="preserve">
+    <value>Nom du pays</value>
+  </data>
+  <data name="CreateDate" xml:space="preserve">
+    <value>créer un rendez-vous</value>
+  </data>
+  <data name="CultureName" xml:space="preserve">
+    <value>Nom culturel</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Device" xml:space="preserve">
+    <value>Dispositif</value>
+  </data>
+  <data name="DeviceId" xml:space="preserve">
+    <value>Reference de l'appareil</value>
+  </data>
+  <data name="DeviceInfo" xml:space="preserve">
+    <value>Info appareil</value>
+  </data>
+  <data name="DeviceName" xml:space="preserve">
+    <value>Nom de l'appareil</value>
+  </data>
+  <data name="DeviceVersion" xml:space="preserve">
+    <value>Version de l'appareil</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>District</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>Événement</value>
+  </data>
+  <data name="EventCount" xml:space="preserve">
+    <value>Nombre d'événements</value>
+  </data>
+  <data name="EventNotAssigned" xml:space="preserve">
+    <value>Evénement non attribué</value>
+  </data>
+  <data name="ExportManager" xml:space="preserve">
+    <value>Chef d'Exportation</value>
+  </data>
+  <data name="FamilyBookNumber" xml:space="preserve">
+    <value>Numéro de livret de famille</value>
+  </data>
+  <data name="FamilyInformation" xml:space="preserve">
+    <value>Information familiale</value>
+  </data>
+  <data name="FamilyName" xml:space="preserve">
+    <value>Familiale Nom</value>
+  </data>
+  <data name="FamilySize" xml:space="preserve">
+    <value>Taille de la famille</value>
+  </data>
+  <data name="FamilyStatus" xml:space="preserve">
+    <value>Situation familiale</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Femme</value>
+  </data>
+  <data name="Fillinthefieldbelowtochange" xml:space="preserve">
+    <value>Remplissez le champ ci-dessous pour changer</value>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="FingerPrintDevice" xml:space="preserve">
+    <value>Dispositif d'empreinte digitale</value>
+  </data>
+  <data name="FingerPrintProjectID" xml:space="preserve">
+    <value>ID de projet d'empreintes digitales</value>
+  </data>
+  <data name="ForDetail" xml:space="preserve">
+    <value>Pour plus de détails</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Le genre</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Domicile</value>
+  </data>
+  <data name="IBAN" xml:space="preserve">
+    <value>IBAN</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="IntegrationID" xml:space="preserve">
+    <value>ID d'intégration</value>
+  </data>
+  <data name="ItemOperate" xml:space="preserve">
+    <value>Article fonctionner</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Emploi</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="LastSyncDate" xml:space="preserve">
+    <value>Dernière date de synchronisation</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Date de dernière mise à jour</value>
+  </data>
+  <data name="locale" xml:space="preserve">
+    <value>fr-FR</value>
+  </data>
+  <data name="LocalName" xml:space="preserve">
+    <value>Nom local</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Emplacement</value>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Journal</value>
+  </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>date du journal</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Masculin</value>
+  </data>
+  <data name="MenuItemIconCss" xml:space="preserve">
+    <value>Icône d'élément de menu Css</value>
+  </data>
+  <data name="MenuItemName" xml:space="preserve">
+    <value>Nom de l'élément de menu</value>
+  </data>
+  <data name="MifareKey" xml:space="preserve">
+    <value>Clé Mifare</value>
+  </data>
+  <data name="MobileDeviceId" xml:space="preserve">
+    <value>Identifiant de l'appareil mobile</value>
+  </data>
+  <data name="MultipleEventAssignment" xml:space="preserve">
+    <value>Attribution d'événements multiples</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="NfcTagTechnology" xml:space="preserve">
+    <value>Technologie NfcTag</value>
+  </data>
+  <data name="NoRecordsFound" xml:space="preserve">
+    <value>Aucun enregistrement trouvé</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Pas</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Remarques</value>
+  </data>
+  <data name="Operation" xml:space="preserve">
+    <value>Opération</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>Ordre</value>
+  </data>
+  <data name="OtherInformation" xml:space="preserve">
+    <value>les autres informations</value>
+  </data>
+  <data name="Passive" xml:space="preserve">
+    <value>Passive</value>
+  </data>
+  <data name="PasswordInformation" xml:space="preserve">
+    <value>Informations sur le mot de passe</value>
+  </data>
+  <data name="pcsBeneficiaryselected" xml:space="preserve">
+    <value>pcs Bénéficiaire sélectionné</value>
+  </data>
+  <data name="PersonalInformation" xml:space="preserve">
+    <value>Renseignements personnels</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Numéro de téléphone</value>
+  </data>
+  <data name="PrinterMacAddress" xml:space="preserve">
+    <value>Adresse MAC de l'imprimante</value>
+  </data>
+  <data name="PrinterModel" xml:space="preserve">
+    <value>Modèle d'imprimante</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Projet</value>
+  </data>
+  <data name="ProjectCount" xml:space="preserve">
+    <value>Nombre de projets</value>
+  </data>
+  <data name="Purpose" xml:space="preserve">
+    <value>Objectif</value>
+  </data>
+  <data name="PutSharpİfYouWantToBeParent" xml:space="preserve">
+    <value>mettez # si vous voulez être parent</value>
+  </data>
+  <data name="ReleaseDate" xml:space="preserve">
+    <value>Date de sortie</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Les rôles</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Ligne</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Sauvegarder les modifications</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>Seconde</value>
+  </data>
+  <data name="SelectAEvent" xml:space="preserve">
+    <value>Sélectionnez un événement</value>
+  </data>
+  <data name="SelectAproject" xml:space="preserve">
+    <value>Sélectionnez un projet</value>
+  </data>
+  <data name="ShortName" xml:space="preserve">
+    <value>Nom court</value>
+  </data>
+  <data name="StateChangeProcess" xml:space="preserve">
+    <value>Processus de changement d'état</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="StatusDetail" xml:space="preserve">
+    <value>Détail de l'état</value>
+  </data>
+  <data name="Subdistrict" xml:space="preserve">
+    <value>Sous-district</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Matière</value>
+  </data>
+  <data name="SyncSource" xml:space="preserve">
+    <value>Source de synchronisation</value>
+  </data>
+  <data name="SystemUserId" xml:space="preserve">
+    <value>ID utilisateur système</value>
+  </data>
+  <data name="TransactionDate" xml:space="preserve">
+    <value>Transaction Date</value>
+  </data>
+  <data name="TransactionId" xml:space="preserve">
+    <value>Transaction Id</value>
+  </data>
+  <data name="UpdatedUser" xml:space="preserve">
+    <value>Utilisateur mis à jour</value>
+  </data>
+  <data name="UpdateInformation" xml:space="preserve">
+    <value>Mettre à jour les informations</value>
+  </data>
+  <data name="UpdateOpeningApp" xml:space="preserve">
+    <value>Mettre à jour l'application d'ouverture</value>
+  </data>
+  <data name="UpdateTrxAfterSales" xml:space="preserve">
+    <value>Mettre à jour Trx après-vente</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Utilisatrice</value>
+  </data>
+  <data name="UserId" xml:space="preserve">
+    <value>Identifiant d'utilisateur</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Utilisatrices</value>
+  </data>
+  <data name="VersionControl" xml:space="preserve">
+    <value>Contrôle de version</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Heures d'ouverture</value>
+  </data>
+  <data name="YouCanCreateAfter" xml:space="preserve">
+    <value>Vous pouvez créer après</value>
+  </data>
+  <data name="ZoneID" xml:space="preserve">
+    <value>ID de zone</value>
+  </data>
+</root>

@@ -1,0 +1,127 @@
+﻿@model WebIU.Models.Role.RoleEditViewModel
+
+@{
+    ViewData["Title"] = "RoleEdit";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-outline card-primary ">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="border-bottom">@Language["EditRoleInformation"]</h4>
+                    </div>
+                    <div class="col-md-12">
+                        @using (Html.BeginForm("RoleEdit", "Role", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+                        {
+                            <div class="p-2">
+                                <div class="form-group my-2">
+                                    <label asp-for="Id"></label>
+                                    <input type="text" class="form-control" disabled asp-for="Id" placeholder="Role Id" />
+                                    <span asp-validation-for="Id"></span>
+                                </div>
+                                <div class="form-group my-2">
+                                    <label asp-for="RoleName"></label>
+                                    <input type="text" class="form-control" asp-for="RoleName" placeholder="RoleName" />
+                                    <span asp-validation-for="RoleName"></span>
+                                </div>
+                                <div asp-validation-summary="All"></div>
+                                <div class="text-right my-2">
+                                    @if (AuthorizationService.AuthorizeAsync(User, Permission.Role.RoleEdit).Result.Succeeded)
+                                    {
+                                        <input type="submit" class="btn btn-success" value="@Language["SaveChanges"]" />
+                                    }
+                                    <a href="/Role/RoleList" class="btn btn-danger">@Language["Back"]</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card card-outline card-primary ">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="border-bottom">@Language["RolePermissions"]</h4>
+                    </div>
+                    <div class="col-md-12">
+                        @if (Model.Permissions.Any())
+                        {
+                            <div class="row">
+                                @{
+                                    int row = 1;
+                                }
+                                @foreach (var item in Model.Permissions)
+                                {
+                                    <div class="col-4">
+                                        <span>@row.</span><p class="card-text" style="display: inline;"> @item</p>
+                                        @{
+                                            row++;
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <span>@Language["NoPermissionDefinedRole"]</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right bg-white">
+                @if (AuthorizationService.AuthorizeAsync(User, Permission.Role.EditPermissionInRole).Result.Succeeded)
+                {
+                    <a asp-controller="Role" asp-action="EditPermissionInRole" asp-route-Id="@Model.Id" class="btn btn-primary ">@Language["ManageRolePermissions"]</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card card-outline card-primary ">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="border-bottom">@Language["RoleUsers"]</h4>
+                    </div>
+                    <div class="col-md-12">
+                        @if (Model.Users.Any())
+                        {
+                            <div class="row">
+                                @{
+                                    int row = 1;
+                                }
+                                @foreach (var user in Model.Users)
+                                {
+                                    <div class="col-3">
+                                        <span>@row.</span><p class="card-text" style="display: inline;"> @user.UserName <span class="text-muted">(@user.Email)</span></p>
+                                        @{
+                                            row++;
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <span>@Language["NoUserDefinedRole"]</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right bg-white">
+                @if (AuthorizationService.AuthorizeAsync(User, Permission.Role.EditUserInRole).Result.Succeeded)
+                {
+                    <a asp-controller="Role" asp-action="EditUserInRole" asp-route-Id="@Model.Id" class="btn btn-primary">@Language["ManageRoleUsers"]</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

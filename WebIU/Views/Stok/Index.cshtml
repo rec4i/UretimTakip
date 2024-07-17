@@ -1,0 +1,339 @@
+﻿@model WebIU.Models.StokViewModels.StokIndexViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button class="btn btn-primary" id="StokOluşturModalAçBtn"><i class="fa fa-plus"></i> Yeni Stok Oluştur</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="OrderList"
+                               data-toolbar="#OrderListToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="stokAdı" data-title="Stok Adı" data-sortable="false"></th>
+                                    <th data-field="birim.birimKodu" data-title="Birim" data-sortable="false"></th>
+                                    <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>
+                                    <th data-field="stokAdeti" data-title="Stok Adeti" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="StokOluşturModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle"> Stok Oluştur</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="StokOluşturModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>Stok Adı:</label>
+                        <input type="text" id="StokAdı" class="form-control" value="" />
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Stok Birimi:</label>
+                        <select id="BirimId" class="form-control">
+                            @foreach (var item in Model.Birims)
+                            {
+                                <option value="@item.Id">@item.BirimKodu (@item.DönüşümAçıklama)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Stok Başlangıç Adeti:</label>
+                        <input type="text" data-Mask="decimal" id="StokBaşlangıçAdeti" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Açıklama:</label>
+                        <textarea id="Açıklama" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="StokKaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="StokDüzenleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle"> Stok Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="StokDüzenleModalBody">
+
+                <div class="row">
+                    <div class="col">
+                        <label>Stok Adı:</label>
+                        <input type="text" id="StokAdıDüzenle" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <select id="BirimIdDüzenle" class="form-control">
+                            @foreach (var item in Model.Birims)
+                            {
+                                <option value="@item.Id">@item.BirimKodu (@item.DönüşümAçıklama)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                        <label>Stok Başlangıç Adeti:</label>
+                        <input type="text" data-Mask="decimal" id="StokBaşlangıçAdetiDüzenle" class="form-control" value="" />
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                        <label>Açıklama:</label>
+                        <textarea id="AçıklamaDüzenle" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="StokKaydetBtnDüzenle"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        OrderTablosuDoldur()
+
+        $('#StokOluşturModalAçBtn').click(function () {
+            $('#StokOluşturModal').modal('show')
+        })
+
+        $('#StokKaydetBtn').click(function () {
+            var data = new FormData();
+            data.append('StokAdı', $('#StokAdı').val())
+            data.append('BirimId', $('#BirimId').find(':selected').val())
+            data.append('Açıklama', $('#Açıklama').val())
+            data.append('StokAdeti', $('#StokBaşlangıçAdeti').val())
+
+
+            $.ajax({
+                url: "/Stok/StokKaydet",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    successAlert(data)
+                },
+            });
+
+        })
+
+        $('#StokKaydetBtnDüzenle').click(function () {
+            var data = new FormData();
+            data.append('Id', $(this).attr('StokId'))
+            data.append('StokAdı', $('#StokAdıDüzenle').val())
+            data.append('BirimId', $('#BirimIdDüzenle').find(':selected').val())
+            data.append('Açıklama', $('#AçıklamaDüzenle').val())
+            data.append('StokAdeti', $('#StokBaşlangıçAdetiDüzenle').val())
+
+            $.ajax({
+                url: "/Stok/StokDüzenle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    successAlert(data)
+                    $('#StokDüzenleModal').modal('hide')
+                    OrderTablosuDoldur()
+
+                },
+            });
+
+        })
+
+
+
+
+
+
+
+    })
+
+
+
+
+
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/Stok/StokPagination",
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+            value += "<button id='StokDüzenleModalAçBtn' StokId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button>";
+            value += "<button id='StokSil' StokId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+
+            return value
+        }
+        function afterLoad() {
+            $('#StokSil').click(function () {
+
+                var data = new FormData();
+                data.append('Id', $(this).attr('StokId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/Stok/StokSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                successAlert(data)
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+              
+            })
+
+
+            $('#StokDüzenleModalAçBtn').click(function () {
+
+                $('#StokDüzenleModal').modal('show')
+                var data = new FormData();
+                data.append('Id', $(this).attr('StokId'))
+                $('#StokKaydetBtnDüzenle').attr('StokId', $(this).attr('StokId'))
+                $.ajax({
+                    url: "/Stok/GetStok",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        $('#StokAdıDüzenle').val(data[0].stokAdı)
+                        $('#BirimIdDüzenle').val(data[0].birim.id)
+                        $('#StokBaşlangıçAdetiDüzenle').val(data[0].stokAdeti)
+                        $('#AçıklamaDüzenle').val(data[0].açıklama)
+
+
+
+                    },
+                });
+
+            })
+
+        }
+
+    }
+
+</script>

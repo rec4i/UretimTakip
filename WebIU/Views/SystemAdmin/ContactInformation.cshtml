@@ -1,0 +1,76 @@
+﻿@model WebIU.Models.SystemAdmin.ContactInformationViewModel
+@{
+    ViewData["Title"] = "ContactInformation";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="border-bottom">@Model.User.UserName 'a Ait Mesaj</h4>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <img src="~/Images/UserImages/@Model.User.Image" class="img-circle shadow-sm align-middle my-3" width="200" height="200" /><br>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="border-bottom">Kullanıcı Bilgileri</h4>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group my-3">
+                                    <label>@Language["UserName"]</label>
+                                    <h5>@Model.User.UserName</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group my-3">
+                                    <label>@Language["Email"]</label>
+                                    <h5>@Model.User.Email</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group my-3">
+                                    <label >@Language["AddedDate"]</label>
+                                    <h5>@Model.Contact.AddedDate.ToString("dd/MMM/yyyy")</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <h4 class="border-bottom">Mesaj Bilgileri</h4>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group my-3">
+                                    <label @Language["SubjecTtype"]></label>
+                                    <h5>@Model.Contact.SubjecTtype</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group my-3">
+                                    <label >@Language["Subject"]</label>
+                                    <h5>@Model.Contact.Subject</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group my-3">
+                                    <label >@Language["Content"]</label>
+                                    <h5>@Html.Raw(Model.Contact.Content)</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-footer text-right bg-white">
+                <a asp-action="ContactList" asp-controller="SystemAdmin" class="btn btn-warning text-white"><i class="fa-solid fa-arrow-rotate-left "></i> @Language["Back"]</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

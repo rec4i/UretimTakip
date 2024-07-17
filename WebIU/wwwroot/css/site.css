@@ -1,0 +1,78 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.row:not(:first-child) {
+    padding-top: 25px !important;
+}
+
+.row:first-child {
+    padding-top: 10px !important;
+}
+
+.worldMap svg .map {
+    margin: 0 auto;
+    text-align: center;
+}
+
+    .worldMap svg .map path {
+        cursor: pointer;
+        fill: lightgray;
+        transform: scale(0.60) !important;
+    }
+
+.worldMap svg path {
+    cursor: pointer;
+    fill: lightgray;
+    position: relative;
+    z-index: 1;
+}
+
+    .worldMap svg path:hover {
+        fill: rgba(28, 91, 138, 1);
+    }
+
+.worldMap .names {
+    position: absolute;
+    z-index: 2;
+}
+
+.worldMap .names span {
+    color: white;
+    background-color: rgba(28, 91, 138, 1);
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.worldMap .content {
+    position: absolute;
+    z-index: 2;
+}
+
+.worldMap .valueList {
+    position: absolute;
+    z-index: 2;
+}
+
+.validation-summary ul {
+    background-color: red;
+    color:white;
+}
+.validation-summary ul li {
+    padding:1px;
+}
