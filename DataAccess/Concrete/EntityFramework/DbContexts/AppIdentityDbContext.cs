@@ -71,6 +71,8 @@ namespace DataAccess.Concrete.EntityFramework.DbContexts
         public DbSet<Urun> Uruns { get; set; }
         public DbSet<UrunAşamaları> UrunAşamalarıs { get; set; }
         public DbSet<Tezgah_Iş_MTM> Tezgah_Iş_MTMs { get; set; }
+        public DbSet<Depo> Depos { get; set; }
+        public DbSet<StokHareket> StokHarekets { get; set; }
 
         //Urun
         //UrunAşamaları

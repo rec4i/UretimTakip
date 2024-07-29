@@ -3,6 +3,7 @@ using DataAccess.Concrete;
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using WebIU.Models.HelperModels;
 using WebIU.Models.StokViewModels;
 using WebIU.Models.TezgahModels;
 using WebIU.Models.TezgahViewModels;
@@ -44,11 +45,7 @@ namespace WebIU.Controllers
             entity.Açıklama = Açıklama;
 
             entity.Guid = Guid.NewGuid().ToString();
-
             var addedEntity = _tezgahRepository.Add(entity);
-
-
-
             foreach (var item in IşsIds)
             {
                 Tezgah_Iş_MTM entityy = new Tezgah_Iş_MTM();
@@ -59,7 +56,43 @@ namespace WebIU.Controllers
             }
 
 
-            return Json("İşlem Başarılı");
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+
+
+
+        public IActionResult TezgahDüzenle(int Id, string TezgahAdı, string Açıklama, List<string> IşsIds)
+        {
+
+            var entity = _tezgahRepository.Get(o => o.Id == Id);
+            entity.TezgahAdı = TezgahAdı;
+            entity.Açıklama = Açıklama;
+
+
+            var işsentits = _tezgah_Iş_MTMReposiyory.GetAll(o => o.TezgahId == Id);
+            foreach (var item in işsentits)
+            {
+                _tezgah_Iş_MTMReposiyory.Delete(item,true);
+            }
+
+            foreach (var item in IşsIds)
+            {
+                Tezgah_Iş_MTM entityy = new Tezgah_Iş_MTM();
+                entityy.IşId = Convert.ToInt32(item);
+                entityy.TezgahId = Id;
+
+                _tezgah_Iş_MTMReposiyory.Add(entityy);
+            }
+
+
+
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
         }
         public IActionResult GetTezgah(int Id)
         {
@@ -70,7 +103,10 @@ namespace WebIU.Controllers
         {
             var entitiy = _tezgahRepository.GetAllIncluded(o => o.Id == Id).FirstOrDefault();
             _tezgahRepository.Delete(entitiy);
-            return Json("İşlem Başarılı");
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
         }
 
 

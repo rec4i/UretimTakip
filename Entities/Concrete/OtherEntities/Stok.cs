@@ -15,6 +15,10 @@ namespace Entities.Concrete.OtherEntities
         public int BirimId { get; set; }
         public Birim Birim { get; set; }
 
-        public decimal StokAdeti { get; set; }
+        //public decimal StokAdeti { get; set; }
+
+        //public int? DepoId { get; set; }
+        //public Depo? Depo { get; set; }
+        public List<StokHareket>? StokHarekets { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using WebIU.Models.HelperModels;
 using WebIU.Models.StokViewModels;
 
 namespace WebIU.Controllers
@@ -10,17 +12,22 @@ namespace WebIU.Controllers
 
         private readonly IStokRepository _stokRepository;
         private readonly IBirimRepository _birimRepository;
-        public StokController(IStokRepository stokRepository, IBirimRepository birimRepository)
+        private readonly IDepoRepository _depoRepository;
+        private readonly IStokHarektiRepository _stokHarektiRepository;
+
+        public StokController(IStokRepository stokRepository, IBirimRepository birimRepository, IDepoRepository depoRepository, IStokHarektiRepository stokHarektiRepository)
         {
             _stokRepository = stokRepository;
             _birimRepository = birimRepository;
-
+            _depoRepository = depoRepository;
+            _stokHarektiRepository = stokHarektiRepository;
         }
 
         public IActionResult Index()
         {
             StokIndexViewModel model = new StokIndexViewModel();
             model.Birims = _birimRepository.GetAll();
+            model.Depos = _depoRepository.GetAll();
             return View(model);
         }
 
@@ -30,25 +37,38 @@ namespace WebIU.Controllers
             var model = _stokRepository.GetAllIncluded(o => o.Id
             == Id);
 
-
             return Json(model);
         }
 
 
-        public IActionResult StokKaydet(string StokAdı, int BirimId, string Açıklama, decimal StokAdeti)
+        public IActionResult GetStokWithName(string StokName)
+        {
+            var res = _stokRepository.GetAll(o => o.StokAdı.Contains(StokName));
+            return Json(res);
+
+        }
+
+        public IActionResult StokKaydet(string StokAdı, int BirimId, string Açıklama, decimal StokAdeti, int DepoId)
         {
 
             Stok entity = new Stok();
             entity.StokAdı = StokAdı;
             entity.BirimId = BirimId;
             entity.Açıklama = Açıklama;
-            entity.StokAdeti = StokAdeti;
 
+            var addedEntity = _stokRepository.Add(entity);
 
-            _stokRepository.Add(entity);
+            StokHareket stokHarekti = new StokHareket();
+            stokHarekti.StokId = addedEntity.Id;
+            stokHarekti.Adet = StokAdeti;
+            stokHarekti.HareketTipi = 1;
+            stokHarekti.DepoId = DepoId;
+            _stokHarektiRepository.Add(stokHarekti);
 
-
-            return Json("İşlem Başarılı");
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
         }
 
 
@@ -57,20 +77,26 @@ namespace WebIU.Controllers
             var entity = _stokRepository.Get(o => o.Id == Id);
             _stokRepository.Delete(entity);
 
-            return Json("İşlem Başarılı");
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
         }
 
-        public IActionResult StokDüzenle(int Id, string StokAdı, int BirimId, string Açıklama, decimal StokAdeti)
+        public IActionResult StokDüzenle(int Id, string StokAdı, int BirimId, string Açıklama, decimal StokAdeti, int DepoId)
         {
             var entity = _stokRepository.Get(o => o.Id == Id);
             entity.StokAdı = StokAdı;
             entity.BirimId = BirimId;
             entity.Açıklama = Açıklama;
-            entity.StokAdeti = StokAdeti;
+            //entity.DepoId = DepoId;
             _stokRepository.Update(entity);
 
 
-            return Json("İşlem Başarılı");
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
         }
 
         public IActionResult StokPagination(int offset, int limit, List<int> orderStatusId, string search)

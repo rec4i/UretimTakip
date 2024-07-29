@@ -288,6 +288,7 @@
 
 
         $('#TezgahtaYapılanİşEkleDüzenle').click(function () {
+
             var boş = '' +
                 '  <tr id="IşSilinecekDüzenle">' +
                 '        <td class="text-center" colspan="3"> Hiç Veri Bulunamadı</td>' +
@@ -302,15 +303,13 @@
                 '';
 
             var silinecekCounter = $('#IşSilinecekDüzenle').each(function () { }).length
-            if (silinecekCounter <= 1) {
+            if (silinecekCounter >= 1) {
 
                 var varmı = $('tr[id="IşdataDüzenle"][IşId="' + $('#YapılanIşlerSelectDüzenle').find(':selected').val() + '"]').each(function () { }).length
                 if (varmı <= 0) {
                     $('#YapılanIşBodyDüzenle').empty();
                     $('#YapılanIşBodyDüzenle').append(data);
                 }
-
-
             }
             else {
                 var varmı = $('tr[id="IşdataDüzenle"][IşId="' + $('#YapılanIşlerSelectDüzenle').find(':selected').val() + '"]').each(function () { }).length
@@ -328,14 +327,8 @@
                     if (silinecekCounter <= 0) {
                         $('#YapılanIşBodyDüzenle').append(boş);
                     }
-
-
-
                 }
-
             })
-
-
         })
 
 
@@ -372,13 +365,51 @@
                 async: false,
                 data: data,
                 success: function (data) {
-                    successAlert(data)
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
                     OrderTablosuDoldur()
                 },
             });
 
         })
 
+
+
+
+        $('#YeniTezgahDüzenleBtn').click(function () {
+            var data = new FormData();
+            data.append('Id', $(this).attr('TezgahId'))
+            data.append('TezgahAdı', $('#TezgahAdı').val())
+            data.append('Açıklama', $('#Açıklama').val())
+
+            $('tr[id="IşdataDüzenle"]').each(function () {
+                data.append('IşsIds[]', $(this).attr('IşId'))
+            })
+
+
+
+            $.ajax({
+                url: "/Tezgah/TezgahDüzenle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+        })
 
 
     })
@@ -433,7 +464,12 @@
                             async: false,
                             data: data,
                             success: function (data) {
-                                successAlert(data)
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
                                 OrderTablosuDoldur()
                             },
                         });
@@ -495,12 +531,9 @@
                     success: function (data) {
                         $('#TezgahAdıDüzenle').val(data[0].tezgahAdı)
                         $('#AçıklamaDüzenle').val(data[0].açıklama)
-
-                        console.log(data);
                         $('#YapılanIşBodyDüzenle').empty();
 
                         for (var i = 0; i < data[0].tezgah_Iş_MTMs.length; i++) {
-                            console.log(data[0].tezgah_Iş_MTMs[i].iş.işAdı);
 
                             var satır = '' +
                                 '   <tr id="IşdataDüzenle"  IşId="' + data[0].tezgah_Iş_MTMs[i].iş.id + '">' +
@@ -512,6 +545,23 @@
 
                             $('#YapılanIşBodyDüzenle').append(satır);
 
+
+                            var boş = '' +
+                                '  <tr id="IşSilinecekDüzenle">' +
+                                '        <td class="text-center" colspan="3"> Hiç Veri Bulunamadı</td>' +
+                                '    </tr>' +
+                                '';
+                            $('button[id="YapılanIşSilBtnDüzenle"][IşId="' + data[0].tezgah_Iş_MTMs[i].iş.id + '"]').click(function () {
+                                $(this).parent().parent().remove();
+
+                                var dataCounter = $('#IşdataDüzenle').each(function () { }).length
+                                var silinecekCounter = $('#IşSilinecekDüzenle').each(function () { }).length
+                                if (dataCounter <= 0) {
+                                    if (silinecekCounter <= 0) {
+                                        $('#YapılanIşBodyDüzenle').append(boş);
+                                    }
+                                }
+                            })
                         }
 
                     },

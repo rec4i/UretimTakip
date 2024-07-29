@@ -2,6 +2,7 @@
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks.Dataflow;
+using WebIU.Models.HelperModels;
 using WebIU.Models.IşModels;
 using WebIU.Models.TezgahViewModels;
 
@@ -39,8 +40,10 @@ namespace WebIU.Controllers
             var entity = _ışRepository.GetAllIncluded(o => o.Id == Id).FirstOrDefault();
             _ışRepository.Delete(entity);
 
-            return Json("İşlem Başarılı");
-
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
         }
 
 
@@ -54,7 +57,32 @@ namespace WebIU.Controllers
             _ışRepository.Add(entitiy);
 
 
-            return Json("İşlem Başarılı");
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+
+        public IActionResult IşDüzenle(int Id, string IşAdı, string Açıklama)
+        {
+            var entitiy = _ışRepository.Get(o => o.Id == Id);
+            entitiy.IşAdı = IşAdı;
+            entitiy.Açıklama = Açıklama;
+
+            _ışRepository.Update(entitiy);
+
+
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+
+        public IActionResult IşSearchWithName(string işName)
+        {
+            var res = _ışRepository.GetAll(o => o.IşAdı.Contains(işName));
+
+            return Json(res);
         }
 
         public IActionResult IşGetPagination(int offset, int limit, List<int> orderStatusId, string search)

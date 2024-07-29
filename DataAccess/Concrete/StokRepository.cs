@@ -22,9 +22,12 @@ namespace DataAccess.Concrete
                 var entities = filter == null
                     ? context.Set<Stok>().Where("IsDeleted == false")
                     .Include("Birim")
+                    .Include("StokHarekets")
                     .ToList().ToList()
                     : context.Set<Stok>().Where("IsDeleted == false").Where(filter)
                     .Include("Birim")
+                    .Include("StokHarekets")
+
                     .ToList();
                 return entities;
             }
@@ -36,14 +39,18 @@ namespace DataAccess.Concrete
             {
                 var entities = filter == null
                     ? context.Set<Stok>().Where("IsDeleted == false")
+                    .Include("StokHarekets")
                     .Include("Birim")
+
                     .Where(o =>
                     search == null ? o.StokAdı == o.StokAdı :
                     o.StokAdı.ToLower().Contains(search.ToLower())
                     )
                     .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList()
                     : context.Set<Stok>().Where("IsDeleted == false").Where(filter)
+                    .Include("StokHarekets")
                     .Include("Birim")
+
                     .Where(o =>
                     search == null ? o.StokAdı == o.StokAdı :
                     o.StokAdı.ToLower().Contains(search.ToLower())

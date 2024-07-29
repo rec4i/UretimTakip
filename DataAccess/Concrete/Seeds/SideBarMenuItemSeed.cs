@@ -52,6 +52,9 @@ namespace DataAccess.Concrete.Seeds
 
                              new SideBarMenuItem{Id=39,Name="Iş",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Iş/Index",Row=12},
                               new SideBarMenuItem{Id=40,Name="Iş Emri",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/IşEmri/Index",Row=12},
+
+
+                  new SideBarMenuItem{Id=41,Name="Depo",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Depo/Index",Row=12},
             };
 
             modelBuilder.Entity<SideBarMenuItem>().HasData(sideBarMenuItems);

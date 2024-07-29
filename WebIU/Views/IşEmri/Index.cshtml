@@ -190,19 +190,19 @@
             const { jsPDF } = window.jspdf;
             const canvas = document.createElement('canvas');
             const qrDataList = [
-              
+
             ];
 
             for (var i = 0; i < $("#QrKodListesi").bootstrapTable('getSelections').length; i++) {
                 var guid = $("#QrKodListesi").bootstrapTable('getSelections')[i].guid
 
-                qrDataList.push("1-"+guid)
+                qrDataList.push("1-" + guid)
 
             }
 
             const qrSize = 50; // QR kodu boyutu
             const margin = 10; // Kenar boşluğu
-            const pageHeight = 297; 
+            const pageHeight = 297;
             const pdf = new jsPDF();
 
             let currentX = margin;
@@ -242,7 +242,7 @@
                 if (index === qrDataList.length - 1) {
                     pdf.save('qrcodes.pdf');
                 }
-              
+
             });
 
 
@@ -273,7 +273,12 @@
                 async: false,
                 data: data,
                 success: function (data) {
-                    successAlert(data)
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
                     OrderTablosuDoldur()
                 },
             });
@@ -332,7 +337,12 @@
                             async: false,
                             data: data,
                             success: function (data) {
-                                successAlert(data)
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
                                 OrderTablosuDoldur()
                             },
                         });
@@ -428,7 +438,12 @@
                             async: false,
                             data: data,
                             success: function (data) {
-                                successAlert(data)
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
                                 OrderTablosuDoldur()
                             },
                         });

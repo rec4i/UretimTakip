@@ -258,7 +258,7 @@ namespace WebIU.Controllers
        
 
             if (string.IsNullOrEmpty(model.Password))
-                model.Password = "NagisNewUser1*";
+                model.Password = "RpcSystems977*";
 
             var result = await _userManager.CreateAsync(user, model.Password);
 

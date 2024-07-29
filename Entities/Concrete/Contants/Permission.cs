@@ -136,6 +136,10 @@ namespace Entities.Concrete.Contants
             public const string Index = "Permission.IşEmri.Index";
         }
 
+        public static class Depo
+        {
+            public const string Index = "Permission.Depo.Index";
+        }
         //PharmacyListManager
 
         //fa-solid fa-cube

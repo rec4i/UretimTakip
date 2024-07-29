@@ -3,6 +3,7 @@ using DataAccess.Concrete;
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using WebIU.Models.HelperModels;
 using WebIU.Models.IşEmriViewModels;
 using WebIU.Models.IşModels;
 using WebIU.Models.ReçeteViewModels;
@@ -63,14 +64,21 @@ namespace WebIU.Controllers
 
                 }
             }
-            return Json("İşlem Başarılı");
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+
+            return Json(res);
         }
 
         public IActionResult İşEmriSil(int Id)
         {
             var enttiy = _işEmriRepository.Get(o => o.Id == Id);
             _işEmriRepository.Delete(enttiy);
-            return Json("İşlem Başarılı");
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
         }
         public IActionResult GetUrunPagination(int offset, int limit, string search, int İşEmriId)
         {

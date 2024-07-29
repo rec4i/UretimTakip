@@ -1,7 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+<div class="row">
+    <div class="col">
+        <a href="/Tezgah/TezgahtaYapılacakİşEmirleri?qr=c16e3aa4-219b-4bbb-9d8f-49ad83f4e508" class="btn btn-primary"><i class="fa fa-arrow-right"></i> TEZGAH SAYFASINA GİT</a>
+        <a href="/Urun/Index?qr=6c78ddbd-8a2f-4680-8b1d-300698b49e83" class="btn btn-primary"><i class="fa fa-arrow-right"></i> ÜRÜN SAYFASINA GİT</a>
+    </div>
+</div>
+@*6c78ddbd-8a2f-4680-8b1d-300698b49e83*@
 <div class="row">
     <div class="col">
         <div class="card card-primary card-outline">
@@ -27,7 +33,7 @@
                                 <tr>
                                     @*<th data-field="type" data-width="10" data-width-unit="%" data-sortable="true">Type</th>*@
                                     <th data-field="releaseDate" data-title="@Language["ReleaseDate"]" data-width="10" data-width-unit="%" data-sortable="true">Release Date</th>
-                                    <th data-field="subject"@Language["Subject"] data-sortable="true">Subject</th>
+                                    <th data-field="subject" @Language["Subject"] data-sortable="true">Subject</th>
                                 </tr>
                             </thead>
                         </table>

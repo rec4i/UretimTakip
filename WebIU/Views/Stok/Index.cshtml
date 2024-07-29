@@ -82,6 +82,19 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Depo :</label>
+                        <select id="DepoId" class="form-control" style="width:100%">
+                            @foreach (var item in Model.Depos)
+                            {
+                                <option value="@item.Id">@item.DepoAdı </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col">
                         <label>Stok Başlangıç Adeti:</label>
@@ -140,13 +153,18 @@
                     </div>
                 </div>
 
-
-                <div class="row">
+                @*<div class="row">
                     <div class="col">
-                        <label>Stok Başlangıç Adeti:</label>
-                        <input type="text" data-Mask="decimal" id="StokBaşlangıçAdetiDüzenle" class="form-control" value="" />
+                        <label>Depo :</label>
+                        <select id="DepoIdDüzenle" class="form-control" style="width:100%">
+                            @foreach (var item in Model.Depos)
+                            {
+                                <option value="@item.Id">@item.DepoAdı </option>
+                            }
+                        </select>
                     </div>
-                </div>
+                </div>*@
+
 
 
                 <div class="row">
@@ -165,8 +183,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -180,16 +196,32 @@
 <script>
 
     $(document).ready(function () {
+
+        $('#KullanılıcakStokSelect').select2({
+            dropdownParent: $("#ReçeteOluşturModal")
+        })
+
+
         OrderTablosuDoldur()
 
         $('#StokOluşturModalAçBtn').click(function () {
             $('#StokOluşturModal').modal('show')
         })
 
+
+        $('#DepoId').select2({
+            dropdownParent: $("#StokOluşturModal")
+        })
+
+        $('#DepoIdDüzenle').select2({
+            dropdownParent: $("#StokDüzenleModal")
+        })
+
         $('#StokKaydetBtn').click(function () {
             var data = new FormData();
             data.append('StokAdı', $('#StokAdı').val())
             data.append('BirimId', $('#BirimId').find(':selected').val())
+            data.append('DepoId', $('#DepoId').find(':selected').val())
             data.append('Açıklama', $('#Açıklama').val())
             data.append('StokAdeti', $('#StokBaşlangıçAdeti').val())
 
@@ -202,7 +234,13 @@
                 async: false,
                 data: data,
                 success: function (data) {
-                    successAlert(data)
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
                 },
             });
 
@@ -213,8 +251,10 @@
             data.append('Id', $(this).attr('StokId'))
             data.append('StokAdı', $('#StokAdıDüzenle').val())
             data.append('BirimId', $('#BirimIdDüzenle').find(':selected').val())
+            data.append('DepoId', $('#DepoIdDüzenle').find(':selected').val())
+
             data.append('Açıklama', $('#AçıklamaDüzenle').val())
-            data.append('StokAdeti', $('#StokBaşlangıçAdetiDüzenle').val())
+            //data.append('StokAdeti', $('#StokBaşlangıçAdetiDüzenle').val())
 
             $.ajax({
                 url: "/Stok/StokDüzenle",
@@ -224,7 +264,13 @@
                 async: false,
                 data: data,
                 success: function (data) {
-                    successAlert(data)
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
                     $('#StokDüzenleModal').modal('hide')
                     OrderTablosuDoldur()
 
@@ -242,9 +288,6 @@
     })
 
 
-
-
-
     function OrderTablosuDoldur() {
         $('#OrderList').bootstrapTable("destroy")
         $('#OrderList').bootstrapTable({
@@ -255,7 +298,9 @@
                     {},
                     {},
                     {},
-                    {},
+                    {
+                        formatter: StokSay
+                    },
                     {
                         formatter: ActionFormatter
                     },
@@ -270,6 +315,21 @@
 
 
             return value
+        }
+        function StokSay(value, row) {
+            var ToplamStok = 0;
+            console.log(row["stokHarekets"])
+            for (var i = 0; i < row["stokHarekets"].length; i++) {
+                //row["stokHarekets"][i].hareketTipi
+                if (row["stokHarekets"][i].hareketTipi == 1) {
+                    ToplamStok = ToplamStok + row["stokHarekets"][i].adet
+                }
+                if (row["stokHarekets"][i].hareketTipi == 2) {
+                    ToplamStok = ToplamStok - row["stokHarekets"][i].adet
+                }
+            }
+            return ToplamStok;
+            //
         }
         function afterLoad() {
             $('#StokSil').click(function () {
@@ -296,13 +356,19 @@
                             async: false,
                             data: data,
                             success: function (data) {
-                                successAlert(data)
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                OrderTablosuDoldur()
                                 OrderTablosuDoldur()
                             },
                         });
                     }
                 })
-              
+
             })
 
 

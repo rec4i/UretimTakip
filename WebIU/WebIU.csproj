@@ -36,6 +36,7 @@
   <ItemGroup>
     <Folder Include="Models\ExportedFile\" />
     <Folder Include="Models\NewFolder\" />
+    <Folder Include="Views\NewFolder\" />
     <Folder Include="wwwroot\images\DeviceImages\" />
   </ItemGroup>
 

@@ -1,0 +1,502 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3>Reçete Bilgileri</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Reçete Adı:</label>
+                                        <input type="text" id="ReçeteAdı" class="form-control" value="" />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Açıklama :</label>
+                                        <textarea rows="3" class="form-control" id="Açıklama"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-danger">
+                            <div class="card-header">
+                                <label>Yapılacak İşler</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card card-blue">
+                                            <div class="card-header">
+                                                <h3>Kullanılıcak Stok</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <label>Kullanılacak Depo:</label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <label>Kullanılacak Stok:</label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <label>Kullanılacak Stok Adeti:</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <select style="width:100%" class="form-control" id="KullanılacakDepo">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <select style="width:100%" class="form-control" id="İşYapılırkenKullanılıcakStok">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="text" data-Mask="decimal" id="İşYapılırkenKullanılıcakStokAdeti" class="form-control" s value="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card card-warning">
+                                            <div class="card-header">
+                                                <h3>İş Sonuçu Oluşacak Stok</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <label>Hedef Depo:</label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <label>Üretilecek Hedef Stok:</label>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <label>Üretilecek Hedef Stok Adeti:</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <select style="width:100%" class="form-control" id="HedefDepo">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <select style="width:100%" class="form-control" id="ÜretilecekStok">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="text" data-Mask="decimal" id="ÜretilecekStokAdeti" class="form-control" s value="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <label>Yapılacak İş:</label>
+                                    </div>
+                                    <div class="col-5">
+                                        <label>Açıklama:</label>
+                                    </div>
+                                    <div class="col-2">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <select style="width:100%" id="YapılanIşlerSelect" class="form-control">
+                                        </select>
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="text" class="form-control" id="İşAçıklama" value="" />
+                                    </div>
+                                    <div class="col-2">
+                                        <button class="btn btn-primary btn-block" id="TezgahtaYapılanİşEkle"><i class="fa fa-plus"></i> Ekle</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th> İş Adı</th>
+                                                        <th> İş Açıklama</th>
+                                                        <th> Kullanılan Depo</th>
+                                                        <th> Kullanılan Stok</th>
+                                                        <th> Kullanılan Stok Adeti</th>
+                                                        <th> Hedef Depo</th>
+                                                        <th> Üretilecek Stok</th>
+                                                        <th> Üretilecek Stok Adeti</th>
+                                                        <th> İşlemler</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="YapılanIşBody">
+                                                    <tr id="IşSilinecek">
+                                                        <td class="text-center" colspan="9"> Hiç Veri Bulunamadı</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="ReçeteKaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        $('#ReçeteKaydetBtn').click(function () {
+
+            var data = new FormData();
+            data.append('ReçeteAdı', $('#ReçeteAdı').val())
+            data.append('Açıklama', $('#Açıklama').val())
+
+            $('tr[id="Işdata"]').each(function () {
+                data.append('IşsIds[]', $(this).attr('IşId'))
+
+
+                data.append('IşsIds[]', $(this).attr('IşId'))
+                data.append('Açıklamas[]', $(this).attr('açıklama'))
+                data.append('KullanılıcakDepoId[]', $(this).attr('kullanılacakdepoid'))
+                data.append('KullanılacakStokId[]', $(this).attr('kullanılacakstokid'))
+                data.append('KullanılacakStokAdeti[]', $(this).attr('kullanılacakstokadeti'))
+
+
+                data.append('HedefDepoId[]', $(this).attr('hedefdepoid'))
+                data.append('HedefStokId[]', $(this).attr('hedefstokid'))
+                data.append('HedefStokAdeti[]', $(this).attr('hedefstokadeti'))
+
+            })
+
+
+
+            $.ajax({
+                url: "/Reçete/ReçeteEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+
+
+        })
+
+
+
+
+
+
+        $('#HedefDepo').select2({
+            ajax: {
+                url: '/Depo/DepoSearchWithName', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        DepoName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.depoAdı, // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true // Temizleme butonunu etkinleştir
+        });
+
+        $('#KullanılacakDepo').select2({
+            ajax: {
+                url: '/Depo/DepoSearchWithName', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        DepoName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.depoAdı, // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true // Temizleme butonunu etkinleştir
+        });
+
+        $('#YapılanIşlerSelect').select2({
+            ajax: {
+                url: '/Iş/IşSearchWithName', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        işName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.işAdı, // Select2'de görüntülenecek metin
+                                açıklama: item.açıklama
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true // Temizleme butonunu etkinleştir
+        });
+
+        $('#YapılanIşlerSelect').change(function () {
+            var data = $(this).select2('data')
+            $('#İşAçıklama').val(data[0].açıklama)
+        })
+
+
+
+        $('#ÜretilecekStok').select2({
+            ajax: {
+                url: '/Stok/GetStokWithName', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        StokName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.stokAdı // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true // Temizleme butonunu etkinleştir
+        });
+        $('#İşYapılırkenKullanılıcakStok').select2({
+            ajax: {
+                url: '/Stok/GetStokWithName', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        StokName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.stokAdı,// Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true // Temizleme butonunu etkinleştir
+        });
+
+
+
+        $('#TezgahtaYapılanİşEkle').click(function () {
+            //$('#İşYapılırkenKullanılıcakStok').val(null).trigger('change'); // Seçimi temizleme
+            //$('#ÜretilecekStok').val(null).trigger('change'); // Seçimi temizleme
+            //$('#İşYapılırkenKullanılıcakStok').val(null).trigger('change'); // Seçimi temizleme
+
+
+
+
+
+            var boş = '' +
+                '  <tr id="IşSilinecek">' +
+                '        <td class="text-center" colspan="9"> Hiç Veri Bulunamadı</td>' +
+                '    </tr>' +
+                '';
+            var işselected = $('#YapılanIşlerSelect').select2('data')
+
+            var kullanılacakselected = $('#İşYapılırkenKullanılıcakStok').select2('data')
+            var kullanılacakselectedText = "";
+            var kullanılacakselectedId = 0;
+            if ((kullanılacakselected.length <= 0)) {
+                kullanılacakselectedText = "Stok Kullanılmayacak"
+                kullanılacakselectedId = 0
+            }
+            else {
+                kullanılacakselectedText = kullanılacakselected[0].text
+                kullanılacakselectedId = kullanılacakselected[0].id
+            }
+
+            var Üretilkecekselected = $('#ÜretilecekStok').select2('data')
+            var ÜretilkecekselectedText = "";
+            var ÜretilkecekselectedId = 0
+            if ((Üretilkecekselected.length <= 0)) {
+                ÜretilkecekselectedText = "Stok Üretilmeyecek"
+                ÜretilkecekselectedId = 0;
+            }
+            else {
+                ÜretilkecekselectedText = Üretilkecekselected[0].text
+                ÜretilkecekselectedId = Üretilkecekselected[0].id
+
+            }
+
+
+            var KullanılacakDepo = $('#KullanılacakDepo').select2('data')
+            var KullanılacakDepoText = "";
+            var KullanılacakDepoId = 0
+            if ((KullanılacakDepo.length <= 0)) {
+                KullanılacakDepoText = "Stok Üretilmeyecek"
+                KullanılacakDepoId = 0;
+
+            }
+            else {
+                KullanılacakDepoText = KullanılacakDepo[0].text
+                KullanılacakDepoId = KullanılacakDepo[0].id
+
+            }
+
+            var HedefDepo = $('#HedefDepo').select2('data')
+            var HedefDepoText = "";
+            var HedefDepoId = 0;
+            if ((HedefDepo.length <= 0)) {
+                HedefDepoText = "Stok Üretilmeyecek"
+                HedefDepoId = 0;
+
+            }
+            else {
+                HedefDepoText = HedefDepo[0].text
+                HedefDepoId = HedefDepo[0].id
+
+            }
+
+
+
+
+
+
+
+
+
+
+            var data = '' +
+                '   <tr HedefStokAdeti="' + $('#ÜretilecekStokAdeti').val() + '"   HedefStokId="' + ÜretilkecekselectedId + '"  HedefDepoId="' + HedefDepoId + '"  KullanılacakStokAdeti="' + $('#İşYapılırkenKullanılıcakStokAdeti').val() + '"  KullanılacakStokId="' + kullanılacakselectedId + '" KullanılacakDepoId="' + KullanılacakDepoId + '" Açıklama="' + işselected[0].açıklama + '"  id="Işdata" IşId="' + $('#YapılanIşlerSelect').find(':selected').val() + '">' +
+                '        <td  >' + işselected[0].text + '</td>' +
+                '        <td  Açıklama="' + işselected[0].açıklama + '">' + işselected[0].açıklama + '</td>' +
+                '        <td KullanılacakDepoId="' + KullanılacakDepoId + '">' + KullanılacakDepoText + '</td>' +
+                '        <td KullanılacakStokId="' + kullanılacakselectedId + '">' + kullanılacakselectedText + '</td>' +
+                '        <td KullanılacakStokAdeti="' + $('#İşYapılırkenKullanılıcakStokAdeti').val() + '" >' + $('#İşYapılırkenKullanılıcakStokAdeti').val() + '</td>' +
+                '        <td HedefDepoId="' + HedefDepoId + '" >' + HedefDepoText + '</td>' +
+                '        <td HedefStokId="' + ÜretilkecekselectedId + '">' + ÜretilkecekselectedText + '</td>' +
+                '        <td HedefStokAdeti="' + $('#ÜretilecekStokAdeti').val() + '" >' + $('#ÜretilecekStokAdeti').val() + '</td>' +
+                '        <td><button class="btn btn-danger" id="YapılanIşSilBtn"><i class="fa fa-trash"></i></button></td>' +
+                '    </tr>' +
+                '';
+
+            var silinecekCounter = $('#IşSilinecek').each(function () { }).length
+            if (silinecekCounter >= 1) {
+                var varmı = $('tr[id="Işdata"][IşId="' + $('#YapılanIşlerSelect').find(':selected').val() + '"]').each(function () { }).length
+
+                if (varmı <= 0) {
+                    $('#YapılanIşBody').empty();
+                    $('#YapılanIşBody').append(data);
+                }
+
+            }
+            else {
+                var varmı = $('tr[id="Işdata"][IşId="' + $('#YapılanIşlerSelect').find(':selected').val() + '"]').each(function () { }).length
+                if (varmı <= 0) {
+                    $('#YapılanIşBody').append(data);
+                }
+            }
+
+            $('#YapılanIşSilBtn').click(function () {
+                $(this).parent().parent().remove();
+                var dataCounter = $('#Işdata').each(function () { }).length
+                var silinecekCounter = $('#IşSilinecek').each(function () { }).length
+                if (dataCounter <= 0) {
+                    if (silinecekCounter <= 0) {
+                        $('#YapılanIşBody').append(boş);
+                    }
+                }
+            })
+        })
+    })
+</script>
