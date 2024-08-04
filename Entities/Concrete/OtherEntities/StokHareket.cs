@@ -9,6 +9,8 @@ namespace Entities.Concrete.OtherEntities
 {
     public class StokHareket : BaseEntity
     {
+        public int? ProgramŞirketGrupId { get; set; }
+        public ProgramŞirketGrup? ProgramŞirketGrup { get; set; }
         public int? StokId { get; set; }
         public Stok? Stok { get; set; }
 

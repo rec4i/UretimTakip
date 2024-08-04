@@ -9,9 +9,9 @@ namespace Entities.Concrete.OtherEntities
 {
     public class ProgramŞirketGrup : BaseEntity
     {
-        public string Adı { get; set; }
-        public int ŞirketAktifmi { get; set; }
-        public string YetkiliİletişimNo { get; set; }
+        public string? Adı { get; set; }
+        public int? ŞirketAktifmi { get; set; }
+        public string? YetkiliİletişimNo { get; set; }
         public List<ProgramŞirketKullanıcı> ProgramŞirketKullanıcıs { get; set; }
     }
 }

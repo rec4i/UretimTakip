@@ -74,6 +74,20 @@ namespace DataAccess.Concrete.EntityFramework.DbContexts
         public DbSet<Depo> Depos { get; set; }
         public DbSet<StokHareket> StokHarekets { get; set; }
 
+        public DbSet<ProgramŞirketKullanıcı> ProgramŞirketKullanıcıs { get; set; }
+        public DbSet<ProgramŞirketGrup> ProgramŞirketGrups { get; set; }
+        public DbSet<Cari> Caris { get; set; }
+
+        public DbSet<BlokBilgi> BlokBilgis { get; set; }
+        public DbSet<BlokGörüntü> BlokGörüntüs { get; set; }
+        public DbSet<Şantiye> Şantiyes { get; set; }
+
+
+        public DbSet<CariKoduTanım> CariKoduTanıms { get; set; }
+        public DbSet<StokKoduTanım> StokKoduTanıms { get; set; }
+
+
+
         //Urun
         //UrunAşamaları
 

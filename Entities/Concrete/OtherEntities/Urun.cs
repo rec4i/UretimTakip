@@ -9,6 +9,8 @@ namespace Entities.Concrete.OtherEntities
 {
     public class Urun : BaseEntity
     {
+        public int? ProgramŞirketGrupId { get; set; }
+        public ProgramŞirketGrup? ProgramŞirketGrup { get; set; }
         public string Guid { get; set; }
         public int İşEmriId { get; set; }
         public İşEmri İşEmri { get; set; }

@@ -1,0 +1,62 @@
+﻿@model string
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label class="text-red">A: Harf</label>
+                        <label class="text-red">9: Sayı</label>
+                        <label class="text-red">Örneğin 999.999.AAA Yapılırsa 001.001.AAB</label>
+                        <label class="text-red"></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Kod Tanımı: </label>
+                        <input type="text" id="KodTanımı" class="form-control" name="name" value="@Model" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-primary"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var data = new FormData();
+        data.append('Kod', $('#KodTanımı').val())
+
+
+        $.ajax({
+            url: "/Tanımlar/CariKoduTanımSave",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                if (data.status == 1) {
+                    successAlert(data.message)
+                }
+                else {
+                    errorAlert(data.message)
+                }
+                OrderTablosuDoldur()
+            },
+        });
+    })
+</script>

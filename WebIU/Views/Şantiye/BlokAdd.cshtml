@@ -1,0 +1,219 @@
+﻿@model int
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Kat :</label>
+                        <input type="text" data-mask="numeric" name="name" id="Kat" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Stun :</label>
+                        <input type="text" data-mask="numeric" name="name" id="Stun" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Derinlik :</label>
+                        <input type="text" data-mask="numeric" name="name" id="Derinlik" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Kalite :</label>
+                        <input type="text" data-mask="decimal" name="name" id="Kalite" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-primary" id="Kaydet"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-danger">
+                            <div class="card-header">
+                                <label>Blok Görüntüleri</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="d-flex flex-row-reverse">
+                                            <div class="p-2">
+                                                <button class="btn btn-primary" id="GörüntüEkle"><i class="fa fa-plus"></i> Görüntü Ekle</button>
+                                                <input type="file" accept="image/*" multiple id="fileInput" style="display:none;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Görüntü</th>
+                                                        <th>İşlem</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="GörüntülerTbody">
+                                                    <tr id="BoşRow">
+                                                        <td class="text-center" colspan="2">Hiç Veri Bulunamadı</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-primary" id="Kaydet"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var görseller = []
+
+        $('#Kaydet').click(function () {
+
+            var data = new FormData();
+            data.append('kat', $('#Kat').val())
+            data.append('stun', $('#Stun').val())
+            data.append('derinlik', $('#Derinlik').val())
+            data.append('Kalite', $('#Kalite').val())
+
+            data.append('ŞantiyeId', @Model)
+
+            //ŞantiyeId
+            for (var i = 0; i < görseller.length; i++) {
+
+                data.append('BlokGörüntüsü[' + i + ']', görseller[i].file);
+            }
+
+
+
+            $.ajax({
+                url: "/Şantiye/BlokAdd",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                        setInterval(() => {
+                            window.location.href = "/Şantiye/Index";
+                        }, 1000)
+
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+
+
+
+
+        })
+
+
+
+
+        $('#GörüntüEkle').click(function () {
+            $('#fileInput').click();
+        });
+        var boş = "" +
+            " <tr>" +
+            "    <td class=\"text-center\" colspan=\"2\">Hiç Veri Bulunamadı</td>" +
+            "</tr>" +
+            "";
+
+        $('#fileInput').change(function () {
+            var files = this.files;
+
+            var boşRowCount = $('#BoşRow').each(function () { }).length
+            if (boşRowCount >= 1) {
+                $('#GörüntülerTbody').empty()
+            }
+
+            for (var i = 0; i < files.length; i++) {
+                var guid = generateUUID();
+                var görsel = {
+                    Id: guid,
+                    file: files[i]
+                }
+                görseller.push(görsel)
+                var imageUrl = URL.createObjectURL(files[i]);
+                var satır = '' +
+                    ' <tr id="görüntü">' +
+                    '    <td>' +
+                    '        <img style="max-height:100px" src="' + imageUrl + '" class="image" />' +
+                    '    </td>' +
+                    '    <td>' +
+                    '        <button görüntüLocalId="' + guid + '" id="GörüntüSilBtn" class="btn btn-danger"><i class="fa fa-trash"></i></button>' +
+                    '    </td>' +
+                    '</tr>' +
+                    '';
+                $('#GörüntülerTbody').append(satır)
+                $('button[id="GörüntüSilBtn"][görüntüLocalId="' + guid + '"]').click(function () {
+                    $(this).parent().parent().remove()
+                    var görüntüRowCounter = $('#görüntü').each(function () { }).length
+                    if (görüntüRowCounter <= 0) {
+                        $('#GörüntülerTbody').append(boş)
+                    }
+                    var görselId = $(this).attr('görüntüLocalId');
+
+                    görseller = görseller.filter(function (görsel) {
+                        if (görsel.Id !== görselId) {
+                            return görsel
+                        }
+                    });
+                    console.log(görseller);
+                })
+            }
+
+
+
+
+        });
+
+
+
+    })
+    function generateUUID() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+</script>

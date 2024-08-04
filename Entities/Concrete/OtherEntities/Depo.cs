@@ -9,7 +9,9 @@ namespace Entities.Concrete.OtherEntities
 {
     public class Depo : BaseEntity
     {
-        public string DepoAdı { get; set; }
+        public int? ProgramŞirketGrupId { get; set; }
+        public ProgramŞirketGrup? ProgramŞirketGrup { get; set; }
+        public string? DepoAdı { get; set; }
         public string? DepoAdres { get; set; }
         public List<Stok> Stoks { get; set; }
     }

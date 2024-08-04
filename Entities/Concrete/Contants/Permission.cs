@@ -140,6 +140,38 @@ namespace Entities.Concrete.Contants
         {
             public const string Index = "Permission.Depo.Index";
         }
+
+        public static class Program
+        {
+            public const string Index = "Permission.Program.Index";
+            public const string ProgramAdd = "Permission.Program.ProgramAdd";
+        }
+
+        public static class Cari
+        {
+            public const string Müşteriler = "Permission.Cari.Müşteriler";
+            public const string Tedarikçiler = "Permission.Cari.Tedarikçiler";
+            public const string Index = "Permission.Cari.Index";
+
+        }
+        public static class Şantiye
+        {
+            public const string Index = "Permission.Şantiye.Index";
+
+        }
+
+
+
+        public static class Tanımlar
+        {
+            public const string StokKoduTanım = "Permission.Tanımlar.StokKoduTanım";
+            public const string CariKoduTanım = "Permission.Tanımlar.CariKoduTanım";
+
+        }
+
+
+
+
         //PharmacyListManager
 
         //fa-solid fa-cube

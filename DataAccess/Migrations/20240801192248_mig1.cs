@@ -149,26 +149,6 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Depos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DepoAdı = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DepoAdres = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Depos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ExportedFiles",
                 columns: table => new
                 {
@@ -191,13 +171,14 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reçetes",
+                name: "ProgramŞirketGrups",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ReçeteAdı = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Adı = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ŞirketAktifmi = table.Column<int>(type: "int", nullable: true),
+                    YetkiliİletişimNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -207,7 +188,7 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reçetes", x => x.Id);
+                    table.PrimaryKey("PK_ProgramŞirketGrups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -254,27 +235,6 @@ namespace DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SystemUserLogs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tezgah",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TezgahAdı = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Guid = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tezgah", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -466,11 +426,149 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Caris",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
+                    Ad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Adres = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tür = table.Column<int>(type: "int", nullable: false),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Caris", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Caris_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Depos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
+                    DepoAdı = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DepoAdres = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Depos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Depos_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProgramŞirketKullanıcıs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProgramŞirketKullanıcıs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProgramŞirketKullanıcıs_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ProgramŞirketKullanıcıs_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reçetes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
+                    ReçeteAdı = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reçetes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reçetes_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tezgah",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
+                    TezgahAdı = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Guid = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tezgah", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tezgah_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stoks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
                     StokAdı = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BirimId = table.Column<int>(type: "int", nullable: false),
@@ -496,6 +594,11 @@ namespace DataAccess.Migrations
                         column: x => x.DepoId,
                         principalTable: "Depos",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Stoks_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -504,6 +607,7 @@ namespace DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
                     ReçeteId = table.Column<int>(type: "int", nullable: false),
                     Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     İşEmriAdı = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -519,6 +623,11 @@ namespace DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_İşEmris", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_İşEmris_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_İşEmris_Reçetes_ReçeteId",
                         column: x => x.ReçeteId,
                         principalTable: "Reçetes",
@@ -532,6 +641,7 @@ namespace DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
                     IşAdı = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TezgahId = table.Column<int>(type: "int", nullable: true),
@@ -545,6 +655,11 @@ namespace DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Işs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Işs_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Işs_Tezgah_TezgahId",
                         column: x => x.TezgahId,
@@ -580,6 +695,35 @@ namespace DataAccess.Migrations
                         column: x => x.TezgahId,
                         principalTable: "Tezgah",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BlokBilgis",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StokId = table.Column<int>(type: "int", nullable: false),
+                    Kalite = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Kat = table.Column<int>(type: "int", nullable: false),
+                    Stun = table.Column<int>(type: "int", nullable: false),
+                    Derinlik = table.Column<int>(type: "int", nullable: false),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlokBilgis", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BlokBilgis_Stoks_StokId",
+                        column: x => x.StokId,
+                        principalTable: "Stoks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -621,6 +765,7 @@ namespace DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
                     StokId = table.Column<int>(type: "int", nullable: true),
                     DepoId = table.Column<int>(type: "int", nullable: true),
                     HareketTipi = table.Column<int>(type: "int", nullable: true),
@@ -641,6 +786,11 @@ namespace DataAccess.Migrations
                         principalTable: "Depos",
                         principalColumn: "Id");
                     table.ForeignKey(
+                        name: "FK_StokHarekets_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_StokHarekets_Stoks_StokId",
                         column: x => x.StokId,
                         principalTable: "Stoks",
@@ -653,6 +803,7 @@ namespace DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ProgramŞirketGrupId = table.Column<int>(type: "int", nullable: true),
                     Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     İşEmriId = table.Column<int>(type: "int", nullable: false),
                     AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -671,6 +822,11 @@ namespace DataAccess.Migrations
                         principalTable: "İşEmris",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Uruns_ProgramŞirketGrups_ProgramŞirketGrupId",
+                        column: x => x.ProgramŞirketGrupId,
+                        principalTable: "ProgramŞirketGrups",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -681,6 +837,13 @@ namespace DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReçeteId = table.Column<int>(type: "int", nullable: true),
                     IşId = table.Column<int>(type: "int", nullable: true),
+                    İşAçıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    KullanılacakDepoId = table.Column<int>(type: "int", nullable: true),
+                    KullanılacakStokId = table.Column<int>(type: "int", nullable: true),
+                    KullanılacakStokAdeti = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    UretilecekDepoId = table.Column<int>(type: "int", nullable: true),
+                    UretilecekStokId = table.Column<int>(type: "int", nullable: true),
+                    UretilecekStokAdeti = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -692,6 +855,16 @@ namespace DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Reçete_Iş_MTM", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Reçete_Iş_MTM_Depos_KullanılacakDepoId",
+                        column: x => x.KullanılacakDepoId,
+                        principalTable: "Depos",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Reçete_Iş_MTM_Depos_UretilecekDepoId",
+                        column: x => x.UretilecekDepoId,
+                        principalTable: "Depos",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Reçete_Iş_MTM_Işs_IşId",
                         column: x => x.IşId,
                         principalTable: "Işs",
@@ -700,6 +873,16 @@ namespace DataAccess.Migrations
                         name: "FK_Reçete_Iş_MTM_Reçetes_ReçeteId",
                         column: x => x.ReçeteId,
                         principalTable: "Reçetes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Reçete_Iş_MTM_Stoks_KullanılacakStokId",
+                        column: x => x.KullanılacakStokId,
+                        principalTable: "Stoks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Reçete_Iş_MTM_Stoks_UretilecekStokId",
+                        column: x => x.UretilecekStokId,
+                        principalTable: "Stoks",
                         principalColumn: "Id");
                 });
 
@@ -731,6 +914,32 @@ namespace DataAccess.Migrations
                         name: "FK_Tezgah_Iş_MTMs_Tezgah_TezgahId",
                         column: x => x.TezgahId,
                         principalTable: "Tezgah",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BlokGörüntüs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BlokBilgiId = table.Column<int>(type: "int", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddedUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlokGörüntüs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BlokGörüntüs_BlokBilgis_BlokBilgiId",
+                        column: x => x.BlokBilgiId,
+                        principalTable: "BlokBilgis",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1125,7 +1334,11 @@ namespace DataAccess.Migrations
                     { 38, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon fa-solid fa-receipt", false, false, false, "Tezgah", null, null, 12, true, null, null, "/Tezgah/Index" },
                     { 39, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon fa-solid fa-receipt", false, false, false, "Iş", null, null, 12, true, null, null, "/Iş/Index" },
                     { 40, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon fa-solid fa-receipt", false, false, false, "Iş Emri", null, null, 12, true, null, null, "/IşEmri/Index" },
-                    { 41, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon fa-solid fa-receipt", false, false, false, "Depo", null, null, 12, true, null, null, "/Depo/Index" }
+                    { 41, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon fa-solid fa-receipt", false, false, false, "Depo", null, null, 12, true, null, null, "/Depo/Index" },
+                    { 42, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon fa-solid fa-receipt", false, false, false, "Program", null, null, 12, true, null, null, "/Program/Index" },
+                    { 43, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon fa-solid fa-user-group", false, false, true, "Cariler", null, null, 3, true, null, null, "#" },
+                    { 44, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon far fa-circle text-info", false, false, false, "Müşteriler", null, 43, 1, true, null, null, "/Cari/Müşteriler" },
+                    { 45, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "nav-icon far fa-circle text-info", false, false, false, "Tedarikçiler", null, 43, 2, true, null, null, "/Cari/Tedarikçiler" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1178,9 +1391,39 @@ namespace DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BlokBilgis_StokId",
+                table: "BlokBilgis",
+                column: "StokId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlokGörüntüs_BlokBilgiId",
+                table: "BlokGörüntüs",
+                column: "BlokBilgiId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Caris_ProgramŞirketGrupId",
+                table: "Caris",
+                column: "ProgramŞirketGrupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Depos_ProgramŞirketGrupId",
+                table: "Depos",
+                column: "ProgramŞirketGrupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Işs_ProgramŞirketGrupId",
+                table: "Işs",
+                column: "ProgramŞirketGrupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Işs_TezgahId",
                 table: "Işs",
                 column: "TezgahId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_İşEmris_ProgramŞirketGrupId",
+                table: "İşEmris",
+                column: "ProgramŞirketGrupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_İşEmris_ReçeteId",
@@ -1188,14 +1431,44 @@ namespace DataAccess.Migrations
                 column: "ReçeteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProgramŞirketKullanıcıs_ProgramŞirketGrupId",
+                table: "ProgramŞirketKullanıcıs",
+                column: "ProgramŞirketGrupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramŞirketKullanıcıs_UserId",
+                table: "ProgramŞirketKullanıcıs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reçete_Iş_MTM_IşId",
                 table: "Reçete_Iş_MTM",
                 column: "IşId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reçete_Iş_MTM_KullanılacakDepoId",
+                table: "Reçete_Iş_MTM",
+                column: "KullanılacakDepoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reçete_Iş_MTM_KullanılacakStokId",
+                table: "Reçete_Iş_MTM",
+                column: "KullanılacakStokId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reçete_Iş_MTM_ReçeteId",
                 table: "Reçete_Iş_MTM",
                 column: "ReçeteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reçete_Iş_MTM_UretilecekDepoId",
+                table: "Reçete_Iş_MTM",
+                column: "UretilecekDepoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reçete_Iş_MTM_UretilecekStokId",
+                table: "Reçete_Iş_MTM",
+                column: "UretilecekStokId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reçete_Stok_MTM_ReçeteId",
@@ -1218,9 +1491,19 @@ namespace DataAccess.Migrations
                 column: "TezgahId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reçetes_ProgramŞirketGrupId",
+                table: "Reçetes",
+                column: "ProgramŞirketGrupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StokHarekets_DepoId",
                 table: "StokHarekets",
                 column: "DepoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StokHarekets_ProgramŞirketGrupId",
+                table: "StokHarekets",
+                column: "ProgramŞirketGrupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StokHarekets_StokId",
@@ -1236,6 +1519,16 @@ namespace DataAccess.Migrations
                 name: "IX_Stoks_DepoId",
                 table: "Stoks",
                 column: "DepoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stoks_ProgramŞirketGrupId",
+                table: "Stoks",
+                column: "ProgramŞirketGrupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tezgah_ProgramŞirketGrupId",
+                table: "Tezgah",
+                column: "ProgramŞirketGrupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tezgah_Iş_MTMs_IşId",
@@ -1271,6 +1564,11 @@ namespace DataAccess.Migrations
                 name: "IX_Uruns_İşEmriId",
                 table: "Uruns",
                 column: "İşEmriId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Uruns_ProgramŞirketGrupId",
+                table: "Uruns",
+                column: "ProgramŞirketGrupId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1297,6 +1595,12 @@ namespace DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BlokGörüntüs");
+
+            migrationBuilder.DropTable(
+                name: "Caris");
+
+            migrationBuilder.DropTable(
                 name: "Contacts");
 
             migrationBuilder.DropTable(
@@ -1304,6 +1608,9 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "ExportedFiles");
+
+            migrationBuilder.DropTable(
+                name: "ProgramŞirketKullanıcıs");
 
             migrationBuilder.DropTable(
                 name: "Reçete_Iş_MTM");
@@ -1342,7 +1649,7 @@ namespace DataAccess.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Stoks");
+                name: "BlokBilgis");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
@@ -1354,10 +1661,7 @@ namespace DataAccess.Migrations
                 name: "Uruns");
 
             migrationBuilder.DropTable(
-                name: "Birims");
-
-            migrationBuilder.DropTable(
-                name: "Depos");
+                name: "Stoks");
 
             migrationBuilder.DropTable(
                 name: "Tezgah");
@@ -1366,7 +1670,16 @@ namespace DataAccess.Migrations
                 name: "İşEmris");
 
             migrationBuilder.DropTable(
+                name: "Birims");
+
+            migrationBuilder.DropTable(
+                name: "Depos");
+
+            migrationBuilder.DropTable(
                 name: "Reçetes");
+
+            migrationBuilder.DropTable(
+                name: "ProgramŞirketGrups");
         }
     }
 }

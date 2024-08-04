@@ -106,15 +106,7 @@ namespace Core.DataAccess.Concrete.EntityFramework
             }
         }
 
-        //private JsonSerializerOptions JsonOptions()
-        //{
-        //    JsonSerializerOptions options = new()
-        //    {
-        //        ReferenceHandler = ReferenceHandler.Preserve,
-        //        WriteIndented = true
-        //    };
-        //    return options;
-        //}
+
 
     }
 }

@@ -1,0 +1,66 @@
+﻿@model Entities.Concrete.OtherEntities.Şantiye
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label> Adı : </label>
+                        <input type="text" id="Adı" name="name" value="@Model.Adı" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Adres :</label>
+                        <textarea class="form-control" rows="3" id="Adres">@Model.Adres</textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="EkleBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#EkleBtn').click(function () {
+            var data = new FormData();
+            data.append('Id', @Model.Id)
+            data.append('Adı', $('#Adı').val())
+            data.append('Adres', $('#Adres').val())
+            $.ajax({
+                url: "/Şantiye/ŞantiyeEdit",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                        setInterval(() => {
+                            window.location.href = "/Şantiye/Index";
+                        },1000)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+
+
+        })
+    })
+</script>

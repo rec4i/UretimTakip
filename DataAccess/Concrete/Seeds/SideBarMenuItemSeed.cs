@@ -45,16 +45,39 @@ namespace DataAccess.Concrete.Seeds
                 new SideBarMenuItem{Id=34,Name="Announcement",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-right-from-bracket",Url = "#",Row=12},
                // new SideBarMenuItem{Id=35,Name="Announcement List",IsParent=false,ParentId=34,IconCss = "nav-icon fa-solid fa-right-from-bracket",Url = "/Ann
                 new SideBarMenuItem{Id=36,Name="Reçete",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Reçete/Index",Row=12},
-                new SideBarMenuItem{Id=37,Name="Stok",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Stok/Index",Row=12},
+                //new SideBarMenuItem{Id=37,Name="Stok",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Stok/Index",Row=12},
 
-                    new SideBarMenuItem{Id=38,Name="Tezgah",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Tezgah/Index",Row=12},
-
-
-                             new SideBarMenuItem{Id=39,Name="Iş",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Iş/Index",Row=12},
-                              new SideBarMenuItem{Id=40,Name="Iş Emri",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/IşEmri/Index",Row=12},
+                new SideBarMenuItem{Id=38,Name="Tezgah",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Tezgah/Index",Row=12},
 
 
-                  new SideBarMenuItem{Id=41,Name="Depo",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Depo/Index",Row=12},
+                new SideBarMenuItem{Id=39,Name="Iş",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Iş/Index",Row=12},
+                new SideBarMenuItem{Id=40,Name="Iş Emri",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/IşEmri/Index",Row=12},
+
+                new SideBarMenuItem{Id=41,Name="Depo",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Depo/Index",Row=12},
+
+
+
+                new SideBarMenuItem{Id=42,Name="Program",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/Program/Index",Row=12},
+
+
+                   //Kullanıcı İşlemleri 
+                new SideBarMenuItem{Id=43,Name="Cariler",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
+                new SideBarMenuItem{Id=44,Name="Müşteriler",IsParent=false,ParentId=43,IconCss = "nav-icon far fa-circle text-info",Url = "/Cari/Müşteriler",Row=1},
+                new SideBarMenuItem{Id=45,Name="Tedarikçiler",IsParent=false,ParentId=43,IconCss = "nav-icon far fa-circle text-info",Url = "/Cari/Tedarikçiler",Row=2},
+
+
+
+               new SideBarMenuItem{Id=46,Name="Şantiye",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
+                new SideBarMenuItem{Id=47,Name="Şantiyeler",IsParent=false,ParentId=46,IconCss = "nav-icon far fa-circle text-info",Url = "/Şantiye/Index",Row=1},
+
+
+
+               new SideBarMenuItem{Id=48,Name="Stok",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
+               new SideBarMenuItem{Id=49,Name="Stok",IsParent=false,ParentId=48,IconCss = "nav-icon far fa-circle text-info",Url = "/Stok/Index",Row=1},
+               new SideBarMenuItem{Id=50,Name="Hızlı Stok Kartı Oluştur",IsParent=false,ParentId=48,IconCss = "nav-icon far fa-circle text-info",Url = "/Stok/HızlıStokKartıOluştur",Row=1},
+                   
+
+
             };
 
             modelBuilder.Entity<SideBarMenuItem>().HasData(sideBarMenuItems);

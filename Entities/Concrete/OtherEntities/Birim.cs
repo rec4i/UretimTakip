@@ -12,8 +12,6 @@ namespace Entities.Concrete.OtherEntities
         public string BirimKodu { get; set; }
         public string DönüşümKodu { get; set; }
         public string DönüşümAçıklama { get; set; }
-
         public List<Stok> Stoks { get; set; }
-
     }
 }
