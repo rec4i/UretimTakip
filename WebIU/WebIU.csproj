@@ -38,6 +38,7 @@
     <Folder Include="Models\NewFolder\" />
     <Folder Include="Views\NewFolder\" />
     <Folder Include="wwwroot\images\DeviceImages\" />
+    <Folder Include="wwwroot\FileUploads\" />
   </ItemGroup>
 
 </Project>

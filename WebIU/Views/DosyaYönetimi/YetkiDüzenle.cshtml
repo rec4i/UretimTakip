@@ -1,0 +1,943 @@
+﻿@model int
+
+<div class="row">
+    <div class="col">
+        <div class="card card-danger">
+            <div class="card-header">
+                <label>Dosya Silme Yetkileri</label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <label>Kullanıcı Adı</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <select class="form-control" id="DosyaSilmeYetkiSelect"></select>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" dosyaId="@Model" id="DosyaSilmeYetkiBtn"><i class="fa fa-plus"></i> Ekle</button>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="DosyaSilmeTable"
+                                               data-toolbar="#DosyaSilmeTableToolBar"
+                                               data-pagination="true"
+                                               data-side-pagination="server"
+                                               data-id-field="id"
+                                               data-page-list="[10, 25, 50, 100, all]"
+                                               data-locale="Tr-tr"
+                                               data-search="true"
+                                               data-show-refresh="true"
+                                               data-show-export="true">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                                    <th data-field="user.userName" data-title="Kullanıcı Adı" data-sortable="false"></th>
+                                                    <th data-field="dosya.dosyaAdı" data-title="Dosya/Klasör Adı" data-sortable="false"></th>
+                                                    <th data-title="Actions" data-sortable="false"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card card-warning">
+            <div class="card-header">
+                <label>Dosya İsim Değiştirme Yetkisi</label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <label>Kullanıcı Adı</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <select class="form-control" id="DosyaİsimDeğiştirmeSelect"></select>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" dosyaId="@Model" id="DosyaİsimDeğiştirmeBtn"><i class="fa fa-plus"></i> Ekle</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table id="DosyaİsimVermeTable"
+                               data-toolbar="#DosyaİsimVermeTableToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="user.userName" data-title="Kullanıcı Adı" data-sortable="false"></th>
+                                    <th data-field="dosya.dosyaAdı" data-title="Dosya/Klasör Adı" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card card-default">
+            <div class="card-header">
+                <label>Dosya Yetki Verme Yetkisi</label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <label>Kullanıcı Adı</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <select class="form-control" id="DosyaYetkiYetkiSelect"></select>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" dosyaId="@Model" id="DosyaYetkiYetkiBtn"><i class="fa fa-plus"></i> Ekle</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table id="DosyaYetkiVermeYetkisiTable"
+                               data-toolbar="#DosyaYetkiVermeYetkisiTableToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="user.userName" data-title="Kullanıcı Adı" data-sortable="false"></th>
+                                    <th data-field="dosya.dosyaAdı" data-title="Dosya/Klasör Adı" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card card-primary">
+            <div class="card-header">
+                <label>Dosya İndirme Yetkisi</label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <label>Kullanıcı Adı</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <select class="form-control" id="DosyaİndirmeYetkiSelect"></select>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" dosyaId="@Model" id="DosyaİndirmeYetkiBtn"><i class="fa fa-plus"></i> Ekle</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table id="DosyaİndirmeYetkisiTable"
+                               data-toolbar="#DosyaİndirmeYetkisiTableToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="user.userName" data-title="Kullanıcı Adı" data-sortable="false"></th>
+                                    <th data-field="dosya.dosyaAdı" data-title="Dosya/Klasör Adı" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col">
+        <div class="card card-default">
+            <div class="card-header">
+                <label>Dosya İçerik Görme Yetkisi</label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-10">
+                        <label>Kullanıcı Adı</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <select class="form-control" id="DosyaÇeirkGörmeYetkisiSelect"></select>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" dosyaId="@Model" id="DosyaÇeirkGörmeYetkisiBtn"><i class="fa fa-plus"></i> Ekle</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table id="DosyaİçerikGörmeYetkiTable"
+                               data-toolbar="#DosyaİçerikGörmeYetkiTableToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="user.userName" data-title="Kullanıcı Adı" data-sortable="false"></th>
+                                    <th data-field="dosya.dosyaAdı" data-title="Dosya/Klasör Adı" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#DosyaÇeirkGörmeYetkisiBtn').click(function () {
+            var data = new FormData();
+            data.append('DosyaId', $(this).attr('dosyaId'))
+            data.append('UserId', $('#DosyaÇeirkGörmeYetkisiSelect').find(':selected').val())
+
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaİçerikGörmeEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    DosyaİçerikGörmeYetkiTableDoldur(@Model)
+                },
+            });
+        })
+
+
+
+
+        $('#DosyaSilmeYetkiBtn').click(function () {
+            var data = new FormData();
+            data.append('DosyaId', $(this).attr('dosyaId'))
+            data.append('UserId', $('#DosyaSilmeYetkiSelect').find(':selected').val())
+
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaSilmeYetkiEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    DosyaSilmeYetkiTableDoldur(@Model)
+                },
+            });
+        })
+
+        $('#DosyaİsimDeğiştirmeBtn').click(function () {
+            var data = new FormData();
+            data.append('DosyaId', $(this).attr('dosyaId'))
+            data.append('UserId', $('#DosyaİsimDeğiştirmeSelect').find(':selected').val())
+
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaİsimDeğiştirmeYetkiEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    DosyaİsimVermeYetkiTableDoldur(@Model)
+                },
+            });
+        })
+
+        $('#DosyaYetkiYetkiBtn').click(function () {
+            var data = new FormData();
+            data.append('DosyaId', $(this).attr('dosyaId'))
+            data.append('UserId', $('#DosyaYetkiYetkiSelect').find(':selected').val())
+
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaYetkiYetkiEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    DosyaYetkiVermeYetkiTableDoldur(@Model)
+                },
+            });
+        })
+        $('#DosyaİndirmeYetkiBtn').click(function () {
+            var data = new FormData();
+            data.append('DosyaId', $(this).attr('dosyaId'))
+            data.append('UserId', $('#DosyaİndirmeYetkiSelect').find(':selected').val())
+
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaİndirmeYetkiEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    DosyaİndirmeYetkiTableDoldur(@Model)
+                },
+            });
+        })
+
+
+        $('#DosyaSilmeYetkiSelect').select2({
+            ajax: {
+                url: '/DosyaYönetimi/UserSearch', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        UserName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.userName, // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true, // Temizleme butonunu etkinleştir,
+        });
+
+
+        $('#DosyaİsimDeğiştirmeSelect').select2({
+            ajax: {
+                url: '/DosyaYönetimi/UserSearch', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        UserName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.userName, // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true, // Temizleme butonunu etkinleştir,
+
+        });
+
+        $('#DosyaYetkiYetkiSelect').select2({
+            ajax: {
+                url: '/DosyaYönetimi/UserSearch', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        UserName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.userName, // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true, // Temizleme butonunu etkinleştir,
+        });
+
+
+        //DosyaÇeirkGörmeYetkisiSelect
+
+        $('#DosyaÇeirkGörmeYetkisiSelect').select2({
+            ajax: {
+                url: '/DosyaYönetimi/UserSearch', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        UserName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.userName, // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true, // Temizleme butonunu etkinleştir,
+        });
+        $('#DosyaİndirmeYetkiSelect').select2({
+            ajax: {
+                url: '/DosyaYönetimi/UserSearch', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        UserName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.userName, // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true, // Temizleme butonunu etkinleştir,
+        });
+
+
+
+        $('#YeniDosyaKlasörOluştur').click(function () {
+            $('#YeniDosyaEkleModal').modal('show')
+        })
+
+        DosyaİndirmeYetkiTableDoldur(@Model)
+        DosyaYetkiVermeYetkiTableDoldur(@Model)
+        DosyaİsimVermeYetkiTableDoldur(@Model)
+        DosyaSilmeYetkiTableDoldur(@Model)
+        DosyaİçerikGörmeYetkiTableDoldur(@Model)
+
+    })
+
+
+   //DosyaİçerikGörmeYetkiTable
+    function DosyaİçerikGörmeYetkiTableDoldur(dosyaId) {
+        $('#DosyaİçerikGörmeYetkiTable').bootstrapTable("destroy")
+        $('#DosyaİçerikGörmeYetkiTable').bootstrapTable({
+            url: "/DosyaYönetimi/DosyaİçerikGörmeYetkiPagination?DosyaId=" + dosyaId,
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+
+            value += "<button id='DosyaSilmeYetkiSilBtn' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+
+            $('*#DosyaSilmeYetkiSilBtn').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/DosyaYönetimi/DosyaİçerikGörmeSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                DosyaİçerikGörmeYetkiTableDoldur(dosyaId)
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+        }
+    }
+
+    function DosyaİndirmeYetkiTableDoldur(dosyaId) {
+        $('#DosyaİndirmeYetkisiTable').bootstrapTable("destroy")
+        $('#DosyaİndirmeYetkisiTable').bootstrapTable({
+            url: "/DosyaYönetimi/DosyaİndirmeYetkiPagination?DosyaId=" + dosyaId,
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+
+            value += "<button id='DosyaSilmeYetkiSilBtn' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+
+            $('*#DosyaSilmeYetkiSilBtn').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/DosyaYönetimi/DosyaİndirmeYetkiSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                DosyaİndirmeYetkiTableDoldur(dosyaId)
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+        }
+    function DosyaİndirmeYetkiTableDoldur(dosyaId) {
+        $('#DosyaİndirmeYetkisiTable').bootstrapTable("destroy")
+        $('#DosyaİndirmeYetkisiTable').bootstrapTable({
+            url: "/DosyaYönetimi/DosyaİndirmeYetkiPagination?DosyaId=" + dosyaId,
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+
+            value += "<button id='DosyaSilmeYetkiSilBtn' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+
+            $('#DosyaSilmeYetkiSilBtn').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/DosyaYönetimi/DosyaSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+        }
+    }
+    }
+
+    function DosyaYetkiVermeYetkiTableDoldur(dosyaId) {
+        $('#DosyaYetkiVermeYetkisiTable').bootstrapTable("destroy")
+        $('#DosyaYetkiVermeYetkisiTable').bootstrapTable({
+            url: "/DosyaYönetimi/DosyaYetkiYetkiPagination?DosyaId=" + dosyaId,
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+
+            value += "<button id='DosyaSilmeYetkiSilBtn' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+
+            $('*#DosyaSilmeYetkiSilBtn').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/DosyaYönetimi/DosyaYetkiYetkiSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                DosyaYetkiVermeYetkiTableDoldur(dosyaId)
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+        }
+    }
+
+    function DosyaİsimVermeYetkiTableDoldur(dosyaId) {
+        $('#DosyaİsimVermeTable').bootstrapTable("destroy")
+        $('#DosyaİsimVermeTable').bootstrapTable({
+            url: "/DosyaYönetimi/DosyaİsimDeğiştirmeYetkiPagination?DosyaId=" + dosyaId,
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+
+            value += "<button id='DosyaSilmeYetkiSilBtn' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+
+            $('*#DosyaSilmeYetkiSilBtn').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/DosyaYönetimi/DosyDosyaİsimDeğiştirmeYetkiSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                DosyaİsimVermeYetkiTableDoldur(dosyaId)
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+        }
+    }
+
+    function DosyaSilmeYetkiTableDoldur(dosyaId) {
+        $('#DosyaSilmeTable').bootstrapTable("destroy")
+        $('#DosyaSilmeTable').bootstrapTable({
+            url: "/DosyaYönetimi/DosyaSilmeYetkiPagination?DosyaId=" + dosyaId,
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+
+            value += "<button id='DosyaSilmeYetkiSilBtn' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+
+            $('*#DosyaSilmeYetkiSilBtn').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/DosyaYönetimi/DosyaSilmeYetkiSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                DosyaSilmeYetkiTableDoldur(dosyaId) 
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+        }
+    }
+
+
+
+
+
+</script>

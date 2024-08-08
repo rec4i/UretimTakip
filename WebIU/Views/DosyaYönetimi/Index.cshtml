@@ -1,15 +1,358 @@
-﻿<div class="row">
+﻿@model WebIU.Models.DosyaViewModels.DosyaIndexViewModel
+
+<div class="row">
     <div class="col">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-row-reverse">
                     <div class="p-2">
-                        <button class="btn btn-primary"><i class="fa fa-plus"></i> Yeni Dosya/Klasör Oluştur</button>
+                        <button id="YeniDosyaKlasörOluştur" class="btn btn-primary"><i class="fa fa-plus"></i> Yeni Dosya/Klasör Oluştur</button>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
 </div>
+
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="OrderList"
+                               data-toolbar="#OrderListToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="dosyaAdı" data-title="Klasör Adı" data-sortable="false"></th>
+                                    <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>
+                                    <th data-field="guid" data-title="Guid" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="YeniDosyaEkleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">İş Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="YeniDosyaEkleModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>Klasör Adı:</label>
+                        <input type="text" id="KlasörAdı" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Açıklama:</label>
+                        <textarea class="form-control" id="Açıklama" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="exampleInputFile">Dosya Seç(Eğer Klasör Oluşturuyorsanız Dosya Seçemyin!)</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile">
+                                    <label class="custom-file-label" for="exampleInputFile">Dosya Seç</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="KaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#YeniDosyaKlasörOluştur').click(function () {
+            $('#YeniDosyaEkleModal').modal('show')
+        })
+
+        $('#KaydetBtn').click(function () {
+            var data = new FormData();
+            data.append('ParentId', @Model.ParentId)
+            data.append('Açıklama', $('#Açıklama').val())
+            data.append('Klasörİsmi', $('#KlasörAdı').val())
+
+            if ($("#exampleInputFile")[0].files.lenght >=1) {
+                data.append('dosya', $("#exampleInputFile")[0].files[0])
+            }
+
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaKaydet",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+        })
+
+        OrderTablosuDoldur()
+    })
+
+
+
+
+
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/DosyaYönetimi/DosyaGetPagination?ParentId="+@Model.ParentId,
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row,data,_data) {
+            var value = "";
+
+
+
+            value += "<button id='YetkiDüzenlemeBtn' IşId='" + row["id"] + "' class='btn btn-default'><i class='fa fa-key'></i> Yetkileri Düzenle</button> ";
+
+
+
+            value += silmeYetkiKontrol(row);
+            value += indirYetkiKontrol(row);
+            value += içerikGörYetkiKontrol(row);
+            value += isimDeğiştirmeYetkiKontrol(row);
+
+
+
+            return value
+        }
+        function isimDeğiştirmeYetkiKontrol(row) {
+            var data = new FormData();
+            data.append('DosyaId', row["id"])
+            var x = "";
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaİsimDeğiştirmeYetkiKontrol",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        x = "<button id='İsimDeğiştirBtn' IşId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-arrow-up-from-ground-water'></i> İsim Değiştir</button> ";
+
+                    }
+                },
+            });
+            return x;
+        }
+
+        function içerikGörYetkiKontrol(row) {
+            var data = new FormData();
+            data.append('DosyaId', row["id"])
+            var x = "";
+            $.ajax({
+                url: "/DosyaYönetimi/İçerikGörmeYetkiKontrol",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        x = "<button id='DosyaİçerikGör' IşId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-arrow-right'></i> İçeriğe Git</button> ";
+
+                    }
+                },
+            });
+            return x;
+        }
+
+        function indirYetkiKontrol(row) {
+            var data = new FormData();
+            data.append('DosyaId', row["id"])
+            var x = "";
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaİndirmeYetkiKontrol",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        x =  "<button id='DosyaİndirBtn' IşId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-download'></i></button> ";
+
+                    }
+                },
+            });
+            return x;
+        }
+        function silmeYetkiKontrol(row) {
+            var data = new FormData();
+            data.append('DosyaId', row["id"])
+            var x = "";
+            $.ajax({
+                url: "/DosyaYönetimi/DosyaSilmeYetkiKontrol",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        x= "<button id='DosyaSilBtn' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button> ";
+                    }
+                },
+            });
+            return x;
+        }
+
+
+
+
+
+        function afterLoad(data) {
+            console.log(data);
+
+            $('#YetkiDüzenlemeBtn').click(function () {
+                window.open("/DosyaYönetimi/YetkiDüzenle?DosyaId=" + $(this).attr('IşId'), '_blank').focus();
+            })
+
+            $('#DosyaİçerikGör').click(function () {
+
+                window.location.href = "/DosyaYönetimi/Index?ParentId=" + $(this).attr('IşId')
+            })
+
+            $('#DosyaİndirBtn').click(function () {
+                var data = new FormData();
+                data.append('DosyaId', $(this).attr('IşId'))
+
+                $.ajax({
+                    url: '/DosyaYönetimi/DownloadFile', // Controller'daki action metodu
+                    type: 'GET',
+                    xhrFields: {
+                        responseType: 'blob' // Dosya indirmek için gerekli ayar
+                    },
+                    success: function (data, status, xhr) {
+                        var filename = xhr.getResponseHeader('Content-Disposition').split('filename=')[1];
+                        var blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename;
+                        link.click();
+                    },
+                    error: function () {
+                        alert('Dosya indirilirken bir hata oluştu.');
+                    }
+                });
+
+
+            })
+
+
+            $('#DosyaSilBtn').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/DosyaYönetimi/DosyaSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+        }
+    }
+
+</script>
+

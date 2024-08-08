@@ -86,6 +86,15 @@ namespace DataAccess.Concrete.EntityFramework.DbContexts
         public DbSet<CariKoduTanım> CariKoduTanıms { get; set; }
         public DbSet<StokKoduTanım> StokKoduTanıms { get; set; }
 
+        public DbSet<Dosya> Dosyas { get; set; }
+        public DbSet<DosyaSilmeYetki> DosyaSilmeYetkis { get; set; }
+        public DbSet<DosyaYetkiYetki> DosyaYetkiYetkis { get; set; }
+        public DbSet<DosyaİndirmeYetki> DosyaİndirmeYetkis { get; set; }
+        public DbSet<DosyaİsimDeğiştirmeYetki> DosyaİsimDeğiştirmeYetkis { get; set; }
+
+        public DbSet<DosyaİçerikGörmeYetki> DosyaİçerikGörmeYetkis { get; set; }
+
+        //DosyaİçerikGörmeYetki
 
 
         //Urun

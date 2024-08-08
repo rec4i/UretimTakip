@@ -168,6 +168,10 @@ namespace Entities.Concrete.Contants
             public const string CariKoduTanım = "Permission.Tanımlar.CariKoduTanım";
 
         }
+        public static class DosyaYönetimi
+        {
+            public const string Index = "Permission.DosyaYönetimi.Index";
+        }
 
 
 

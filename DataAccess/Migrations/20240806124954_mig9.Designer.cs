@@ -4,6 +4,7 @@ using DataAccess.Concrete.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    partial class AppIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240806124954_mig9")]
+    partial class mig9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3307,48 +3309,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Dosyas");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİçerikGörmeYetki", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AddedUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DosyaId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DosyaId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DosyaİçerikGörmeYetkis");
-                });
-
             modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİndirmeYetki", b =>
                 {
                     b.Property<int>("Id")
@@ -5101,25 +5061,6 @@ namespace DataAccess.Migrations
                         .HasForeignKey("ProgramŞirketGrupId");
 
                     b.Navigation("ProgramŞirketGrup");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİçerikGörmeYetki", b =>
-                {
-                    b.HasOne("Entities.Concrete.OtherEntities.Dosya", "Dosya")
-                        .WithMany()
-                        .HasForeignKey("DosyaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.Identity.AppIdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dosya");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİndirmeYetki", b =>

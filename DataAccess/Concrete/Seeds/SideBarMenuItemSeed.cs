@@ -75,8 +75,10 @@ namespace DataAccess.Concrete.Seeds
                new SideBarMenuItem{Id=48,Name="Stok",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
                new SideBarMenuItem{Id=49,Name="Stok",IsParent=false,ParentId=48,IconCss = "nav-icon far fa-circle text-info",Url = "/Stok/Index",Row=1},
                new SideBarMenuItem{Id=50,Name="Hızlı Stok Kartı Oluştur",IsParent=false,ParentId=48,IconCss = "nav-icon far fa-circle text-info",Url = "/Stok/HızlıStokKartıOluştur",Row=1},
-                   
 
+
+
+                 new SideBarMenuItem{Id=51,Name="DosyaYönetimi",IsParent=false,ParentId=null,IconCss = "nav-icon fa-solid fa-receipt",Url = "/DosyaYönetimi/Index",Row=12},
 
             };
 

@@ -7,6 +7,15 @@
         icon: 'success'
     })
 }
+function errorAlert(message) {
+    Swal.fire({
+        position: 'bottom-end',
+        text: '' + message,
+        showConfirmButton: false,
+        timer: 1500,
+        icon: 'error'
+    })
+}
 
 function SetSelectedDeviceFromController(Ids) {
     $.ajax({

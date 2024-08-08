@@ -4,6 +4,7 @@ using DataAccess.Concrete.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    partial class AppIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240804101212_mig5")]
+    partial class mig5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3275,22 +3277,22 @@ namespace DataAccess.Migrations
                     b.Property<string>("AddedUserId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Açıklama")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("DosyaAdı")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DosyaYolu")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Guid")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ParentId")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Status")
@@ -3305,216 +3307,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Dosyas");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİçerikGörmeYetki", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AddedUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DosyaId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DosyaId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DosyaİçerikGörmeYetkis");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİndirmeYetki", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AddedUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DosyaId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DosyaId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DosyaİndirmeYetkis");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİsimDeğiştirmeYetki", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AddedUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DosyaId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DosyaId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DosyaİsimDeğiştirmeYetkis");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaSilmeYetki", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AddedUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DosyaId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DosyaId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DosyaSilmeYetkis");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaYetkiYetki", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AddedUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DosyaId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DosyaId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DosyaYetkiYetkis");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.ExportedFile", b =>
@@ -5101,101 +4893,6 @@ namespace DataAccess.Migrations
                         .HasForeignKey("ProgramŞirketGrupId");
 
                     b.Navigation("ProgramŞirketGrup");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİçerikGörmeYetki", b =>
-                {
-                    b.HasOne("Entities.Concrete.OtherEntities.Dosya", "Dosya")
-                        .WithMany()
-                        .HasForeignKey("DosyaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.Identity.AppIdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dosya");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİndirmeYetki", b =>
-                {
-                    b.HasOne("Entities.Concrete.OtherEntities.Dosya", "Dosya")
-                        .WithMany()
-                        .HasForeignKey("DosyaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.Identity.AppIdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dosya");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaİsimDeğiştirmeYetki", b =>
-                {
-                    b.HasOne("Entities.Concrete.OtherEntities.Dosya", "Dosya")
-                        .WithMany()
-                        .HasForeignKey("DosyaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.Identity.AppIdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dosya");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaSilmeYetki", b =>
-                {
-                    b.HasOne("Entities.Concrete.OtherEntities.Dosya", "Dosya")
-                        .WithMany()
-                        .HasForeignKey("DosyaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.Identity.AppIdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dosya");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.OtherEntities.DosyaYetkiYetki", b =>
-                {
-                    b.HasOne("Entities.Concrete.OtherEntities.Dosya", "Dosya")
-                        .WithMany()
-                        .HasForeignKey("DosyaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.Identity.AppIdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dosya");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.Iş", b =>
