@@ -39,6 +39,10 @@
     <Folder Include="Views\NewFolder\" />
     <Folder Include="wwwroot\images\DeviceImages\" />
     <Folder Include="wwwroot\FileUploads\" />
+    <Folder Include="wwwroot\DosyaYönetimi\" />
+    <Folder Include="wwwroot\IslenecekDosyalar\" />
+    <Folder Include="wwwroot\YazilacakDosyalar\" />
+    <Folder Include="wwwroot\YazılacakDosyalar\" />
   </ItemGroup>
 
 </Project>

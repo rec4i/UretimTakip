@@ -171,6 +171,8 @@ namespace Entities.Concrete.Contants
         public static class DosyaYönetimi
         {
             public const string Index = "Permission.DosyaYönetimi.Index";
+            public const string YtkiVerme = "Permission.DosyaYönetimi.YtkiVerme";
+            public const string DosyaYoluKaydet = "Permission.DosyaYönetimi.DosyaYoluKaydet";
         }
 
 

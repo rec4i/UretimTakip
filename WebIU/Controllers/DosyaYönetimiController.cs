@@ -1,14 +1,20 @@
 ﻿using DataAccess.Abstract;
 using DataAccess.Concrete;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using DocumentFormat.OpenXml.Vml.Office;
+using Entities.Abstract;
 using Entities.Concrete.Identity;
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Execution;
+using Microsoft.Build.Framework;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.DotNet.MSIdentity.Shared;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Security.Cryptography;
 using WebIU.Models.DepoViewModels;
 using WebIU.Models.DosyaViewModels;
 using WebIU.Models.HelperModels;
@@ -36,6 +42,314 @@ namespace WebIU.Controllers
             _dosyaİçerikGörmeYetkiRepository = dosyaİçerikGörmeYetkiRepository;
             _userManager = userManager;
         }
+
+        public async Task<IActionResult> DosyaYazmaYoluOluştur(int DosyaId)
+        {
+            var rootpath = _webHostEnvironment.ContentRootPath;
+            var dosya = _dosyaRepository.Get(o => o.Id == DosyaId);
+            string path = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(dosya.Id);
+            var copyPath = rootpath + "wwwroot/YazilacakDosyalar/" + dosya.Guid;
+
+            if (!Directory.Exists(copyPath))
+            {
+                CopyDirectory(path, copyPath);
+            }
+
+            string command = "DosyaKontrolAppv2.exe ";
+            string arguments = $"C:\\Users\\RECAI\\source\\repos\\UretimTakip\\WebIU\\wwwroot\\YazilacakDosyalar 192.168.1.39:5231 {dosya.Guid}";
+
+            // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            processStartInfo.FileName = "cmd.exe";
+            processStartInfo.Arguments = $"/c {command} {arguments}";
+            processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
+            processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
+            processStartInfo.CreateNoWindow = false; // Pencere açmamak için
+
+            // Process sınıfı ile işlemi başlat
+            using (Process process = new Process())
+            {
+                process.StartInfo = processStartInfo;
+                process.Start();
+            }
+
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            res.data = "\\\\192.168.1.39\\YazilacakDosyalar\\" + dosya.Guid;
+
+            return Json(res);
+        }
+
+
+
+        public async Task<IActionResult> DosyaYoluOluştur(int DosyaId)
+        {
+            JsonResponseModel res = new JsonResponseModel();
+
+
+            var rootpath = _webHostEnvironment.ContentRootPath;
+            var dosya = _dosyaRepository.Get(o => o.Id == DosyaId);
+            string path = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(dosya.Id);
+            var copyPath = rootpath + "wwwroot/IslenecekDosyalar/" + dosya.Guid;
+
+
+
+            string command = "DosyaKontrolApp.exe ";
+            string arguments = $"C:\\Users\\RECAI\\source\\repos\\UretimTakip\\WebIU\\wwwroot\\YazilacakDosyalar 192.168.1.39:5231 {dosya.Guid}";
+
+            // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            processStartInfo.FileName = "cmd.exe";
+            processStartInfo.Arguments = $"/c {command} {arguments}";
+            processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
+            processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
+            processStartInfo.CreateNoWindow = false; // Pencere açmamak için
+
+            // Process sınıfı ile işlemi başlat
+            using (Process process = new Process())
+            {
+                process.StartInfo = processStartInfo;
+                process.Start();
+            }
+
+
+
+            if (Directory.Exists(copyPath))
+            {
+
+                try
+                {
+                    if (Directory.Exists(copyPath))
+                    {
+                        // Klasörü ve içeriğini sil
+                        Directory.Delete(copyPath, true);
+                        Console.WriteLine("Klasör ve içeriği başarıyla silindi.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Klasör bulunamadı.");
+                        res.status = 0;
+                        res.message = "Klasör bulunamadı ";
+                        return Json(res);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    res.status = 0;
+                    res.message = "Hata " + ex.Message;
+                    return Json(res);
+                }
+
+
+
+            }
+            else
+            {
+                CopyDirectory(path, copyPath);
+
+            }
+
+
+
+
+
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            res.data = "\\\\192.168.1.39\\IslenecekDosyalar\\" + dosya.Guid;
+
+            return Json(res);
+        }
+
+
+        public async Task<IActionResult> DeğişmişDosyayıKaydet(string Guid)
+        {
+            JsonResponseModel res = new JsonResponseModel();
+            var rootpath = _webHostEnvironment.ContentRootPath;
+            var dosya = _dosyaRepository.Get(o => o.Guid == Guid);
+
+            var varolanDosya = _dosyaRepository.Get(o => o.Id == dosya.Id);
+            var varolandDosyaParents = _dosyaRepository.GetAll(o => o.DosyaAdı.Contains(varolanDosya.DosyaAdı));
+
+
+            var destinationDir = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(varolanDosya.ParentId) + varolanDosya.DosyaAdı + " Versiyon No " + varolandDosyaParents.Count();
+
+
+            CopyDirectoryAndCreateDatabeseObject(rootpath + "wwwroot/IslenecekDosyalar/" + Guid, destinationDir, dosya.ParentId);
+
+
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+        public async Task<IActionResult> YeniYazılanDosyayıKaydet(string Guid)
+        {
+            JsonResponseModel res = new JsonResponseModel();
+            var rootpath = _webHostEnvironment.ContentRootPath;
+            var dosya = _dosyaRepository.Get(o => o.Guid == Guid);
+
+            var varolanDosya = _dosyaRepository.Get(o => o.Id == dosya.Id);
+            var varolandDosyaParents = _dosyaRepository.GetAll(o => o.DosyaAdı.Contains(varolanDosya.DosyaAdı));
+
+            var destinationDir = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(varolanDosya.ParentId) + varolanDosya.DosyaAdı;
+
+
+
+            CopyDirectoryAndCreateDatabeseObject(rootpath + "wwwroot/YazilacakDosyalar/" + Guid, destinationDir, dosya.Id);
+            string folderPath = rootpath + "wwwroot/YazilacakDosyalar/" + Guid;
+            try
+            {
+                if (Directory.Exists(folderPath))
+                {
+                    // Klasörü ve içeriğini sil
+                    Directory.Delete(folderPath, true);
+                    Console.WriteLine("Klasör ve içeriği başarıyla silindi.");
+                }
+                else
+                {
+                    Console.WriteLine("Klasör bulunamadı.");
+                    res.status = 0;
+                    res.message = "Klasör bulunamadı ";
+                    return Json(res);
+                }
+            }
+            catch (Exception ex)
+            {
+                res.status = 0;
+                res.message = "Hata " + ex.Message;
+                return Json(res);
+            }
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+
+
+
+        public void CopyDirectoryAndCreateDatabeseObject(string sourceDir, string destinationDir, int? parentId)
+        {
+            // Hedef klasör yoksa oluştur
+            var folderGuid = Guid.NewGuid().ToString();
+            Dosya folderEntity = null;
+            if (!Directory.Exists(destinationDir))
+            {
+                Directory.CreateDirectory(destinationDir);
+                // Klasör için veritabanına kayıt ekle
+                folderEntity = new Dosya
+                {
+                    ParentId = parentId,
+                    DosyaAdı = Path.GetFileName(destinationDir),
+                    Guid = folderGuid,
+                };
+                folderEntity = _dosyaRepository.Add(folderEntity);
+            }
+
+
+          
+            foreach (var file in Directory.GetFiles(sourceDir))
+            {
+                string destFileName = Path.Combine(destinationDir, Path.GetFileName(file));
+                System.IO.File.Copy(file, destFileName, true);
+
+                // Dosya için veritabanına kayıt ekle
+                var fileGuid = Guid.NewGuid().ToString();
+                var fileEntity = new Dosya
+                {
+                    ParentId = folderEntity == null ? parentId : folderEntity.Id,  // Veritabanında otomatik olarak atanacak ID
+                    DosyaAdı = Path.GetFileName(file),
+                    DosyaYolu = destFileName,
+                    Guid = fileGuid,
+                    Açıklama = "Dosya"
+                };
+                fileEntity = _dosyaRepository.Add(fileEntity);
+            }
+
+            // Kaynak klasördeki alt klasörleri al ve yeniden aynı metod ile kopyala
+            foreach (var directory in Directory.GetDirectories(sourceDir))
+            {
+                string destDirName = Path.Combine(destinationDir, Path.GetFileName(directory));
+                CopyDirectoryAndCreateDatabeseObject(directory, destDirName, folderEntity == null ? parentId : folderEntity.Id);
+            }
+
+        }
+
+
+
+        public void CopyDirectory(string sourceDir, string destinationDir)
+        {
+            // Hedef klasör yoksa oluştur
+            if (!Directory.Exists(destinationDir))
+            {
+                Directory.CreateDirectory(destinationDir);
+            }
+
+            // Kaynak klasördeki dosyaları al ve hedef klasöre kopyala
+            foreach (var file in Directory.GetFiles(sourceDir))
+            {
+                string destFileName = Path.Combine(destinationDir, Path.GetFileName(file));
+                System.IO.File.Copy(file, destFileName, true);
+            }
+
+            // Kaynak klasördeki alt klasörleri al ve yeniden aynı metod ile kopyala
+            foreach (var directory in Directory.GetDirectories(sourceDir))
+            {
+                string destDirName = Path.Combine(destinationDir, Path.GetFileName(directory));
+                CopyDirectory(directory, destDirName);
+            }
+
+        }
+
+        public string CreateFileDestinaton(int? ParentId, string rootFileName = null)
+        {
+            var dosyaYolu = "";
+            int? cuurParent = ParentId;
+            List<string> dosyalar = new List<string>();
+
+
+            while (true)
+            {
+
+                var dosyaParent = _dosyaRepository.Get(o => o.Id == cuurParent);
+                if (dosyaParent == null)
+                {
+                    break;
+                }
+                if (dosyaParent.ParentId == 0)
+                {
+                    if (rootFileName != null)
+                    {
+                        //     dosyaYolu += rootFileName;
+                        dosyalar.Add(rootFileName);
+                        cuurParent = dosyaParent.ParentId;
+                        break;
+                    }
+                    dosyalar.Add(dosyaParent.DosyaAdı);
+                    //   dosyaYolu += dosyaParent.DosyaAdı;
+                    cuurParent = dosyaParent.ParentId;
+
+                    break;
+                }
+                dosyalar.Add(dosyaParent.DosyaAdı);
+                // dosyaYolu += dosyaParent.DosyaAdı + "/";
+                cuurParent = dosyaParent.ParentId;
+
+            }
+            for (int i = dosyalar.Count() - 1; i >= 0; i--)
+            {
+                if (dosyalar[i].Contains("."))
+                {
+                    dosyaYolu += dosyalar[i];
+
+
+                }
+                dosyaYolu += dosyalar[i] + "/";
+
+            }
+
+            return dosyaYolu;
+        }
+
+
         public async Task<IActionResult> Index(int ParentId = 0)
         {
             var userId = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
@@ -70,8 +384,10 @@ namespace WebIU.Controllers
             Dosya entity = new Dosya();
             entity.ParentId = ParentId;
             entity.Açıklama = Açıklama;
+            var rootpath = _webHostEnvironment.ContentRootPath;
 
-            if (dosya != null && String.IsNullOrEmpty(Klasörİsmi))
+
+            if (dosya != null && !String.IsNullOrEmpty(Klasörİsmi))
             {
                 res.status = 0;
                 res.message = "İçerik Hem Dosya Hemde Klasör Olamaz Lütfen Alanları Doğru girin";
@@ -79,18 +395,33 @@ namespace WebIU.Controllers
             }
             if (dosya != null)
             {
+
+                var dosyaYolu = CreateFileDestinaton(ParentId);
+
+
+
+
                 string fileExtension = Path.GetExtension(dosya.FileName);
-                var rootpath = _webHostEnvironment.ContentRootPath;
                 string guid = Guid.NewGuid().ToString();
-                string path = rootpath + "/wwwroot/images/FileUploads/" + guid + fileExtension;
+                string path = rootpath + "/wwwroot/DosyaYönetimi/" + dosyaYolu + dosya.FileName;
                 using (FileStream fs = new FileStream(path, FileMode.Create))
                 {
                     dosya.CopyTo(fs);
                 }
-                entity.DosyaYolu = "/images/FileUploads/" + guid + fileExtension;
+                entity.DosyaYolu = "/DosyaYönetimi/" + dosyaYolu + "/" + dosya.FileName + fileExtension;
+                entity.DosyaAdı = dosya.FileName;
             }
             if (!String.IsNullOrEmpty(Klasörİsmi))
+            {
+                var dosyaYolu = CreateFileDestinaton(ParentId);
+
                 entity.DosyaAdı = Klasörİsmi;
+                string path = rootpath + "/wwwroot/DosyaYönetimi/" + dosyaYolu + Klasörİsmi;
+
+                Directory.CreateDirectory(path);
+
+
+            }
             entity.Guid = Guid.NewGuid().ToString();
 
             _dosyaRepository.Add(entity);
@@ -125,16 +456,17 @@ namespace WebIU.Controllers
             var filePath = dosya.DosyaYolu;
             var fileName = dosya.DosyaAdı;
 
+            var rootpath = _webHostEnvironment.ContentRootPath;
 
-            if (System.IO.File.Exists(filePath))
+            if (System.IO.File.Exists(rootpath + filePath))
             {
                 var memory = new MemoryStream();
-                using (var stream = new FileStream(filePath, FileMode.Open))
+                using (var stream = new FileStream(rootpath + filePath, FileMode.Open))
                 {
                     await stream.CopyToAsync(memory);
                 }
                 memory.Position = 0;
-                return File(memory, GetContentType(filePath), fileName);
+                return File(memory, GetContentType(rootpath + filePath), fileName);
             }
             else
             {

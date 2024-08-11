@@ -51,6 +51,31 @@
 
 
 
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="DosyaYoluKopyalaModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">İşlem Yapacağınız Dosya Yolu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="DosyaYoluKopyalaModalBody">
+
+                <div class="row">
+                    <div class="col">
+                        <textarea readonly class="form-control" rows="3" id="DosyaYoluTextarea"></textarea>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 
@@ -121,9 +146,7 @@
             data.append('Açıklama', $('#Açıklama').val())
             data.append('Klasörİsmi', $('#KlasörAdı').val())
 
-            if ($("#exampleInputFile")[0].files.lenght >=1) {
-                data.append('dosya', $("#exampleInputFile")[0].files[0])
-            }
+            data.append('dosya', $("#exampleInputFile")[0].files[0])
 
             $.ajax({
                 url: "/DosyaYönetimi/DosyaKaydet",
@@ -172,8 +195,19 @@
             var value = "";
 
 
+            @if (AuthorizationService.AuthorizeAsync(User, Permission.DosyaYönetimi.YtkiVerme).Result.Succeeded)
+            {
+                @Html.Raw("value += \"<button id='YetkiDüzenlemeBtn' IşId='\" + row[\"id\"] + \"' class='btn btn-default'><i class='fa fa-key'></i> Yetkileri Düzenle</button> \";");
+            }
 
-            value += "<button id='YetkiDüzenlemeBtn' IşId='" + row["id"] + "' class='btn btn-default'><i class='fa fa-key'></i> Yetkileri Düzenle</button> ";
+            @if (AuthorizationService.AuthorizeAsync(User, Permission.DosyaYönetimi.YtkiVerme).Result.Succeeded)
+            {
+                @Html.Raw("value += \"<button id='DeğişmişiKaydet' IşId='\" + row[\"guid\"] + \"' class='btn btn-default'><i class='fa fa-newspaper'></i> Değişmiş Dosyayı Kaydet</button> \";");
+            }
+
+            value += "<button id='DosyaYoluOluştur' IşId='" + row["id"] + "' class='btn btn-default'><i class='fa fa-newspaper'></i> Dosya Yolu Oluştur</button> ";
+            value += "<button id='DosyaYazmaYoluOluştur' IşId='" + row["id"] + "' class='btn btn-default'><i class='fa fa-newspaper'></i> Dosya Yazma Yolu Oluştur</button> ";
+
 
 
 
@@ -275,6 +309,8 @@
         function afterLoad(data) {
             console.log(data);
 
+
+
             $('#YetkiDüzenlemeBtn').click(function () {
                 window.open("/DosyaYönetimi/YetkiDüzenle?DosyaId=" + $(this).attr('IşId'), '_blank').focus();
             })
@@ -284,12 +320,92 @@
                 window.location.href = "/DosyaYönetimi/Index?ParentId=" + $(this).attr('IşId')
             })
 
+            $('#DosyaYazmaYoluOluştur').click(function () {
+                var data = new FormData();
+                data.append('DosyaId', $(this).attr('IşId'))
+
+                $.ajax({
+                    url: "/DosyaYönetimi/DosyaYazmaYoluOluştur",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                            $('#DosyaYoluKopyalaModal').modal('show')
+                            $('#DosyaYoluTextarea').val(data.data)
+                            $('#DosyaYoluTextarea').html(data.data)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                        OrderTablosuDoldur()
+                    },
+                });
+            })
+
+            $('#DeğişmişiKaydet').click(function () {
+                var data = new FormData();
+                data.append('Guid', $(this).attr('IşId'))
+
+                $.ajax({
+                    url: "/DosyaYönetimi/DeğişmişDosyayıKaydet",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                        OrderTablosuDoldur()
+                    },
+                });
+            })
+
+
+            $('#DosyaYoluOluştur').click(function () {
+                var data = new FormData();
+                data.append('DosyaId', $(this).attr('IşId'))
+
+                $.ajax({
+                    url: "/DosyaYönetimi/DosyaYoluOluştur",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                            //data.data
+                            $('#DosyaYoluKopyalaModal').modal('show')
+                            $('#DosyaYoluTextarea').val(data.data)
+                            $('#DosyaYoluTextarea').html(data.data)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                        OrderTablosuDoldur()
+                    },
+                });
+
+
+            })
+
+
             $('#DosyaİndirBtn').click(function () {
                 var data = new FormData();
                 data.append('DosyaId', $(this).attr('IşId'))
 
                 $.ajax({
-                    url: '/DosyaYönetimi/DownloadFile', // Controller'daki action metodu
+                    url: '/DosyaYönetimi/DownloadFile?DosyaId=' + $(this).attr('IşId'), // Controller'daki action metodu
                     type: 'GET',
                     xhrFields: {
                         responseType: 'blob' // Dosya indirmek için gerekli ayar
