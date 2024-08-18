@@ -17,7 +17,6 @@ namespace Entities.Concrete.OtherEntities
         public string Açıklama { get; set; }
         public string İşEmriAdı { get; set; }
         public int HedefÜretim { get; set; }
-
         public List<Urun> Uruns { get; set; }
 
     }

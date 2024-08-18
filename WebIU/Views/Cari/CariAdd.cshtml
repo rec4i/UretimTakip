@@ -1,0 +1,83 @@
+﻿@model WebIU.Models.CariViewModels.CariAddViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Cari Adı:</label>
+                        <input type="text" class="form-control" name="name" id="Ad" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Cari Kodu:</label>
+                        <input type="text" class="form-control" name="name" id="Kod" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Adres :</label>
+                        <textarea class="form-control" id="Adres" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-primary" id="EkletBtn"><i class="fa fa-plus"></i> Ekle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#Kod').inputmask('@Model.CariKodTanım',
+            {
+                'definitions': {
+                    'H': { validator: "[A-Z-0-9]", cardinality: 1 }
+                }
+            }
+        );
+
+        $('#EkletBtn').click(function () {
+
+            var data = new FormData();
+            data.append('Ad', $('#Ad').val())
+            data.append('Adres', $('#Adres').val())
+            data.append('Kod', $('#Adres').val())
+            data.append('ParentId', @Model.ParentId)
+
+
+            $.ajax({
+                url: "/Cari/CariAdd",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                        setTimeout(() => { window.location.href = "/Cari/Cariler?ParentId=@Model.ParentId" }, 1000)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+
+        })
+    })
+</script>

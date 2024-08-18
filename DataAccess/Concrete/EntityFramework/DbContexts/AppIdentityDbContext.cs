@@ -6,6 +6,7 @@ using Entities.Concrete.Token;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 
@@ -93,12 +94,11 @@ namespace DataAccess.Concrete.EntityFramework.DbContexts
         public DbSet<DosyaİsimDeğiştirmeYetki> DosyaİsimDeğiştirmeYetkis { get; set; }
 
         public DbSet<DosyaİçerikGörmeYetki> DosyaİçerikGörmeYetkis { get; set; }
+        public DbSet<KareKodUrunler> KareKodUrunlers { get; set; }
+        public DbSet<KareKodAnaUrun> KareKodAnaUruns { get; set; }
 
-        //DosyaİçerikGörmeYetki
 
-
-        //Urun
-        //UrunAşamaları
+        public DbSet<KareKodIsEmri> kareKodIsEmris { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

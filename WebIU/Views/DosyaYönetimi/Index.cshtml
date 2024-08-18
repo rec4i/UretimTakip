@@ -134,7 +134,46 @@
 
 
 <script type="text/javascript">
+    function getLocalIP(callback) {
+        var ips = [];
+
+        var RTCPeerConnection = window.RTCPeerConnection ||
+            window.mozRTCPeerConnection ||
+            window.webkitRTCPeerConnection;
+
+        if (!RTCPeerConnection) {
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            var win = iframe.contentWindow;
+            RTCPeerConnection = win.RTCPeerConnection ||
+                win.mozRTCPeerConnection ||
+                win.webkitRTCPeerConnection;
+        }
+
+        var pc = new RTCPeerConnection({ iceServers: [] });
+        pc.createDataChannel("");
+
+        pc.onicecandidate = function (event) {
+            if (!event.candidate) return;
+            var ip = /([0-9]{1,3}(\.[0-9]{1,3}){3})/
+                .exec(event.candidate.candidate)[1];
+            if (ips.indexOf(ip) === -1) ips.push(ip);
+            callback(ip);
+        };
+
+        pc.createOffer(function (sdp) {
+            pc.setLocalDescription(sdp);
+        }, function (error) {
+            console.log(error);
+        });
+    }
     $(document).ready(function () {
+        getLocalIP(function (ip) {
+            // IP adresini bir HTML elementine veya sunucuya gönder
+            console.log(ip)
+        });
+
 
         $('#YeniDosyaKlasörOluştur').click(function () {
             $('#YeniDosyaEkleModal').modal('show')

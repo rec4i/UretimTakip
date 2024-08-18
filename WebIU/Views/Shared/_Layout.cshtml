@@ -3,7 +3,7 @@
 <head>
     <partial name="Partials\_ValidationCssPartial" />
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
     <partial name="Partials\_LoadingSpinnerPartial" />
     @{
         await Html.RenderPartialAsync("_GenericModal");
@@ -14,7 +14,7 @@
         @await Component.InvokeAsync("Navbar")
         <!-- Sidebar -->
         @await Component.InvokeAsync("SideBar")
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="min-height: 805px;">
             <section class="content">
                 <div>
                     @if (TempData["message"] != null)
@@ -30,10 +30,11 @@
                 </div>
             </section>
         </div>
-        <footer class="main-footer">
-            @await Component.InvokeAsync("Footer")
-        </footer>
+
     </div>
+    <footer class="main-footer">
+        @await Component.InvokeAsync("Footer")
+    </footer>
     @RenderSection("Scripts", required: false)
     <partial name="Partials\_ValidationScriptsPartial" />
 

@@ -569,11 +569,13 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CariKodu")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ProgramŞirketGrupId")
                         .HasColumnType("int");
@@ -3664,6 +3666,230 @@ namespace DataAccess.Migrations
                     b.ToTable("İşEmris");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodAnaUrun", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BoxesInPalet")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Gtin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("HasPack")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Origin")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PacksInBox")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductInBox")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProductsInPack")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RafCycleTime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RafCycleUnit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KareKodAnaUruns");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodIsEmri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BaseProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BoxCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BoxPerPalet")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Lot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PackCount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PackPerBox")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaletCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlannedProduct")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductPerBox")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductPerPack")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaseProductId");
+
+                    b.ToTable("kareKodIsEmris");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodUrunler", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Bn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BoxSn")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BoxSscc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gtin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Md")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PackSn")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PackSscc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaletSn")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaletSscc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QrCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Sn")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WoorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Xd")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KareKodUrunlers");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.ProgramŞirketGrup", b =>
                 {
                     b.Property<int>("Id")
@@ -4477,7 +4703,7 @@ namespace DataAccess.Migrations
                             IsOpen = false,
                             IsParent = true,
                             Name = "Ayarlar",
-                            Row = 1,
+                            Row = 1999,
                             Status = true,
                             Url = "#"
                         },
@@ -4491,7 +4717,7 @@ namespace DataAccess.Migrations
                             IsParent = false,
                             Name = "Menü Ayarları",
                             ParentId = 1,
-                            Row = 1,
+                            Row = 1999,
                             Status = true,
                             Url = "/Setting/MenuList"
                         },
@@ -4505,7 +4731,7 @@ namespace DataAccess.Migrations
                             IsParent = false,
                             Name = "Log Arama",
                             ParentId = 1,
-                            Row = 2,
+                            Row = 299,
                             Status = true,
                             Url = "/Setting/SystemUserLogListSearch"
                         },
@@ -4519,7 +4745,7 @@ namespace DataAccess.Migrations
                             IsParent = false,
                             Name = "Ulke Ayarları",
                             ParentId = 1,
-                            Row = 3,
+                            Row = 39999,
                             Status = true,
                             Url = "/Setting/CountryList"
                         },
@@ -4532,7 +4758,7 @@ namespace DataAccess.Migrations
                             IsOpen = false,
                             IsParent = true,
                             Name = "Role İşlemleri",
-                            Row = 2,
+                            Row = 2999,
                             Status = true,
                             Url = "#"
                         },
@@ -4546,7 +4772,7 @@ namespace DataAccess.Migrations
                             IsParent = false,
                             Name = "Rol Listesi",
                             ParentId = 5,
-                            Row = 1,
+                            Row = 199999,
                             Status = true,
                             Url = "/Role/RoleList"
                         },
@@ -4560,7 +4786,7 @@ namespace DataAccess.Migrations
                             IsParent = false,
                             Name = "Rol Ekle",
                             ParentId = 5,
-                            Row = 2,
+                            Row = 299999,
                             Status = true,
                             Url = "/Role/CreateRole"
                         },
@@ -4573,7 +4799,7 @@ namespace DataAccess.Migrations
                             IsOpen = false,
                             IsParent = true,
                             Name = "Kullanıcı İşlemleri",
-                            Row = 3,
+                            Row = 3999,
                             Status = true,
                             Url = "#"
                         },
@@ -4587,7 +4813,7 @@ namespace DataAccess.Migrations
                             IsParent = false,
                             Name = "Arama",
                             ParentId = 8,
-                            Row = 1,
+                            Row = 1999,
                             Status = true,
                             Url = "/User/Search"
                         },
@@ -4601,7 +4827,7 @@ namespace DataAccess.Migrations
                             IsParent = false,
                             Name = "Kullanıcı Ekle",
                             ParentId = 8,
-                            Row = 2,
+                            Row = 299,
                             Status = true,
                             Url = "/User/AddUser"
                         },
@@ -4614,7 +4840,7 @@ namespace DataAccess.Migrations
                             IsOpen = false,
                             IsParent = true,
                             Name = "Diğer İşlemler",
-                            Row = 9,
+                            Row = 9999,
                             Status = true,
                             Url = "#"
                         },
@@ -4628,7 +4854,7 @@ namespace DataAccess.Migrations
                             IsParent = false,
                             Name = "Bize Yazanlar",
                             ParentId = 28,
-                            Row = 10,
+                            Row = 10999,
                             Status = true,
                             Url = "/SystemAdmin/ContactList"
                         },
@@ -4673,53 +4899,70 @@ namespace DataAccess.Migrations
                         },
                         new
                         {
-                            Id = 36,
+                            Id = 61,
                             AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IconCss = "nav-icon fa-solid fa-receipt",
+                            IconCss = "nav-icon fa-solid fa-user-group",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = true,
+                            Name = "Üretim",
+                            Row = 3,
+                            Status = true,
+                            Url = "#"
+                        },
+                        new
+                        {
+                            Id = 62,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
                             IsDeleted = false,
                             IsOpen = false,
                             IsParent = false,
                             Name = "Reçete",
-                            Row = 12,
+                            ParentId = 61,
+                            Row = 2,
                             Status = true,
                             Url = "/Reçete/Index"
                         },
                         new
                         {
-                            Id = 38,
+                            Id = 63,
                             AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IconCss = "nav-icon fa-solid fa-receipt",
+                            IconCss = "nav-icon far fa-circle text-info",
                             IsDeleted = false,
                             IsOpen = false,
                             IsParent = false,
                             Name = "Tezgah",
-                            Row = 12,
+                            ParentId = 61,
+                            Row = 3,
                             Status = true,
                             Url = "/Tezgah/Index"
                         },
                         new
                         {
-                            Id = 39,
+                            Id = 64,
                             AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IconCss = "nav-icon fa-solid fa-receipt",
+                            IconCss = "nav-icon far fa-circle text-info",
                             IsDeleted = false,
                             IsOpen = false,
                             IsParent = false,
                             Name = "Iş",
-                            Row = 12,
+                            ParentId = 61,
+                            Row = 4,
                             Status = true,
                             Url = "/Iş/Index"
                         },
                         new
                         {
-                            Id = 40,
+                            Id = 65,
                             AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IconCss = "nav-icon fa-solid fa-receipt",
                             IsDeleted = false,
                             IsOpen = false,
                             IsParent = false,
                             Name = "Iş Emri",
-                            Row = 12,
+                            ParentId = 61,
+                            Row = 1,
                             Status = true,
                             Url = "/IşEmri/Index"
                         },
@@ -4738,14 +4981,28 @@ namespace DataAccess.Migrations
                         },
                         new
                         {
-                            Id = 42,
+                            Id = 59,
                             AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IconCss = "nav-icon fa-solid fa-receipt",
+                            IconCss = "nav-icon fa-solid fa-user-group",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = true,
+                            Name = "Yönetim",
+                            Row = 3,
+                            Status = true,
+                            Url = "#"
+                        },
+                        new
+                        {
+                            Id = 60,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
                             IsDeleted = false,
                             IsOpen = false,
                             IsParent = false,
                             Name = "Program",
-                            Row = 12,
+                            ParentId = 59,
+                            Row = 1,
                             Status = true,
                             Url = "/Program/Index"
                         },
@@ -4761,6 +5018,20 @@ namespace DataAccess.Migrations
                             Row = 3,
                             Status = true,
                             Url = "#"
+                        },
+                        new
+                        {
+                            Id = 58,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Cariler",
+                            ParentId = 43,
+                            Row = 1,
+                            Status = true,
+                            Url = "/Cari/Cariler"
                         },
                         new
                         {
@@ -4860,6 +5131,33 @@ namespace DataAccess.Migrations
                         },
                         new
                         {
+                            Id = 66,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon fa-solid fa-user-group",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = true,
+                            Name = "Belge Tasarımı",
+                            Row = 3,
+                            Status = true,
+                            Url = "#"
+                        },
+                        new
+                        {
+                            Id = 67,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Tasarlanmış Belgeler",
+                            ParentId = 66,
+                            Row = 1,
+                            Status = true,
+                            Url = "/BelgeTasarım/Index"
+                        },
+                        new
+                        {
                             Id = 51,
                             AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IconCss = "nav-icon fa-solid fa-receipt",
@@ -4870,6 +5168,143 @@ namespace DataAccess.Migrations
                             Row = 12,
                             Status = true,
                             Url = "/DosyaYönetimi/Index"
+                        },
+                        new
+                        {
+                            Id = 52,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon fa-solid fa-user-group",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = true,
+                            Name = "KareKod",
+                            Row = 3,
+                            Status = true,
+                            Url = "#"
+                        },
+                        new
+                        {
+                            Id = 53,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "İş Emirleri",
+                            ParentId = 52,
+                            Row = 1,
+                            Status = true,
+                            Url = "/Karekod/Index"
+                        },
+                        new
+                        {
+                            Id = 54,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Bildirim Emirleri",
+                            ParentId = 52,
+                            Row = 1,
+                            Status = true,
+                            Url = "/KareKod/BildirimEmirleri"
+                        },
+                        new
+                        {
+                            Id = 68,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Ana Urunler",
+                            ParentId = 52,
+                            Row = 1,
+                            Status = true,
+                            Url = "/KareKod/AnaUrunler"
+                        },
+                        new
+                        {
+                            Id = 72,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "İstasyonlar",
+                            ParentId = 52,
+                            Row = 1,
+                            Status = true,
+                            Url = "/KareKod/İstasyonListesi"
+                        },
+                        new
+                        {
+                            Id = 55,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon fa-solid fa-user-group",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = true,
+                            Name = "Tanımlar",
+                            Row = 3,
+                            Status = true,
+                            Url = "#"
+                        },
+                        new
+                        {
+                            Id = 56,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Stok Kodu Tanımı",
+                            ParentId = 55,
+                            Row = 1,
+                            Status = true,
+                            Url = "/Tanımlar/StokKoduTanım"
+                        },
+                        new
+                        {
+                            Id = 57,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Cari Kodu Tanımı",
+                            ParentId = 55,
+                            Row = 1,
+                            Status = true,
+                            Url = "/Tanımalr/CariKoduTanım"
+                        },
+                        new
+                        {
+                            Id = 69,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon fa-solid fa-user-group",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = true,
+                            Name = "Fabrika Makina Yönetimi",
+                            Row = 3,
+                            Status = true,
+                            Url = "#"
+                        },
+                        new
+                        {
+                            Id = 70,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "İlaç Fırın",
+                            ParentId = 69,
+                            Row = 1,
+                            Status = true,
+                            Url = "/FabrikaMakinaYönetimi/Fırın"
                         });
                 });
 
@@ -5228,6 +5663,17 @@ namespace DataAccess.Migrations
                     b.Navigation("ProgramŞirketGrup");
 
                     b.Navigation("Reçete");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodIsEmri", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodAnaUrun", "BaseProduct")
+                        .WithMany()
+                        .HasForeignKey("BaseProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BaseProduct");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.ProgramŞirketKullanıcı", b =>

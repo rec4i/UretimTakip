@@ -35,13 +35,23 @@ namespace DataAccess.Concrete
             {
                 var entities = filter == null
                     ? context.Set<Cari>().Where("IsDeleted == false")
-                //.Include("CarKilometers")
-
+                        .Where(o =>
+                    search == null ? o.CariKodu == o.CariKodu :
+                    o.CariKodu.ToLower().Contains(search.ToLower())
+                    &&
+                     search == null ? o.Ad == o.Ad :
+                    o.Ad.ToLower().Contains(search.ToLower())
+                    )
 
                 .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(limit)).ToList()
                     : context.Set<Cari>().Where("IsDeleted == false").Where(filter)
-                    //.Include("CarKilometers")
-
+                      .Where(o =>
+                    search == null ? o.CariKodu == o.CariKodu :
+                    o.CariKodu.ToLower().Contains(search.ToLower())
+                    &&
+                     search == null ? o.Ad == o.Ad :
+                    o.Ad.ToLower().Contains(search.ToLower())
+                    )
                     .Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(limit)).ToList();
                 return entities;
             }

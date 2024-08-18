@@ -1,7 +1,10 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business;
+using Business.Abstract.Services;
+using Business.Concrate.Services.Helpers;
 using Business.Concrete.CustomValidation;
+using Business.Concrete.Services;
 using Business.Mappings;
 using DataAccess.Concrete.EntityFramework.DbContexts;
 using Entities.Concrete.Identity;
@@ -9,10 +12,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Net.WebSockets;
+using System.Text;
 using System.Text.Json.Serialization;
 using WebIU.DependencyResolvers.Autofac;
 using WebIU.Extensions;
 using WebIU.Filters;
+
 using WebIU.Mappings;
 using WebIU.Middlewares;
 
@@ -91,7 +97,8 @@ await builder.Services.IdentityDbContextSeedAsync();
 
 //Localization Process
 builder.Services.AddScoped<RequestLocalizationCookiesMiddleware>();
-
+builder.Services.AddScoped<DataProcessorService>();
+builder.Services.AddSingleton<IWebSocketService, WebSocketService>();
 //Nlog 
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -104,6 +111,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 //builder.Services.AddAuthentication();
 var app = builder.Build();
+app.UseWebSockets();
 
 
 
@@ -127,6 +135,8 @@ app.Use(async (context, next) =>
         context.Request.Path = "/Home/Page500";
         await next();
     }
+
+
 });
 app.UseSession();
 app.UseRequestLocalization();
@@ -139,5 +149,26 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.Map("/ws", async context =>
+    {
+        if (context.WebSockets.IsWebSocketRequest)
+        {
+            var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            var webSocketHandler = app.Services.GetRequiredService<IWebSocketService>();
+            await webSocketHandler.HandleWebSocketConnection(webSocket);
+        }
+        else
+        {
+            context.Response.StatusCode = 400;
+        }
+    });
+});
 
 app.Run();
+
+
+
+

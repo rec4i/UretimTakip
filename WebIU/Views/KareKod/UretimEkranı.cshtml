@@ -1,0 +1,193 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex flex-row-reverse">
+                        <div class="p-2" id="BaşlatDiv">
+                            <button class="btn btn-primary" id="WebSocketBaşlat"><i class="fa fa-play"></i> Canlı Bağlantıyı Başlat</button>
+                        </div>
+                        <div class="p-2" id="DurdurDiv" hidden>
+                            <button class="btn btn-danger" id="WebSocketDurdur"><i class="fa fa-stop"></i> Canlı Bağlantıyı Durdur</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="OrderList"
+                                               data-toolbar="#OrderListToolBar"
+                                               data-pagination="true"
+                                               data-side-pagination="server"
+                                               data-id-field="id"
+                                               data-page-list="[10, 25, 50, 100, all]"
+                                               data-locale="Tr-tr"
+                                               data-search="true"
+                                               data-show-refresh="true"
+                                               data-show-export="true">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="uretimTarihi" data-title="Üreitm Tarihi" data-width="50" data-sortable="false"></th>
+                                                    <th data-field="seriNo" data-title="Seri No" data-width="1500" data-sortable="false"></th>
+                                                    <th data-field="koliSSCC" data-title="Koli SSCC" data-width="50" data-sortable="false"></th>
+                                                    <th data-field="paketSSCC" data-title="Paket SSCC" data-width="50" data-sortable="false"></th>
+                                                    <th data-title="Actions" data-sortable="false"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        let ws;
+
+        $('#WebSocketDurdur').click(function () {
+
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.close(); // Close the WebSocket connection
+                successAlert("Canlı Bağlantı Başarıyla Kapatıldı")
+
+            } else {
+                errorAlert("Canlı Bağlantı Zaten Kapalı");
+            }
+            $('#DurdurDiv').attr('hidden', true);
+            $('#BaşlatDiv').removeAttr('hidden')
+
+        })
+        $('#WebSocketBaşlat').click(function () {
+
+            $('#DurdurDiv').removeAttr('hidden')
+            $('#BaşlatDiv').attr('hidden', true);
+
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                errorAlert("Canlı Bağlantı Zaten Açık");
+                return;
+            }
+
+            ws = new WebSocket("ws://192.168.1.34/ws"); // WebSocket URL
+
+            ws.onopen = () => {
+                successAlert("Canlı Bağlantı Başarıyla Sağlandı")
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log(data)
+                //$('#OrderList').bootstrapTable('insertRow', {
+                //    index: 0,
+                //    row: {
+                //        uretimTarihi: data.AddedDate,
+                //        seriNo: data.Sn,
+                //        koliSSCC: data.BoxSn,
+                //        paketSSCC: data.PackSn
+                //    }
+                //})
+            };
+
+            ws.onerror = (error) => {
+                errorAlert(error.message);
+            };
+
+        })
+
+
+
+
+        OrderTablosuDoldur()
+    })
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/Reçete/GetReçetePagination",
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+            //value += "<button id='OrderConfrimationEditBtn' odrderId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button>";
+            //value += "<button id='EczaneBilgisiDüzenleModal' odrderId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-edit'></i> Eczane Bilgisi Düzenle</button>";
+            value += "<button id='IşSil' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+
+            return value
+        }
+        function afterLoad() {
+            $('#IşSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/Reçete/ReleçeteSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+        }
+
+    }
+</script>

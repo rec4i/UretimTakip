@@ -111,6 +111,75 @@ namespace WebIU.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> LoginJson(string UserName, string Password, string ReturnUrl, bool RememberMe)
+        {
+
+            UserLoginViewModel userLoginViewModel = new UserLoginViewModel()
+            {
+                UserName = UserName,
+                Password = Password,
+                RememberMe = RememberMe,
+                ReturnUrl = ReturnUrl
+            };
+
+            //if (!ModelState.IsValid)
+            //{
+            //    TempData.Add("message", Messages.WrongInformation);
+            //    _systemUserLogService.Add(userLoginViewModel.UserName + LogMessage.IncorrectLogins, LogTrxResult.Fail);
+            //    return Json("Veri İstenildiği Gibi Gönderlmedi");
+            //}
+            if (userLoginViewModel.ReturnUrl == null)
+                userLoginViewModel.ReturnUrl = "/";
+            var user = await _userManager.FindByNameAsync(userLoginViewModel.UserName);
+            if (user == null)
+            {
+                user = await _userManager.FindByEmailAsync(userLoginViewModel.UserName);
+                if (user == null)
+                {
+                    TempData.Add("message", Messages.UserNotFound);
+                    _systemUserLogService.Add(userLoginViewModel.UserName + LogMessage.UserNotFound, LogTrxResult.Fail);
+                    return Json("Kullanıcı Bulunamadı");
+                }
+            }
+            if (user.LockoutEnd < DateTime.Now)
+            {
+                user.LockoutEnd = null;
+                await _userManager.UpdateAsync(user);
+            }
+            if (user.LockoutEnd != null)
+            {
+                TempData.Add("message", Messages.LockoutEnd);
+                _systemUserLogService.Add(userLoginViewModel.UserName + LogMessage.LockoutEndUser, LogTrxResult.Fail);
+                return Json("Kullanıcı Belirli Bir Süre Yasaklı");
+            }
+            if (user.BanEnd < DateTime.Now)
+            {
+                user.BanEnd = null;
+                user.BanComment = null;
+                user.BanStart = null;
+                user.BanStatus = false;
+                await _userManager.UpdateAsync(user);
+            }
+            if (user.BanStatus)
+            {
+                TempData.Add("message", Messages.BannedUser);
+                _systemUserLogService.Add(userLoginViewModel.UserName + LogMessage.BannedUserLogin, LogTrxResult.Fail);
+                return Json("Kullanıcı Yasaklı");
+            }
+            var result = _signInManager.PasswordSignInAsync(user, userLoginViewModel.Password, userLoginViewModel.RememberMe, true).Result;
+            if (result.Succeeded)
+            {
+                _systemUserLogService.Add(LogMessage.Login, LogTrxResult.Success, user.Id);
+                user.LastLoginDate = DateTime.Now;
+                await _userManager.UpdateAsync(user);
+                return Json("True/" + user.Id);
+            }
+            TempData.Add("message", Messages.UsernamePasswordIncorrect);
+            _systemUserLogService.Add(userLoginViewModel.UserName + LogMessage.IncorrectLogins, LogTrxResult.Fail);
+            return Json("Kullanıcı Adı Veya Şifre Yanlış");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -285,7 +354,7 @@ namespace WebIU.Controllers
             _systemUserLogService.Add(LogMessage.ChangeMyAccountInformationError, LogTrxResult.Fail);
             return View(changeMyAccountInformationViewModel);
         }
-   
+
         private bool HasAdded(AppIdentityUser user, ChangeMyAccountInformationViewModel changeMyAccountInformationViewModel)
         {
             if (user.UserName != changeMyAccountInformationViewModel.User.UserName)

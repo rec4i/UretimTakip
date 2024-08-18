@@ -18,6 +18,9 @@ namespace WebAPI.DependencyResolvers.Autofac
             builder.RegisterAssemblyTypes(businesAssembly, dalAssembly).Where(p => p.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterAssemblyTypes(businesAssembly, dalAssembly).Where(p => p.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterAssemblyTypes(businesAssembly, dalAssembly).Where(p => p.Name.EndsWith("Accessor")).AsImplementedInterfaces().InstancePerLifetimeScope();
+            //builder.RegisterAssemblyTypes(businesAssembly, dalAssembly).Where(p => p.Name.EndsWith("Manager")).AsImplementedInterfaces().InstancePerLifetimeScope();
+
+            //Manager
         }
     }
 }

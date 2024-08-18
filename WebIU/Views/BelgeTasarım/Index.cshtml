@@ -1,0 +1,382 @@
+﻿<link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet" />
+<div class="controls">
+    <button id="addText">Metin Ekle</button>
+    <button id="addImage">Resim Ekle</button>
+    <button id="addTable">Tablo Ekle</button>
+    <button id="generateJSON">JSON Oluştur</button>
+    <label for="pageOrientation">Kağıt Yönü:</label>
+    <select id="pageOrientation">
+        <option value="portrait">Dikey</option>
+        <option value="landscape">Yatay</option>
+    </select>
+</div>
+
+<div class="page" id="page">
+    <!-- Bu alanda sürüklenen öğeler yerleştirilecek -->
+</div>
+
+<!-- Stil Düzenleme Paneli -->
+<div id="stylePanel" class="style-panel">
+    <label for="fontFamily">Yazı Tipi:</label>
+    <select id="fontFamily">
+        <option value="Arial">Arial</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Courier New">Courier New</option>
+    </select>
+
+    <label for="fontSize">Punto:</label>
+    <input type="number" id="fontSize" value="16" min="8" max="72" />
+
+    <label for="fontColor">Renk:</label>
+    <input type="color" id="fontColor" value="#000000" />
+
+    <label><input type="checkbox" id="boldText" /> Kalın</label>
+    <label><input type="checkbox" id="italicText" /> İtalik</label>
+    <label><input type="checkbox" id="underlineText" /> Altı Çizili</label>
+
+    <button id="applyStyle">Uygula</button>
+</div>
+
+<!-- Özel Bağlam Menüsü -->
+<ul id="contextMenu" class="context-menu">
+    <li id="editStyle">Stili Düzenle</li>
+    <li id="changeImage">Resmi Değiştir</li>
+    <li id="deleteItem">Sil</li>
+    <li id="bringToFront">Üste Getir</li>
+    <li id="sendToBack">Alta İndir</li>
+    <li id="changeCellColor">Hücre Rengini Değiştir</li>
+    <li id="changeBorderWidth">Kenar Kalınlığını Değiştir</li>
+</ul>
+
+<!-- Resim Dosyası Seçme Girdisi -->
+<input type="file" id="imageInput" accept="image/*" style="display: none;" />
+<script type="text/javascript">
+    $(function () {
+        let currentElement;
+        let tableElement;
+
+        // Sayfa yönü değiştirme işlemi
+        $('#pageOrientation').on('change', function () {
+            const orientation = $(this).val();
+            $('#page').css({
+                width: orientation === 'portrait' ? '210mm' : '297mm',
+                height: orientation === 'portrait' ? '297mm' : '210mm'
+            });
+        });
+
+        // Metin ekleme işlemi
+        $('#addText').on('click', function () {
+            var textElement = $('<div contenteditable="true" class="draggable resizable">Yeni Metin</div>');
+            $('#page').append(textElement);
+            makeDraggableResizable(textElement);
+        });
+
+        // Resim ekleme işlemi
+        $('#addImage').on('click', function () {
+            var imgElement = $('<div class="draggable resizable"><img src="https://via.placeholder.com/150" alt="Resim" /></div>');
+            $('#page').append(imgElement);
+            makeDraggableResizable(imgElement);
+        });
+
+        // Tablo ekleme işlemi
+        $('#addTable').on('click', function () {
+            const rows = parseInt(prompt('Satır sayısını girin:', '3'));
+            const cols = parseInt(prompt('Sütun sayısını girin:', '3'));
+            if (rows > 0 && cols > 0) {
+                tableElement = $('<table class="draggable resizable"></table>');
+                for (let i = 0; i < rows; i++) {
+                    const row = $('<tr></tr>');
+                    for (let j = 0; j < cols; j++) {
+                        row.append('<td class="resizable-cell"></td>');
+                    }
+                    tableElement.append(row);
+                }
+                $('#page').append(tableElement);
+                makeDraggableResizable(tableElement);
+                enableCellResizing();
+            }
+        });
+
+        // Sağ tıklama ile bağlam menüsünü açar
+        $(document).on('contextmenu', '.draggable', function (e) {
+            e.preventDefault();
+            currentElement = $(this);
+            $('#contextMenu').css({
+                top: e.pageY + 'px',
+                left: e.pageX + 'px'
+            }).show();
+        });
+
+        // "Stili Düzenle" seçeneğine tıklama işlemi
+        $('#editStyle').on('click', function () {
+            if (currentElement.is('div[contenteditable="true"]')) {
+                $('#contextMenu').hide();
+                $('#stylePanel').css({
+                    top: $('#contextMenu').css('top'),
+                    left: parseInt($('#contextMenu').css('left')) + $('#contextMenu').outerWidth() + 'px'
+                }).show();
+
+                $('#fontFamily').val(currentElement.css('font-family'));
+                $('#fontSize').val(parseInt(currentElement.css('font-size')));
+                $('#fontColor').val(rgbToHex(currentElement.css('color')));
+
+                $('#boldText').prop('checked', currentElement.css('font-weight') === '700' || currentElement.css('font-weight') === 'bold');
+                $('#italicText').prop('checked', currentElement.css('font-style') === 'italic');
+                $('#underlineText').prop('checked', currentElement.css('text-decoration').includes('underline'));
+            }
+        });
+
+        // "Resmi Değiştir" seçeneğine tıklama işlemi
+        $('#changeImage').on('click', function () {
+            if (currentElement.find('img').length > 0) {
+                $('#imageInput').click();
+            }
+            $('#contextMenu').hide();
+        });
+
+        // Seçilen dosyayı yükleyip resmi değiştir
+        $('#imageInput').on('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    currentElement.find('img').attr('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // "Sil" seçeneğine tıklama işlemi
+        $('#deleteItem').on('click', function () {
+            if (confirm('Bu öğeyi silmek istediğinizden emin misiniz?')) {
+                currentElement.remove();
+            }
+            $('#contextMenu').hide();
+        });
+
+        // "Hücre Rengini Değiştir" seçeneğine tıklama işlemi
+        $('#changeCellColor').on('click', function () {
+            if (currentElement.is('td')) {
+                const color = prompt('Yeni hücre rengini girin (HEX formatında):', '#ffffff');
+                if (color) {
+                    currentElement.css('background-color', color);
+                }
+            }
+            $('#contextMenu').hide();
+        });
+
+        // "Kenar Kalınlığını Değiştir" seçeneğine tıklama işlemi
+        $('#changeBorderWidth').on('click', function () {
+            if (currentElement.is('table')) {
+                const width = prompt('Kenar kalınlığını girin (px cinsinden):', '1');
+                if (width) {
+                    currentElement.find('td, th').css('border-width', width + 'px');
+                }
+            }
+            $('#contextMenu').hide();
+        });
+
+        // "Üste Getir" seçeneğine tıklama işlemi
+        $('#bringToFront').on('click', function () {
+            currentElement.css('z-index', parseInt(currentElement.css('z-index')) + 1);
+            $('#contextMenu').hide();
+        });
+
+        // "Alta İndir" seçeneğine tıklama işlemi
+        $('#sendToBack').on('click', function () {
+            currentElement.css('z-index', parseInt(currentElement.css('z-index')) - 1);
+            $('#contextMenu').hide();
+        });
+
+        // Stil uygulama işlemi
+        $('#applyStyle').on('click', function () {
+            const fontFamily = $('#fontFamily').val();
+            const fontSize = $('#fontSize').val() + 'px';
+            const fontColor = $('#fontColor').val();
+            const fontWeight = $('#boldText').is(':checked') ? 'bold' : 'normal';
+            const fontStyle = $('#italicText').is(':checked') ? 'italic' : 'normal';
+            const textDecoration = $('#underlineText').is(':checked') ? 'underline' : 'none';
+
+            currentElement.css({
+                'font-family': fontFamily,
+                'font-size': fontSize,
+                'color': fontColor,
+                'font-weight': fontWeight,
+                'font-style': fontStyle,
+                'text-decoration': textDecoration
+            });
+
+            $('#stylePanel').hide();
+        });
+
+        // Sayfanın JSON formatında temsilini oluşturur ve konsola yazdırır
+        $('#generateJSON').on('click', function () {
+            const elements = [];
+            $('#page').children().each(function () {
+                const elem = $(this);
+                elements.push({
+                    type: elem.prop('tagName').toLowerCase(),
+                    content: elem.html(),
+                    css: elem.attr('style')
+                });
+            });
+            console.log(JSON.stringify(elements, null, 2));
+        });
+
+        // Sayfanın herhangi bir yerine tıklanırsa bağlam menüsünü gizle
+        $(document).on('click', function () {
+            $('#contextMenu').hide();
+        });
+
+        // Öğelerin sürüklenebilir ve yeniden boyutlandırılabilir olmasını sağlar
+        function makeDraggableResizable(element) {
+            element.draggable({
+                containment: '#page'
+            }).resizable({
+                containment: '#page'
+            });
+        }
+
+        // Hücrelerin yeniden boyutlandırma işlevselliğini ekler
+        function enableCellResizing() {
+            $('.resizable-cell').each(function () {
+                const cell = $(this);
+                cell.on('mousemove', function (e) {
+                    const offsetX = e.offsetX;
+                    const offsetY = e.offsetY;
+                    const width = cell.width();
+                    const height = cell.height();
+
+                    if (offsetX > width - 10 && offsetY > height - 10) {
+                        cell.css('cursor', 'nwse-resize');
+                    } else if (offsetX > width - 10) {
+                        cell.css('cursor', 'ew-resize');
+                    } else if (offsetY > height - 10) {
+                        cell.css('cursor', 'ns-resize');
+                    } else {
+                        cell.css('cursor', 'default');
+                    }
+                }).on('mousedown', function (e) {
+                    if (e.offsetX > cell.width() - 10 && e.offsetY > cell.height() - 10) {
+                        $(document).on('mousemove.resize', function (e) {
+                            const newWidth = e.pageX - cell.offset().left;
+                            const newHeight = e.pageY - cell.offset().top;
+                            cell.width(newWidth);
+                            cell.height(newHeight);
+                        }).on('mouseup.resize', function () {
+                            $(document).off('mousemove.resize mouseup.resize');
+                        });
+                    }
+                });
+            });
+        }
+        // RGB renk kodunu HEX'e dönüştürme fonksiyonu
+        function rgbToHex(rgb) {
+            var rgbArray = rgb.match(/\d+/g);
+            return "#" + rgbArray.map(function (x) {
+                return parseInt(x).toString(16).padStart(2, '0');
+            }).join('');
+        }
+    });
+</script>
+
+<style>
+    .controls {
+        margin: 10px;
+    }
+
+    .page {
+        width: 210mm;
+        height: 297mm;
+        border: 1px solid #000;
+        margin: 0 auto;
+        position: relative;
+        background: #fff;
+    }
+
+        .page.landscape {
+            width: 297mm;
+            height: 210mm;
+        }
+
+    .draggable {
+        border: 1px dashed #000;
+        padding: 5px;
+        position: absolute;
+        cursor: move;
+        z-index: 1;
+    }
+
+    .resizable {
+        overflow: hidden;
+    }
+
+        .resizable img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+        }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        height: 100%;
+    }
+
+    td, th {
+        border: 1px solid #000;
+        padding: 5px;
+    }
+
+    .style-panel {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        z-index: 1000;
+    }
+
+    .context-menu {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        list-style: none;
+        padding: 5px;
+        margin: 0;
+        z-index: 1000;
+    }
+
+        .context-menu li {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+            .context-menu li:hover {
+                background-color: #eee;
+            }
+
+    .resizable-cell {
+        position: relative;
+    }
+
+        .resizable-cell:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 10px;
+            height: 10px;
+            background: #000;
+            cursor: nwse-resize;
+        }
+
+        .resizable-cell:hover:after {
+            background: #f00;
+        }
+</style>
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" defer></script>

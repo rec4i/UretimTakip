@@ -1,0 +1,136 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Urun Adı:</label>
+                        <input type="text" id="Name" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Gtin:</label>
+                        <input type="text" id="Gtin" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Birim:</label>
+                        <input type="text" id="Unit" class="form-control" value="" />
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                        <label>Menşei:</label>
+                        <select class="form-control" id="Origin">
+                            <option value="1">IMAL</option>
+                            <option value="2">ITHAL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Raf Ömrü:</label>
+                        <input type="text" data-mask="numeric" id="RafCycleUnit" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Raf Ömrü Birimi</label>
+                        <select class="form-control" id="RafCycleTime">
+                            <option value="1">YIL</option>
+                            <option value="2">Ay</option>
+                            <option value="3">Gün</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Ürün Tipi:</label>
+                        <input type="text" id="ProductType" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Paletteki Koli Adeti:</label>
+                        <input type="text" id="BoxesInPalet" data-mask="numeric" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Kolideki Paket Adeti:</label>
+                        <input type="text" id="ProductInBox" data-mask="numeric" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Paketteki Ürün Adeti:</label>
+                        <input type="text" id="ProductsInPack" data-mask="numeric" class="form-control" value="" />
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button id="Kaydet" class="btn btn-warning"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#Kaydet').click(function () {
+            var data = new FormData();
+            data.append('_entitiy.Name', $('#Name').val());
+            data.append('_entitiy.Gtin', $('#Gtin').val());
+            data.append('_entitiy.Unit', $('#Unit').val());
+            data.append('_entitiy.Origin', $('#Origin').find(':selected').val());
+            data.append('_entitiy.RafCycleUnit', $('#RafCycleUnit').val());
+            data.append('_entitiy.RafCycleTime', $('#RafCycleTime').find(':selected').val());
+            data.append('_entitiy.ProductType', $('#ProductType').val());
+            data.append('_entitiy.BoxesInPalet', $('#BoxesInPalet').val());
+            data.append('_entitiy.ProductInBox', $('#ProductInBox').val());
+            data.append('_entitiy.ProductsInPack', $('#ProductsInPack').val());
+
+            $.ajax({
+                url: "/KareKod/AnaUrunAdd",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                        setTimeout(() => {
+                            window.location.href = "/KareKod/AnaUrunler"
+                        }, 1000)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+        })
+
+
+
+
+    })
+</script>

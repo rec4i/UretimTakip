@@ -1,0 +1,238 @@
+﻿@model WebIU.Models.KareKodViewModels.IsEmriEkleViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Hedef Ürün:</label>
+                        <select id="BaseProductId" class="form-control">
+                            @foreach (var item in Model.KareKodAnaUruns)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Oluşturma Tarihi:</label>
+                        <input type="date" id="CreatedDate" class="form-control" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Son Kullanma Tarihi:</label>
+                        <input type="date" id="ExpirationDate" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Lot Numarası:</label>
+                        <input type="text" id="Lot" class="form-control" value="" />
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col">
+                                <label>Planlanan Ürün:</label>
+                                <input type="text" data-mask="biggerThanZero" id="PlannedProduct" class="form-control" value="" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Kolideki Ürün Adeti:</label>
+                                <input type="text" data-mask="biggerThanZero" id="KolidekiÜrünAdeti" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Paletteki Koli Adeti:</label>
+                                <input type="text" data-mask="biggerThanZero" id="PalettekiKoliAdeti" class="form-control" value="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col">
+                                <label>Toplam Palet:</label>
+                                <input type="text" disabled data-mask="biggerThanZero" id="ToplamPalet" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Toplam Koli :</label>
+                                <input type="text" disabled data-mask="biggerThanZero" id="ToplamKoli" class="form-control" value="" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                @*<div class="row">
+                        <div class="col">
+                            <label>Paket Başına Ürün Sayısı:</label>
+                            <input type="text" data-mask="numeric" id="ProductPerPack" class="form-control" value="" />
+                        </div>
+                    </div>*@
+
+                @*<div class="row">
+                        <div class="col">
+                            <label>Sipariş Durumu:</label>
+                            <input type="text" id="OrderStatus" class="form-control" value="" />
+                        </div>
+                    </div>*@
+                <div class="row">
+                    <div class="col">
+                        <label>Açıklama:</label>
+                        <input type="text" id="Description" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button id="Kaydet" class="btn btn-warning"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        getProducAndFill($('#BaseProductId').find(':selected').val())
+
+        $('#BaseProductId').change(function () {
+            getProducAndFill($('#BaseProductId').find(':selected').val())
+        })
+        $('#PlannedProduct').on('keypress keyup', function () {
+
+        })
+
+
+        $('#Kaydet').click(function () {
+
+            var data = new FormData();
+            data.append('BaseProductId', $('#BaseProductId').find(':selected').val());
+            data.append('CreatedDate', $('#CreatedDate').val());
+            data.append('ExpirationDate', $('#ExpirationDate').val());
+            data.append('Lot', $('#Lot').val());
+            data.append('PlannedProduct', $('#PlannedProduct').val());
+
+
+            data.append('BoxCount', $('#BoxCount').val());
+            data.append('ToplamKoliSayısı', $('#ToplamKoli').val());
+            data.append('ToplamPaletSayısı', $('#ToplamPalet').val());
+            data.append('KolidekiÜrünSayısı', $('#KolidekiÜrünAdeti').val());
+            data.append('PalettekiKoliSayısı', $('#PalettekiKoliAdeti').val());
+            data.append('Açıklama', $('#Description').val());
+
+            $.ajax({
+                url: "/KareKod/IsEmriEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message);
+                        setTimeout(() => {
+                            window.location.href = "/KareKod/Index";
+                        }, 1000);
+                    } else {
+                        errorAlert(data.message);
+                    }
+                },
+            });
+        });
+        $('input[id=PlannedProduct],input[id=KolidekiÜrünAdeti],input[id=PalettekiKoliAdeti]').on('keypress keyup', function () {
+            var planlananÜrün = parseInt($('input[id=PlannedProduct]').val());
+            var KutudakiÜrünSayısı = parseInt($('input[id=KolidekiÜrünAdeti]').val());
+            var PalettekiKoliSayısı = parseInt($('input[id=PalettekiKoliAdeti]').val());
+
+            // ToplamKoli hesaplanırken yukarı yuvarlama yapılır
+            var ToplamKoli = Math.ceil(planlananÜrün / KutudakiÜrünSayısı);
+
+            // ToplamPalet hesaplanırken yine yukarı yuvarlama yapılır
+            var ToplamPalet = Math.ceil(ToplamKoli / PalettekiKoliSayısı);
+
+            $('#ToplamKoli').val(ToplamKoli);
+            $('#ToplamPalet').val(ToplamPalet);
+        })
+
+
+    });
+    function getProducAndFill(Id) {
+        var data = new FormData();
+        data.append('Id', Id);
+        var entity = null;
+        $.ajax({
+            url: "/KareKod/GetKareKodAnaUrunProps",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                if (data.status == 1) {
+                    entity = data.data;
+                    console.log(data.data);
+                } else {
+                    errorAlert(data.message);
+                }
+            },
+        });
+        $('#ExpirationDate').val(calculateSKT(entity.id, $('#CreatedDate').val(), entity.rafCycleUnit))
+        $('#KolidekiÜrünAdeti').val(entity.productInBox)
+        $('#PalettekiKoliAdeti').val(entity.boxesInPalet)
+
+
+
+
+    }
+    function calculateSKT(Id, UretimTar, Birim) {
+        var data = new FormData();
+        data.append('Id', Id);
+        data.append('UretimTar', UretimTar);
+        data.append('RafCycleTime', Birim);
+        var entity = null;
+        $.ajax({
+            url: "/KareKod/SonKullanmaTarihiHesapla",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                if (data.status == 1) {
+                    entity = data.data
+                } else {
+                    errorAlert(data.message);
+                }
+            },
+        });
+        return entity
+
+    }
+
+</script>

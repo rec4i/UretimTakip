@@ -4,10 +4,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="Views\KareKod\İstasyonListesi.cshtml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="ClosedXML" Version="0.96.0" />
+    <PackageReference Include="EasyModbusTCP.NETCore" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
@@ -43,6 +47,18 @@
     <Folder Include="wwwroot\IslenecekDosyalar\" />
     <Folder Include="wwwroot\YazilacakDosyalar\" />
     <Folder Include="wwwroot\YazılacakDosyalar\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\KareKod\İstasyonListesi.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\KareKod\İstasyonListesi.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\KareKod\İstasyonListesi.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -13,14 +13,16 @@ namespace Entities.Concrete.OtherEntities
         public int? ProgramŞirketGrupId { get; set; }
         public ProgramŞirketGrup? ProgramŞirketGrup { get; set; }
 
+        public int? ParentId { get; set; }
         public string Ad { get; set; }
         public string Adres { get; set; }
+
 
 
         //1 Müşteri
         //2 Tedarikçi
         public int Tür { get; set; }
 
-        public string CariKodu { get; set; }
+        public string? CariKodu { get; set; }
     }
 }

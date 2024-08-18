@@ -3,6 +3,7 @@ using Entities.Concrete.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebIU.Models.HelperModels;
+using WebIU.Models.TanımlarViewModel;
 
 namespace WebIU.Controllers
 {
@@ -33,10 +34,15 @@ namespace WebIU.Controllers
         {
             var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
             var entntiy = _stokKoduTanımRepository.Get(o => o.ProgramŞirketGrupId == userGroup);
+            StokKoduTanımViewModel model = new StokKoduTanımViewModel();
+
             if (entntiy != null)
-                return View(entntiy.Tanım);
+            {
+                model.Tanım = entntiy.Tanım;
+                return View(model);
+            }
             else
-                return View("a");
+                return View();
         }
 
         [HttpPost]
@@ -44,6 +50,15 @@ namespace WebIU.Controllers
         {
             var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
             var entntiy = _stokKoduTanımRepository.Get(o => o.ProgramŞirketGrupId == userGroup);
+            if (entntiy == null)
+            {
+                entntiy = _stokKoduTanımRepository.Add(new Entities.Concrete.OtherEntities.StokKoduTanım
+                {
+                    Tanım = Kod,
+                    ProgramŞirketGrupId = userGroup
+                });
+            }
+
             entntiy.Tanım = Kod;
             _stokKoduTanımRepository.Update(entntiy);
 
@@ -60,10 +75,16 @@ namespace WebIU.Controllers
         {
             var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
             var entntiy = _cariKoduTanımRepository.Get(o => o.ProgramŞirketGrupId == userGroup);
+            CariKoduTanımViewModel model = new CariKoduTanımViewModel();
+
+
             if (entntiy != null)
-                return View(entntiy.Tanım);
+            {
+                model.Tanım = entntiy.Tanım;
+                return View(model);
+            }
             else
-                return View("");
+                return View();
         }
 
         [HttpPost]
@@ -71,6 +92,14 @@ namespace WebIU.Controllers
         {
             var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
             var entntiy = _cariKoduTanımRepository.Get(o => o.ProgramŞirketGrupId == userGroup);
+            if (entntiy == null)
+            {
+                entntiy = _cariKoduTanımRepository.Add(new Entities.Concrete.OtherEntities.CariKoduTanım
+                {
+                    Tanım = Kod,
+                    ProgramŞirketGrupId = userGroup
+                });
+            }
             entntiy.Tanım = Kod;
             _cariKoduTanımRepository.Update(entntiy);
 

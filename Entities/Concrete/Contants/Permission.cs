@@ -149,6 +149,7 @@ namespace Entities.Concrete.Contants
 
         public static class Cari
         {
+            public const string Cariler = "Permission.Cari.Cariler";
             public const string Müşteriler = "Permission.Cari.Müşteriler";
             public const string Tedarikçiler = "Permission.Cari.Tedarikçiler";
             public const string Index = "Permission.Cari.Index";
@@ -175,6 +176,27 @@ namespace Entities.Concrete.Contants
             public const string DosyaYoluKaydet = "Permission.DosyaYönetimi.DosyaYoluKaydet";
         }
 
+
+        public static class KareKod
+        {
+            public const string Index = "Permission.KareKod.Index";
+            public const string BildirimEmirleri = "Permission.KareKod.BildirimEmirleri";
+            public const string AnaUrunler = "Permission.KareKod.AnaUrunler";
+            public const string UretimEkranı = "Permission.KareKod.UretimEkranı";
+            public const string İstasyonListesi = "Permission.KareKod.İstasyonListesi";
+        }
+
+        public static class BelgeTasarım
+        {
+            public const string Index = "Permission.BelgeTasarım.Index";
+
+        }
+
+
+        public static class FabrikaMakinaYönetimi
+        {
+            public const string Fırın = "Permission.FabrikaMakinaYönetimi.Fırın";
+        }
 
 
 

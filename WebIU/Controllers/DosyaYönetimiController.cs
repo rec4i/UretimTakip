@@ -5,6 +5,7 @@ using DocumentFormat.OpenXml.Vml.Office;
 using Entities.Abstract;
 using Entities.Concrete.Identity;
 using Entities.Concrete.OtherEntities;
+using Entities.Concrete.Token;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,9 @@ namespace WebIU.Controllers
         private readonly IDosyaİndirmeYetkiRepository _dosyaİndirmeYetkiRepository;
         private readonly IDosyaİçerikGörmeYetkiRepository _dosyaİçerikGörmeYetkiRepository;
         private readonly UserManager<AppIdentityUser> _userManager;
-        public DosyaYönetimiController(IDosyaRepository dosyaRepository, IWebHostEnvironment webHostEnvironment, IDosyaSilmeYetkiRepository dosyaSilmeYetkiRepository, IDosyaİsimDeğiştirmeYetkiRepository dosyaİsimDeğiştirmeYetkiRepository, IDosyaYetkiYetkiRepository dosyaYetkiYetkiRepository, IDosyaİndirmeYetkiRepository dosyaİndirmeYetkiRepository, UserManager<AppIdentityUser> userManager, IDosyaİçerikGörmeYetkiRepository dosyaİçerikGörmeYetkiRepository)
+        private readonly SignInManager<AppIdentityUser> _signInManager;
+
+        public DosyaYönetimiController(IDosyaRepository dosyaRepository, IWebHostEnvironment webHostEnvironment, IDosyaSilmeYetkiRepository dosyaSilmeYetkiRepository, IDosyaİsimDeğiştirmeYetkiRepository dosyaİsimDeğiştirmeYetkiRepository, IDosyaYetkiYetkiRepository dosyaYetkiYetkiRepository, IDosyaİndirmeYetkiRepository dosyaİndirmeYetkiRepository, UserManager<AppIdentityUser> userManager, IDosyaİçerikGörmeYetkiRepository dosyaİçerikGörmeYetkiRepository, SignInManager<AppIdentityUser> signInManager)
         {
             _dosyaRepository = dosyaRepository;
             _webHostEnvironment = webHostEnvironment;
@@ -41,14 +44,39 @@ namespace WebIU.Controllers
             _dosyaİndirmeYetkiRepository = dosyaİndirmeYetkiRepository;
             _dosyaİçerikGörmeYetkiRepository = dosyaİçerikGörmeYetkiRepository;
             _userManager = userManager;
+            _signInManager = signInManager;
+
+        }
+
+
+        public string GetClientIpAddress(HttpContext httpContext)
+        {
+            string ipAddress = httpContext.Connection.RemoteIpAddress?.ToString();
+
+            // Eğer X-Forwarded-For başlığı varsa, onu kontrol et
+            if (httpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+            {
+                ipAddress = httpContext.Request.Headers["X-Forwarded-For"].ToString();
+
+                // X-Forwarded-For birden fazla IP adresi içerebilir, ilkini al
+                if (ipAddress.Contains(","))
+                {
+                    ipAddress = ipAddress.Split(',')[0];
+                }
+            }
+
+            return ipAddress;
         }
 
         public async Task<IActionResult> DosyaYazmaYoluOluştur(int DosyaId)
         {
+
             var rootpath = _webHostEnvironment.ContentRootPath;
             var dosya = _dosyaRepository.Get(o => o.Id == DosyaId);
             string path = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(dosya.Id);
             var copyPath = rootpath + "wwwroot/YazilacakDosyalar/" + dosya.Guid;
+            string clientIp = GetClientIpAddress(HttpContext);
+
 
             if (!Directory.Exists(copyPath))
             {
@@ -56,7 +84,7 @@ namespace WebIU.Controllers
             }
 
             string command = "DosyaKontrolAppv2.exe ";
-            string arguments = $"C:\\Users\\RECAI\\source\\repos\\UretimTakip\\WebIU\\wwwroot\\YazilacakDosyalar 192.168.1.39:5231 {dosya.Guid}";
+            string arguments = $"{rootpath}wwwroot\\YazilacakDosyalar 192.168.1.34 {dosya.Guid} {clientIp}";
 
             // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
@@ -76,17 +104,17 @@ namespace WebIU.Controllers
             JsonResponseModel res = new JsonResponseModel();
             res.status = 1;
             res.message = "İşlem Başarılı";
-            res.data = "\\\\192.168.1.39\\YazilacakDosyalar\\" + dosya.Guid;
+            res.data = "\\\\192.168.1.34\\YazilacakDosyalar\\" + dosya.Guid;
 
             return Json(res);
         }
-
 
 
         public async Task<IActionResult> DosyaYoluOluştur(int DosyaId)
         {
             JsonResponseModel res = new JsonResponseModel();
 
+            string clientIp = GetClientIpAddress(HttpContext);
 
             var rootpath = _webHostEnvironment.ContentRootPath;
             var dosya = _dosyaRepository.Get(o => o.Id == DosyaId);
@@ -95,24 +123,14 @@ namespace WebIU.Controllers
 
 
 
-            string command = "DosyaKontrolApp.exe ";
-            string arguments = $"C:\\Users\\RECAI\\source\\repos\\UretimTakip\\WebIU\\wwwroot\\YazilacakDosyalar 192.168.1.39:5231 {dosya.Guid}";
-
-            // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
-            ProcessStartInfo processStartInfo = new ProcessStartInfo();
-            processStartInfo.FileName = "cmd.exe";
-            processStartInfo.Arguments = $"/c {command} {arguments}";
-            processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
-            processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
-            processStartInfo.CreateNoWindow = false; // Pencere açmamak için
-
-            // Process sınıfı ile işlemi başlat
-            using (Process process = new Process())
+            var _processes = Process.GetProcesses()
+                              .ToList().Where(o => o.ProcessName.Contains("DosyaKontrolApp" + dosya.Guid));
+            // Diğer işlemleri sonlandır
+            foreach (var process in _processes)
             {
-                process.StartInfo = processStartInfo;
-                process.Start();
+                process.Kill();
+                process.WaitForExit(); // İsteğe bağlı: işlem tamamen kapanana kadar bekler
             }
-
 
 
             if (Directory.Exists(copyPath))
@@ -125,6 +143,8 @@ namespace WebIU.Controllers
                         // Klasörü ve içeriğini sil
                         Directory.Delete(copyPath, true);
                         Console.WriteLine("Klasör ve içeriği başarıyla silindi.");
+                        CopyDirectory(path, copyPath);
+
                     }
                     else
                     {
@@ -152,17 +172,62 @@ namespace WebIU.Controllers
 
 
 
+            string[] files = Directory.GetFiles(rootpath);
+
+            var dosyaAdı = files.Where(o => o.Contains("DosyaKontrolApp.exe"));
+
+            // Mevcut dosya yolu
+            string oldFilePath = dosyaAdı.FirstOrDefault();
+
+            // Yeni dosya yolu (dosyanın yeni adı)
+            string newFilePath = $"DosyaKontrolApp{dosya.Guid}.exe";
+
+
+            try
+            {
+                // Dosyanın adını değiştirmek için dosyayı taşı
+                System.IO.File.Copy(oldFilePath, newFilePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Bir hata oluştu: {ex.Message}");
+            }
+
+
+            string command = $"DosyaKontrolApp{dosya.Guid}.exe";
+            string arguments = rootpath + $"wwwroot\\IslenecekDosyalar 192.168.1.34 {dosya.Guid} {clientIp} {dosya.DosyaAdı} 1";
+
+            // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
+            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            processStartInfo.FileName = "cmd.exe";
+            processStartInfo.Arguments = $"/c {command} {arguments}";
+            processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
+            processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
+            processStartInfo.CreateNoWindow = false; // Pencere açmamak için
+
+            // Process sınıfı ile işlemi başlat
+            using (Process process = new Process())
+            {
+                process.StartInfo = processStartInfo;
+                process.Start();
+            }
+
+
+
+
+
+
+
 
 
             res.status = 1;
             res.message = "İşlem Başarılı";
-            res.data = "\\\\192.168.1.39\\IslenecekDosyalar\\" + dosya.Guid;
+            res.data = "\\\\192.168.1.34\\IslenecekDosyalar\\" + dosya.Guid;
 
             return Json(res);
         }
 
-
-        public async Task<IActionResult> DeğişmişDosyayıKaydet(string Guid)
+        public async Task<IActionResult> DeğişmişDosyayıKaydet(string Guid, string UserId, string IslemTuru, string Gerekce, string İşlemTürü)
         {
             JsonResponseModel res = new JsonResponseModel();
             var rootpath = _webHostEnvironment.ContentRootPath;
@@ -172,38 +237,95 @@ namespace WebIU.Controllers
             var varolandDosyaParents = _dosyaRepository.GetAll(o => o.DosyaAdı.Contains(varolanDosya.DosyaAdı));
 
 
-            var destinationDir = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(varolanDosya.ParentId) + varolanDosya.DosyaAdı + " Versiyon No " + varolandDosyaParents.Count();
+            var destinationDir = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(varolanDosya.ParentId) + varolanDosya.DosyaAdı + " İşlem No " + varolandDosyaParents.Count();
 
-
-            CopyDirectoryAndCreateDatabeseObject(rootpath + "wwwroot/IslenecekDosyalar/" + Guid, destinationDir, dosya.ParentId);
+            if (İşlemTürü == "1")
+            {
+                CopyDirectoryAndCreateDatabeseObject(rootpath + "wwwroot/IslenecekDosyalar/" + Guid, destinationDir, dosya.ParentId, UserId, IslemTuru, Gerekce);
+            }
+            else
+            {
+                CopyDirectoryAndCreateDatabeseObject(rootpath + "wwwroot/YazilacakDosyalar/" + Guid, destinationDir, dosya.ParentId, UserId, IslemTuru, Gerekce);
+            }
 
 
             res.status = 1;
             res.message = "İşlem Başarılı";
             return Json(res);
         }
-        public async Task<IActionResult> YeniYazılanDosyayıKaydet(string Guid)
+        public async Task<IActionResult> YeniYazılanDosyayıKaydet(string Guid, string UserId, string IslemTuru, string Gerekce, string remoteIp)
         {
+            string clientIp = GetClientIpAddress(HttpContext);
+
             JsonResponseModel res = new JsonResponseModel();
             var rootpath = _webHostEnvironment.ContentRootPath;
             var dosya = _dosyaRepository.Get(o => o.Guid == Guid);
-
             var varolanDosya = _dosyaRepository.Get(o => o.Id == dosya.Id);
             var varolandDosyaParents = _dosyaRepository.GetAll(o => o.DosyaAdı.Contains(varolanDosya.DosyaAdı));
-
             var destinationDir = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(varolanDosya.ParentId) + varolanDosya.DosyaAdı;
-
-
-
-            CopyDirectoryAndCreateDatabeseObject(rootpath + "wwwroot/YazilacakDosyalar/" + Guid, destinationDir, dosya.Id);
+            CopyDirectoryAndCreateDatabeseObject(rootpath + "wwwroot/YazilacakDosyalar/" + Guid, destinationDir, dosya.Id, UserId, IslemTuru, Gerekce);
             string folderPath = rootpath + "wwwroot/YazilacakDosyalar/" + Guid;
             try
             {
                 if (Directory.Exists(folderPath))
                 {
-                    // Klasörü ve içeriğini sil
-                    Directory.Delete(folderPath, true);
-                    Console.WriteLine("Klasör ve içeriği başarıyla silindi.");
+
+
+                    string[] files = Directory.GetFiles(rootpath);
+
+                    var dosyaAdı = files.Where(o => o.Contains("DosyaKontrolApp.exe"));
+
+                    // Mevcut dosya yolu
+                    string oldFilePath = dosyaAdı.FirstOrDefault();
+
+                    // Yeni dosya yolu (dosyanın yeni adı)
+                    string newFilePath = $"DosyaKontrolApp{dosya.Guid}.exe";
+
+
+                    try
+                    {
+                        // Dosyanın adını değiştirmek için dosyayı taşı
+                        System.IO.File.Copy(oldFilePath, newFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Bir hata oluştu: {ex.Message}");
+                    }
+
+
+
+                    var _processes = Process.GetProcesses()
+                               .ToList().Where(o => o.ProcessName.Contains("DosyaKontrolApp" + dosya.Guid));
+                    // Diğer işlemleri sonlandır
+                    foreach (var process in _processes)
+                    {
+                        process.Kill();
+                        process.WaitForExit(); // İsteğe bağlı: işlem tamamen kapanana kadar bekler
+                    }
+
+
+                    string command = $"DosyaKontrolApp{dosya.Guid}.exe";
+                    string arguments = rootpath + $"wwwroot\\YazilacakDosyalar 192.168.1.34 {dosya.Guid} {remoteIp} {dosya.DosyaAdı} 0";
+
+                    // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
+                    ProcessStartInfo processStartInfo = new ProcessStartInfo();
+                    processStartInfo.FileName = "cmd.exe";
+                    processStartInfo.Arguments = $"/c {command} {arguments}";
+                    processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
+                    processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
+                    processStartInfo.CreateNoWindow = false; // Pencere açmamak için
+
+                    // Process sınıfı ile işlemi başlat
+                    using (Process process = new Process())
+                    {
+                        process.StartInfo = processStartInfo;
+                        process.Start();
+                    }
+
+
+
+
+
                 }
                 else
                 {
@@ -223,13 +345,15 @@ namespace WebIU.Controllers
             res.message = "İşlem Başarılı";
             return Json(res);
         }
-
-
-
-        public void CopyDirectoryAndCreateDatabeseObject(string sourceDir, string destinationDir, int? parentId)
+        public void CopyDirectoryAndCreateDatabeseObject(string sourceDir, string destinationDir, int? parentId, string UserId, string IslemTuru, string Gerekce)
         {
             // Hedef klasör yoksa oluştur
             var folderGuid = Guid.NewGuid().ToString();
+            string userName = "";
+            if (UserId != null)
+            {
+                userName = _userManager.Users.Where(o => o.Id == UserId.Replace("\"", "")).FirstOrDefault().UserName;
+            }
             Dosya folderEntity = null;
             if (!Directory.Exists(destinationDir))
             {
@@ -240,12 +364,13 @@ namespace WebIU.Controllers
                     ParentId = parentId,
                     DosyaAdı = Path.GetFileName(destinationDir),
                     Guid = folderGuid,
+                    Açıklama = userName + "////" + IslemTuru + "/////" + Gerekce
                 };
                 folderEntity = _dosyaRepository.Add(folderEntity);
             }
 
 
-          
+
             foreach (var file in Directory.GetFiles(sourceDir))
             {
                 string destFileName = Path.Combine(destinationDir, Path.GetFileName(file));
@@ -268,7 +393,7 @@ namespace WebIU.Controllers
             foreach (var directory in Directory.GetDirectories(sourceDir))
             {
                 string destDirName = Path.Combine(destinationDir, Path.GetFileName(directory));
-                CopyDirectoryAndCreateDatabeseObject(directory, destDirName, folderEntity == null ? parentId : folderEntity.Id);
+                CopyDirectoryAndCreateDatabeseObject(directory, destDirName, folderEntity == null ? parentId : folderEntity.Id, UserId, IslemTuru, Gerekce);
             }
 
         }
@@ -353,15 +478,9 @@ namespace WebIU.Controllers
         public async Task<IActionResult> Index(int ParentId = 0)
         {
             var userId = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-
             DosyaIndexViewModel model = new DosyaIndexViewModel();
             model.ParentId = ParentId;
 
-            //model.DosyaİndirmeYetkis = _dosyaİndirmeYetkiRepository.GetAll(o => o.UserId == userId.Id);
-            //model.DosyaİçerikGörmeYetkis = _dosyaİçerikGörmeYetkiRepository.GetAll(o => o.UserId == userId.Id);
-            //model.DosyaİsimDeğiştirmeYetkis = _dosyaİsimDeğiştirmeYetkiRepository.GetAll(o => o.UserId == userId.Id);
-            //model.DosyaYetkiYetkis = _dosyaYetkiYetkiRepository.GetAll(o => o.UserId == userId.Id);
-            //model.DosyaSilmeYetkis = _dosyaSilmeYetkiRepository.GetAll(o => o.UserId == userId.Id);
 
             return View(model);
         }
