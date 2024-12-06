@@ -74,6 +74,7 @@
             var value = "";
             value = "<a href='/Cari/Cariler?ParentId=" + row["id"] + "' id='İçerikGör' IşId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-arrow-right'></i> İçine Git</a> ";
             value += "<a href='/Cari/CariEdit?Id=" + row["id"] + "' IşId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</a> ";
+            value += "<a href='/Cari/CariDetay?Id=" + row["id"] + "' IşId='" + row["id"] + "' class='btn btn-secondary'><i class='fa fa-edit'></i> Detay</a> ";
             value += "<button id='IşSil' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
 
             return value

@@ -34,6 +34,10 @@ namespace WebIU.Controllers
             _cariKoduTanımRepository = cariKoduTanımRepository;
         }
 
+        public IActionResult CariDetay()
+        {
+            return View();
+        }
 
         public IActionResult Cariler(int ParentId = 0)
         {
