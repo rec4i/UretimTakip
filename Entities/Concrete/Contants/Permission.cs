@@ -183,21 +183,25 @@ namespace Entities.Concrete.Contants
             public const string BildirimEmirleri = "Permission.KareKod.BildirimEmirleri";
             public const string AnaUrunler = "Permission.KareKod.AnaUrunler";
             public const string UretimEkranı = "Permission.KareKod.UretimEkranı";
-            public const string İstasyonListesi = "Permission.KareKod.İstasyonListesi";
+            public const string Istasyon = "Permission.KareKod.Istasyon";
+            public const string Aktarım = "Permission.KareKod.Aktarım";
+            public const string Müşteriler = "Permission.KareKod.Müşteriler";
         }
 
         public static class BelgeTasarım
         {
             public const string Index = "Permission.BelgeTasarım.Index";
-
         }
-
 
         public static class FabrikaMakinaYönetimi
         {
             public const string Fırın = "Permission.FabrikaMakinaYönetimi.Fırın";
         }
 
+        public static class Döküman
+        {
+            public const string Index = "Permission.Döküman.Index";
+        }
 
 
         //PharmacyListManager

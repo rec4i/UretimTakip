@@ -23,10 +23,14 @@ namespace DataAccess.Concrete
                 var entities = filter == null
                     ? context.Set<KareKodIsEmri>().Where("IsDeleted == false")
                     .Include("BaseProduct")
+                    .Include("KareKodIsEmriIstasyonMTM")
+                    //KareKodIsEmriIstasyonMTM
 
                     .ToList().ToList()
                     : context.Set<KareKodIsEmri>().Where("IsDeleted == false").Where(filter)
                     .Include("BaseProduct")
+                    .Include("KareKodIsEmriIstasyonMTM")
+
 
                     .ToList();
                 return entities;
@@ -38,13 +42,15 @@ namespace DataAccess.Concrete
             using (var context = new AppIdentityDbContext())
             {
                 var entities = filter == null
-                    ? context.Set<KareKodIsEmri>().Where("IsDeleted == false")
+                    ? context.Set<KareKodIsEmri>().Where("IsDeleted == false").OrderByDescending(o=> o.Id)
                     .Include("BaseProduct")
+                    .Include("KareKodIsEmriIstasyonMTM")
 
 
                     .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList()
-                    : context.Set<KareKodIsEmri>().Where("IsDeleted == false").Where(filter)
+                    : context.Set<KareKodIsEmri>().Where("IsDeleted == false").OrderByDescending(o => o.Id).Where(filter)
                     .Include("BaseProduct")
+                    .Include("KareKodIsEmriIstasyonMTM")
 
                      .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList();
                 return entities;
@@ -55,8 +61,8 @@ namespace DataAccess.Concrete
             using (var context = new AppIdentityDbContext())
             {
                 var entities = filter == null
-                    ? context.Set<KareKodIsEmri>().Where("IsDeleted == false").ToList().Count()
-                    : context.Set<KareKodIsEmri>().Where("IsDeleted == false").Where(filter).ToList().Count();
+                    ? context.Set<KareKodIsEmri>().Where("IsDeleted == false").OrderByDescending(o => o.Id).ToList().Count()
+                    : context.Set<KareKodIsEmri>().Where("IsDeleted == false").OrderByDescending(o => o.Id).Where(filter).ToList().Count();
                 return entities;
             }
         }

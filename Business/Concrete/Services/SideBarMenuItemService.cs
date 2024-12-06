@@ -44,7 +44,12 @@ namespace Business.Concrete.Services
                 if (item.Url != "#")
                 {
                     var urlArray = item.Url.Split("/");
+                    var X = AuthorizedActions();
                     var urlResult = $"Permission.{urlArray[1]}.{urlArray[2]}".ToLower();
+                    if (urlResult.Contains("cari"))
+                    {
+
+                    }
                     if (AuthorizedActions().Contains(urlResult) || item.Url.ToLower().Contains("accountinformation") || item.Url.ToLower().Contains("logout"))
                         sideBarItems.Add(item);
                 }

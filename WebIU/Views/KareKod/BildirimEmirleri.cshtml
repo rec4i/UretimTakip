@@ -1,1 +1,374 @@
-﻿
+﻿<div class="row">
+    <div class="col">
+        <div class="d-flex flex-row-reverse">
+            <div class="p-2">
+                <a href="/KareKod/EmirEkleYeni" class="btn btn-primary"><i class="fa fa-plus"></i> Yeni Emri Emri Oluştur</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bwip-js/2.0.12/bwip-js-min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="OrderList"
+                                               data-toolbar="#OrderListToolBar"
+                                               data-pagination="true"
+                                               data-side-pagination="server"
+                                               data-id-field="id"
+                                               data-page-list="[10, 25, 50, 100, all]"
+                                               data-locale="Tr-tr"
+                                               data-search="true"
+                                               data-show-refresh="true"
+                                               data-show-export="true">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id" data-title="Ürün İsimi" data-sortable="false"></th>
+                                                    <th data-field="kareKodAnaUrun.name" data-title="Ürün İsimi" data-sortable="false"></th>
+                                                    <th data-field="dökümanNo" data-title="Döküman No" data-sortable="false"></th>
+                                                    <th data-field="dökümanTarihi" data-title="Döküman Tarihi" data-sortable="false"></th>
+                                                    <th data-field="adet" data-title="Adet" data-sortable="false"></th>
+                                                    <th data-field="addedDate" data-title="Oluşturulma Tarihi" data-sortable="false"></th>
+                                                    <th data-field="kareKodMüşteri.adı" data-title="Müşteri" data-sortable="false"></th>
+                                                    <th data-field="bildirimDurumu" data-title="Durum" data-sortable="false"></th>
+                                                    <th data-field="açıklama" data-title="Açıklama " data-sortable="false"></th>
+                                                    <th data-field="kareKodBildirimTürü.bildirimTürü" data-title="Bildirm Türü" data-sortable="false"></th>
+                                                    <th data-title="Actions" data-sortable="false"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        OrderTablosuDoldur()
+    })
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/KareKod/BildirimEmriPagination",
+            columns: [
+                [
+                    {},
+
+                    {
+                        formatter: UrunAdıFormatter
+                    },
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: StatusFormatter
+
+                    },
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function UrunAdıFormatter(value, row) {
+            return row["kareKodAnaUrun"]["name"] + " " + row["kareKodAnaUrun"]["unit"]
+
+        }
+        function StatusFormatter(value) {
+            if (value == 0) {
+                return '<small class="badge badge-warning"><i class="far fa-clock"></i> Hazırlanıyor</small>'
+            }
+            if (value == 1) {
+                return '<small class="badge badge-success"><i class="far fa-clock"></i> Bildirildi</small>'
+            }
+            if (value == 2) {
+                return '<small class="badge badge-danger"><i class="far fa-clock"></i> Kısmi Bildirim</small>'
+            }
+        }
+        function ActionFormatter(value, row) {
+            console.log(row);
+            var value = "";
+            value += "<a id='KarekodDüzelt' rowId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-edit'></i> KareKod Düzelt</a> ";
+            value += "<a id='KarekodEtiketYazdır' rowId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-print'></i> KareKod Etiket Yazdır </a> ";
+            value += "<a id='KarekodPdfOluştur' rowId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-qrcode'></i> KareKod Pdf Oluştur </a> ";
+            value += "<a id='MailGönder' rowId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-envelope'></i> Mail Gönder </a> ";
+            value += "<a id='PtsBildir' rowId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-car'></i> Pts Bildirim Yap </a> ";
+            value += "<a id='BildirimYap' rowId='" + row["id"] + "' class='btn btn-default'><i class='fa fa-circle'></i>Bildirim Yap </a>";
+            value += "<a href='/KareKod/BildirimEmriİçerikDüzenle?Id=" + row["id"] + "' class='btn btn-primary'><i class='fa fa-edit'></i> İçerik Düzenle </a>";
+            value += " <button id='IsEmriSil' rowId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i> </button>";
+
+            return value
+        }
+        function afterLoad() {
+            $('*#KarekodPdfOluştur').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('rowId'))
+                var codes = []
+
+                $.ajax({
+                    url: "/KareKod/GetBildirimÜrünler",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        codes = data;
+                        console.log(codes);
+                        generatePDF()
+                        async function generatePDF() {
+                            const { jsPDF } = window.jspdf;
+                            const pdf = new jsPDF();
+                            let yPosition = 10;
+
+                            for (let i = 0; i < codes.length; i++) {
+                                const canvas = document.createElement('canvas');
+                                var yeniqr = codes[i].qrCode.replace(splitString(codes[i].qrCode), convertDate(splitString(codes[i].qrCode)));
+                                await drawBarcode(canvas, yeniqr);
+
+
+                                // Barkodu PDF'e ekle
+                                const imgData = canvas.toDataURL('image/png');
+                                pdf.addImage(imgData, 'PNG', 10, yPosition, 30, 30);
+                                pdf.setFontSize(8);
+                                // Barkodun sağına metin ekle
+                                pdf.text(`Gtin: ${codes[i].gtin}`, 70, yPosition + 5);
+                                pdf.text(`SeriNo: ${codes[i].sn}`, 70, yPosition + 10);
+                                pdf.text(`SonKulTar: ${codes[i].xd}`, 70, yPosition + 15);
+                                pdf.text(`Lot: ${codes[i].bn}`, 70, yPosition + 20);
+                                pdf.text(`KoliSSCC: ${codes[i].boxSscc}`, 70, yPosition + 25);
+                                pdf.text(`PaletSSCC: ${codes[i].paletSscc}`, 70, yPosition + 30);
+                                pdf.setLineWidth(1);
+                                pdf.line(0, yPosition - 3, 300, yPosition - 3);
+
+                                // Bir sonraki barkodun PDF'deki konumu
+                                yPosition += 40;
+
+                                // Eğer PDF sayfasını doldurduysak yeni bir sayfa ekle
+                                if (yPosition > 260) {
+                                    pdf.addPage();
+                                    yPosition = 10;
+                                }
+                            }
+
+                            // PDF'i indir
+                            pdf.save('datamatrix_codes_with_text.pdf');
+                        }
+
+                        // DataMatrix barkodunu Canvas'a çizmek için bir yardımcı fonksiyon
+                        function drawBarcode(canvas, text) {
+                            return new Promise((resolve, reject) => {
+                                try {
+                                    bwipjs.toCanvas(canvas, {
+                                        bcid: 'datamatrix',       // DataMatrix barkod türü
+                                        text: text,               // Barkodda gösterilecek metin
+                                        scale: 1,                 // Ölçek
+                                        height: 5,               // Yükseklik
+                                        includetext: true,        // Metni barkodun altına ekle
+                                        textxalign: 'center',     // Metni ortala
+                                    });
+                                    resolve(canvas);
+                                } catch (err) {
+                                    reject(err);
+                                }
+                            });
+                        }
+                        function splitString(str) {
+                            return str.slice(32, 38);
+
+                        }
+                        function convertDate(dateStr) {
+                            // Tarihi 'ddMMyy' formatından 'yyMMdd' formatına çevir
+                            const day = dateStr.slice(0, 2);
+                            const month = dateStr.slice(2, 4);
+                            const year = dateStr.slice(4);
+
+                            return `${year}${month}${day}`;
+                        }
+
+
+                    },
+                });
+
+
+
+            })
+
+            $('*#KarekodDüzelt').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('rowId'))
+                $.ajax({
+                    url: "/KareKod/KarekodDüzelt",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                    },
+                });
+            })
+            $('*#KarekodEtiketYazdır').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('rowId'))
+                $.ajax({
+                    url: "/KareKod/KarekodEtitekYazdır",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                    },
+                });
+            })
+
+            $('*#MailGönder').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('rowId'))
+                data.append('pts', 2)
+                $.ajax({
+                    url: "/KareKod/BildirimYap",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                        OrderTablosuDoldur()
+                    },
+                });
+                successAlert("Bildirime Başlandı")
+
+            })
+            $('*#PtsBildir').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('rowId'))
+                data.append('pts', 1)
+                $.ajax({
+                    url: "/KareKod/BildirimYap",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                        OrderTablosuDoldur()
+                    },
+                });
+                successAlert("Bildirime Başlandı")
+
+            })
+            $('*#BildirimYap').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('rowId'))
+                $.ajax({
+                    url: "/KareKod/BildirimYap",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                        OrderTablosuDoldur()
+                    },
+                });
+                successAlert("Bildirime Başlandı")
+
+            })
+
+            $('*#IsEmriSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('rowId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/KareKod/BildirimEmriSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+        }
+
+    }
+</script>

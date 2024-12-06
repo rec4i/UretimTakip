@@ -239,10 +239,10 @@
                 @Html.Raw("value += \"<button id='YetkiDüzenlemeBtn' IşId='\" + row[\"id\"] + \"' class='btn btn-default'><i class='fa fa-key'></i> Yetkileri Düzenle</button> \";");
             }
 
-            @if (AuthorizationService.AuthorizeAsync(User, Permission.DosyaYönetimi.YtkiVerme).Result.Succeeded)
+            @*@if (AuthorizationService.AuthorizeAsync(User, Permission.DosyaYönetimi.YtkiVerme).Result.Succeeded)
             {
                 @Html.Raw("value += \"<button id='DeğişmişiKaydet' IşId='\" + row[\"guid\"] + \"' class='btn btn-default'><i class='fa fa-newspaper'></i> Değişmiş Dosyayı Kaydet</button> \";");
-            }
+            }*@
 
             value += "<button id='DosyaYoluOluştur' IşId='" + row["id"] + "' class='btn btn-default'><i class='fa fa-newspaper'></i> Dosya Yolu Oluştur</button> ";
             value += "<button id='DosyaYazmaYoluOluştur' IşId='" + row["id"] + "' class='btn btn-default'><i class='fa fa-newspaper'></i> Dosya Yazma Yolu Oluştur</button> ";

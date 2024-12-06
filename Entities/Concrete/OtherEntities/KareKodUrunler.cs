@@ -16,11 +16,13 @@ namespace Entities.Concrete.OtherEntities
         public DateTime Md { get; set; }//
         public string QrCode { get; set; }//
         public int WoorId { get; set; }//
-        public int PaletSn { get; set; }
-        public int BoxSn { get; set; }
-        public int PackSn { get; set; }
-        public string PaletSscc { get; set; }
-        public string BoxSscc { get; set; }
-        public string PackSscc { get; set; }
+        public int PaletSn { get; set; }//
+        public int BoxSn { get; set; }//
+        public int PackSn { get; set; }//
+        public string PaletSscc { get; set; }//
+        public string BoxSscc { get; set; }//
+        public string? PackSscc { get; set; }
+        public int? WorkOrderId { get; set; }
+        public KareKodIsEmri? WorkOrder { get; set; }
     }
 }

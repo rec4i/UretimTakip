@@ -1,4 +1,32 @@
-﻿<div class="row">
+﻿<style>
+    .custom-switch-lg .custom-control-input {
+        height: 50px;
+        width: 90px;
+    }
+
+    .custom-switch-lg .custom-control-label::before {
+        height: 50px;
+        width: 90px;
+        border-radius: 25px;
+    }
+
+    .custom-switch-lg .custom-control-label::after {
+        top: 5px;
+        left: 5px;
+        height: 40px;
+        width: 40px;
+        border-radius: 20px;
+        background-color: white;
+    }
+
+    .custom-switch-lg .custom-control-label {
+        font-size: 1.5rem;
+        padding-left: 110px;
+    }
+</style>
+
+
+<div class="row">
     <div class="col">
         <div class="card">
             <div class="card-body">
@@ -6,21 +34,49 @@
                     <div class="col">
                         <div class="card card-danger">
                             <div class="card-header">
-                                <h3>Fırıt Otomatik Kapatma</h3>
+                                <h3>Fırın Otomatik Kapatma</h3>
                             </div>
                             <div class="card-body">
-
                                 <div class="row">
                                     <div class="col-6">
-                                        <div class="form-group">
-                                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                                <input type="checkbox" class="custom-control-input" id="FırınDurdurSayac">
-                                                <label class="custom-control-label" for="FırınDurdurSayac">Fırın Otomatik Kapatma</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <div class="custom-control custom-switch custom-switch-lg custom-switch-off-danger custom-switch-on-success">
+                                                        <input type="checkbox" class="custom-control-input" id="FırınDurdurSayac">
+                                                        <label class="custom-control-label" for="FırınDurdurSayac">Fırın Otomatik Kapatma</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <input type="text" disabled class="form-control" name="name" id="FırınÇalışmaDururmu" value="FIRIN ÇALIŞMA DURUMU" style="background-color:red" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button class="btn btn-primary" id="FırınBaslatBtn">BAŞLAT</button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button class="btn btn-danger" id="FırınDurdurBtn">DURDUR</button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Aşşağıya girilen süre sonra fırın otomatik olarak kapatılır (DK)</label>
+
+                                                <input type="text" data-Mask="biggerThanEqualZero" id="FırınKapatmaSure" class="form-control" name="name" value="" />
                                             </div>
                                         </div>
                                     </div>
+
+                                </div>
+                                <div class="row">
                                     <div class="col-6">
-                                        <div class="row">
+                                        @*<div class="row">
                                             <div class="col-6">
                                                 <label>Basşalama Saati:</label>
                                                 <input type="text" id="BASST" data-Mask="SıfırdanYirmiDörte" value="" class="form-control" />
@@ -37,10 +93,9 @@
                                             </div>
                                             <div class="col-6">
                                                 <label>Bitme Dakikası:</label>
-
                                                 <input type="text" id="BITDK" data-Mask="ZeroToFiftyNine" value="" class="form-control" />
                                             </div>
-                                        </div>
+                                        </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -57,15 +112,45 @@
 
                                 <div class="row">
                                     <div class="col-6">
-                                        <div class="form-group">
-                                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                                <input type="checkbox" class="custom-control-input" id="SogutmaBaslatSayac">
-                                                <label class="custom-control-label" for="SogutmaBaslatSayac">Fırın Otomatik Soğutma</label>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <div class="custom-control custom-switch custom-switch-lg custom-switch-off-danger custom-switch-on-success">
+                                                        <input type="checkbox" class="custom-control-input" id="SogutmaBaslatSayac">
+                                                        <label class="custom-control-label" for="SogutmaBaslatSayac">Fırın Otomatik Kapatma</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+
+                                                <input type="text" disabled class="form-control" name="name" id="SoğutmaÇalışmaDurumu" value="FIRIN SOĞUTMA DURUMU" style="background-color:red" />
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button class="btn btn-primary" id="SogutmaBaslat">BAŞLAT</button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button class="btn btn-danger" id="SogutmaDurdur">DURDUR</button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Aşşağıya girilen süre sonra fırın otomatik olarak soğutmaya alınır (DK)</label>
+                                                <input type="text" data-Mask="biggerThanEqualZero" class="form-control" id="FırınSogutmaSure" name="name" value="" />
                                             </div>
                                         </div>
                                     </div>
+
+                                </div>
+                                <div class="row">
                                     <div class="col-6">
-                                        <div class="row">
+                                        @*<div class="row">
                                             <div class="col-6">
                                                 <label>Başlama Saati:</label>
                                                 <input type="text" id="SBASST" data-Mask="SıfırdanYirmiDörte" value="" class="form-control" />
@@ -84,7 +169,7 @@
                                                 <label>Bitme Dakikası</label>
                                                 <input type="text" id="SBITDK" data-Mask="ZeroToFiftyNine" value="" class="form-control" />
                                             </div>
-                                        </div>
+                                        </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -116,6 +201,190 @@
 
 <script>
     $(document).ready(function () {
+        $('#FırınBaslatBtn').click(function () {
+
+            var data = new FormData();
+            data.append('Model.FırınDurdurSayac', $('#FırınDurdurSayac').prop('checked'));
+            data.append('Model.SogutmaBaslatSayac', $('#SogutmaBaslatSayac').prop('checked'));
+
+            data.append('Model.BASST', $('#BASST').val());
+            data.append('Model.BASDK', $('#BASDK').val());
+            data.append('Model.BITST', $('#BITST').val());
+            data.append('Model.BITDK', $('#BITDK').val());
+
+            data.append('Model.SBASST', $('#SBASST').val());
+            data.append('Model.SBASDK', $('#SBASDK').val());
+            data.append('Model.SBITST', $('#SBITST').val());
+            data.append('Model.SBITDK', $('#SBITDK').val());
+
+            data.append('Model.FırınKapatmaSure', $('#FırınKapatmaSure').val());
+            data.append('Model.FırınSogutmaSure', $('#FırınSogutmaSure').val());
+
+            data.append('Model.FırınBaslat', true);
+            data.append('Model.FırınKapat', false);
+            data.append('Model.SogutmaBaslat', false);
+            data.append('Model.SogutmaKapat', false);
+
+            $.ajax({
+                url: "/FabrikaMakinaYönetimi/SetFırınStatus", // Bu URL'yi, verileri işleyen endpoint'inize göre ayarlayın
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (response) {
+                    if (response.status == 1) {
+                        successAlert(response.message);
+                        getFırınData()
+                    } else {
+                        errorAlert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    errorAlert("Bir hata oluştu: " + error);
+                }
+            });
+
+
+        })
+        $('#FırınDurdurBtn').click(function () {
+
+            var data = new FormData();
+            data.append('Model.FırınDurdurSayac', $('#FırınDurdurSayac').prop('checked'));
+            data.append('Model.SogutmaBaslatSayac', $('#SogutmaBaslatSayac').prop('checked'));
+
+            data.append('Model.BASST', $('#BASST').val());
+            data.append('Model.BASDK', $('#BASDK').val());
+            data.append('Model.BITST', $('#BITST').val());
+            data.append('Model.BITDK', $('#BITDK').val());
+
+            data.append('Model.SBASST', $('#SBASST').val());
+            data.append('Model.SBASDK', $('#SBASDK').val());
+            data.append('Model.SBITST', $('#SBITST').val());
+            data.append('Model.SBITDK', $('#SBITDK').val());
+
+            data.append('Model.FırınKapatmaSure', $('#FırınKapatmaSure').val());
+            data.append('Model.FırınSogutmaSure', $('#FırınSogutmaSure').val());
+
+            data.append('Model.FırınBaslat', false);
+            data.append('Model.FırınKapat', true);
+            data.append('Model.SogutmaBaslat', false);
+            data.append('Model.SogutmaKapat', false);
+
+            $.ajax({
+                url: "/FabrikaMakinaYönetimi/SetFırınStatus", // Bu URL'yi, verileri işleyen endpoint'inize göre ayarlayın
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (response) {
+                    if (response.status == 1) {
+                        successAlert(response.message);
+                        getFırınData()
+                    } else {
+                        errorAlert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    errorAlert("Bir hata oluştu: " + error);
+                }
+            });
+
+        })
+        $('#SogutmaBaslat').click(function () {
+
+            var data = new FormData();
+            data.append('Model.FırınDurdurSayac', $('#FırınDurdurSayac').prop('checked'));
+            data.append('Model.SogutmaBaslatSayac', $('#SogutmaBaslatSayac').prop('checked'));
+
+            data.append('Model.BASST', $('#BASST').val());
+            data.append('Model.BASDK', $('#BASDK').val());
+            data.append('Model.BITST', $('#BITST').val());
+            data.append('Model.BITDK', $('#BITDK').val());
+
+            data.append('Model.SBASST', $('#SBASST').val());
+            data.append('Model.SBASDK', $('#SBASDK').val());
+            data.append('Model.SBITST', $('#SBITST').val());
+            data.append('Model.SBITDK', $('#SBITDK').val());
+
+            data.append('Model.FırınKapatmaSure', $('#FırınKapatmaSure').val());
+            data.append('Model.FırınSogutmaSure', $('#FırınSogutmaSure').val());
+
+            data.append('Model.FırınBaslat', false);
+            data.append('Model.FırınKapat', false);
+            data.append('Model.SogutmaBaslat', true);
+            data.append('Model.SogutmaKapat', false);
+
+            $.ajax({
+                url: "/FabrikaMakinaYönetimi/SetFırınStatus", // Bu URL'yi, verileri işleyen endpoint'inize göre ayarlayın
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (response) {
+                    if (response.status == 1) {
+                        successAlert(response.message);
+                        getFırınData()
+                    } else {
+                        errorAlert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    errorAlert("Bir hata oluştu: " + error);
+                }
+            });
+
+        })
+        $('#SogutmaDurdur').click(function () {
+
+            var data = new FormData();
+            data.append('Model.FırınDurdurSayac', $('#FırınDurdurSayac').prop('checked'));
+            data.append('Model.SogutmaBaslatSayac', $('#SogutmaBaslatSayac').prop('checked'));
+
+            data.append('Model.BASST', $('#BASST').val());
+            data.append('Model.BASDK', $('#BASDK').val());
+            data.append('Model.BITST', $('#BITST').val());
+            data.append('Model.BITDK', $('#BITDK').val());
+
+            data.append('Model.SBASST', $('#SBASST').val());
+            data.append('Model.SBASDK', $('#SBASDK').val());
+            data.append('Model.SBITST', $('#SBITST').val());
+            data.append('Model.SBITDK', $('#SBITDK').val());
+
+            data.append('Model.FırınKapatmaSure', $('#FırınKapatmaSure').val());
+            data.append('Model.FırınSogutmaSure', $('#FırınSogutmaSure').val());
+
+            data.append('Model.FırınBaslat', false);
+            data.append('Model.FırınKapat', false);
+            data.append('Model.SogutmaBaslat', false);
+            data.append('Model.SogutmaKapat', true);
+
+            $.ajax({
+                url: "/FabrikaMakinaYönetimi/SetFırınStatus", // Bu URL'yi, verileri işleyen endpoint'inize göre ayarlayın
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (response) {
+                    if (response.status == 1) {
+                        successAlert(response.message);
+                        getFırınData()
+                    } else {
+                        errorAlert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    errorAlert("Bir hata oluştu: " + error);
+                }
+            });
+
+        })
+
+
+
         getFırınData()
         $('#Kaydet').click(function () {
             var data = new FormData();
@@ -131,6 +400,9 @@
             data.append('Model.SBASDK', $('#SBASDK').val());
             data.append('Model.SBITST', $('#SBITST').val());
             data.append('Model.SBITDK', $('#SBITDK').val());
+
+            data.append('Model.FırınKapatmaSure', $('#FırınKapatmaSure').val());
+            data.append('Model.FırınSogutmaSure', $('#FırınSogutmaSure').val());
 
             $.ajax({
                 url: "/FabrikaMakinaYönetimi/SetFırınStatus", // Bu URL'yi, verileri işleyen endpoint'inize göre ayarlayın
@@ -155,6 +427,10 @@
         $('#Yenile').click(function () {
             getFırınData()
         })
+
+
+
+
 
     })
 
@@ -194,6 +470,28 @@
         $('#SBITDK').val(formatNumber(entitiy.sbitdk));
         $('#SBITST').val(formatNumber(entitiy.sbitst));
         $('#SogutmaBaslatSayac').prop('checked', entitiy.sogutmaBaslatSayac);
+
+
+        if (entitiy.fırınÇalışmaDurum) {
+            $('#FırınÇalışmaDururmu').attr('style', "background-color:green");
+        }
+        else {
+            $('#FırınÇalışmaDururmu').attr('style', "background-color:red");
+        }
+
+
+        if (entitiy.sogutmaCalısmaDurum) {
+            $('#SoğutmaÇalışmaDurumu').attr('style', "background-color:green");
+        }
+        else {
+            $('#SoğutmaÇalışmaDurumu').attr('style', "background-color:red");
+        }
+        //FırınÇalışmaDurum
+
+        $('#FırınKapatmaSure').val(entitiy.fırınKapatmaSure)
+        $('#FırınSogutmaSure').val(entitiy.fırınSogutmaSure)
+
+
 
 
         console.log(entitiy);

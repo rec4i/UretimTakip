@@ -1,0 +1,70 @@
+﻿@model WebIU.Models.KareKodViewModels.MüşteriYetkilisiAddViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Ad Soyad :</label>
+                        <input type="text" name="name" value="" id="AdSoyad" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Email : </label>
+                        <input type="text" id="Email" class="form-control" name="name" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Telefon :</label>
+                        <input type="text" id="Phone" class="form-control" name="name" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="Kaydet"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Kaydet').click(function () {
+            var data = new FormData();
+            data.append('AdSoyad', $('#AdSoyad').val());
+            data.append('Email', $('#Email').val());
+            data.append('MüşteriId',@Model.Id );
+            data.append('Phone', $('#Phone').val());
+            $.ajax({
+                url: "/KareKod/MüşteriYetkilisiAdd",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message);
+                        setTimeout(() => {
+                            window.location.href = "/KareKod/MüşteriYetkilileri?Id=@Model.Id";
+                        }, 1000);
+                    } else {
+                        errorAlert(data.message);
+                    }
+                },
+            });
+        });
+    })
+</script>

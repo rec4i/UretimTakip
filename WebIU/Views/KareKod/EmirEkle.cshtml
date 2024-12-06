@@ -1,0 +1,385 @@
+﻿@*@model WebIU.Models.KareKodViewModels.BildirimEkleViewModel*@
+
+@*<div class="row">
+    <div class="col">
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <label>Bildirim Türü:</label>
+                        <select class="form-control" id="BildirmTürüSelect">
+                            @foreach (var item in Model.BildirimTürüs)
+                            {
+                                <option value="@item.Id">@item.BildirimTürü</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label>Bildirilecek Ürün</label>
+                        <select class="form-control" id="ÜrünSelect">
+                            @foreach (var item in Model.KareKodAnaUruns)
+                            {
+                                <option value="@item.Id">@item.Name @item.Unit</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row" id="DeaktivasyonDiv" hidden>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label>Döküman Tarihi:</label>
+                                <input type="date" class="form-control" id="DökümanTarihi" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Döküman No :</label>
+                                <input type="text" class="form-control" id="Döküman No" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Adet</label>
+                                <input type="text" data-Mask="biggerThanZero" class="form-control" id="Adet" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Deaktivasyon Nedeni</label>
+                                <select class="form-control" id="DeaktivasyonNedeni">
+                                    @foreach (var item in Model.kareKodDeaktivasyonTürüs)
+                                    {
+                                        <option value="@item.DeaktivasyonKodu"> @item.Sebep</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Kayıt Dışı Firma Bilgisi:</label>
+                                <input type="text" class="form-control" id="KayıtDışıFirmaBilgisi" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Açıklama:</label>
+                                <textarea class="form-control" id="Açıklama" rows="3"></textarea>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+                <div class="row" id="İhracatDiv" hidden>
+                    <div class="col">
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Döküman Tarihi:</label>
+                                <input type="date" class="form-control" id="DökümanTarihi" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Döküman No :</label>
+                                <input type="text" class="form-control" id="Döküman No" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Adet</label>
+                                <input type="text" data-Mask="biggerThanZero" class="form-control" id="Adet" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Kayıt Dışı Firma Bilgisi:</label>
+                                <input type="text" class="form-control" id="KayıtDışıFirmaBilgisi" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Açıklama:</label>
+                                <textarea class="form-control" id="Açıklama" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="row" id="SatışİptalDiv" hidden>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label>Adet : </label>
+                                <input type="text" data-Mask="biggerThanZero" class="form-control" id="Adet" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Açıklama</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+                <div class="row" id="SatışDiv" hidden>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label>Döküman Tarihi:</label>
+                                <input type="date" class="form-control" id="DökümanTarihi" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Döküman No :</label>
+                                <input type="text" class="form-control" id="Döküman No" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Adet</label>
+                                <input type="text" data-Mask="biggerThanZero" class="form-control" id="Adet" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Müşteri : </label>
+                                <select class="form-control" id="MüşteriId">
+                                    @foreach (var item in Model.KareKodMüşteris)
+                                    {
+                                        <option value="@item.Id">@item.Adı</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Fatura No : </label>
+                                <input type="text" class="form-control" id="FaturaNo" name="name" value="" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Sipariş Numarası :</label>
+                                <input type="text" class="form-control" id="SiparişNumarası" name="name" value="" />
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Açıklama:</label>
+                                <textarea class="form-control" id="Açıklama" rows="3"></textarea>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+                <div class="row" id="ÜretimDiv" hidden>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label>Döküman Tarihi:</label>
+                                <input type="date" class="form-control" id="DökümanTarihi" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Döküman No :</label>
+                                <input type="text" class="form-control" id="DökümanNo" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Adet</label>
+                                <input type="text" data-Mask="biggerThanZero" class="form-control" id="Adet" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Açıklama:</label>
+                                <textarea class="form-control" id="Açıklama" rows="3"></textarea>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="KaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>*@
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        setSelectedValueDiv($('#BildirmTürüSelect').find(':selected').val())
+        $('#BildirmTürüSelect').change(function () {
+            var selectedValue = $(this).find(':selected').val();
+            setSelectedValueDiv(selectedValue)
+        })
+
+        $('#KaydetBtn').click(function () {
+            var data = new FormData();
+
+
+            if ($('#BildirmTürüSelect').find(':selected').val() == 1) {
+                data.append('BildirimTürü', $('#BildirmTürüSelect').find(':selected').val());
+                data.append('AnaUrunId', $('#ÜrünSelect').find(':selected').val());
+
+
+                data.append('Adet', $('#ÜretimDiv input[id="Adet"]').val());
+                data.append('DökümanNo', $('#ÜretimDiv input[id="DökümanNo"]').val());
+                data.append('DökümanTarihi', $('#ÜretimDiv input[id="DökümanTarihi"]').val());
+                data.append('Açıklama', $('#ÜretimDiv textarea[id="Açıklama"]').val());
+            }
+            if ($('#BildirmTürüSelect').find(':selected').val() == 2) {
+                data.append('BildirimTürü', $('#BildirmTürüSelect').find(':selected').val());
+                data.append('AnaUrunId', $('#ÜrünSelect').find(':selected').val());
+
+
+                data.append('Adet', $('#SatışDiv input[id="Adet"]').find('#Adet').val());
+                data.append('DökümanNo', $('#SatışDiv input[id="DökümanNo"]').val());
+                data.append('DökümanTarihi', $('#SatışDiv input[id="DökümanTarihi"]').val());
+                data.append('Açıklama', $('#SatışDiv textarea[id="Açıklama"]').val());
+                data.append('MüşteriId', $('#SatışDiv select[id="MüşteriId"]').find(':selected').val());
+                data.append('FaturaNo', $('#SatışDiv input[id="FaturaNo"] ').val());
+                data.append('SiparişNumarası', $('#SatışDiv input[id="SiparişNumarası"]').val());
+
+            }
+            if ($('#BildirmTürüSelect').find(':selected').val() == 3) {
+                data.append('BildirimTürü', $('#BildirmTürüSelect').find(':selected').val());
+                data.append('AnaUrunId', $('#ÜrünSelect').find(':selected').val());
+
+
+                data.append('Adet', $('#SatışİptalDiv input[id="Adet"]').val());
+                data.append('Açıklama', $('#SatışİptalDiv textarea[id="Açıklama"]').val());
+            }
+            if ($('#BildirmTürüSelect').find(':selected').val() == 6) {
+                data.append('BildirimTürü', $('#BildirmTürüSelect').find(':selected').val());
+                data.append('AnaUrunId', $('#ÜrünSelect').find(':selected').val());
+
+
+
+                data.append('Adet', $('#DeaktivasyonDiv').find('#Adet').val());
+                data.append('DökümanNo', $('#DeaktivasyonDiv input[id="DökümanNo"]').val());
+                data.append('DökümanTarihi', $('#DeaktivasyonDiv input[id="DökümanTarihi"]').val());
+                data.append('Açıklama', $('#DeaktivasyonDiv textarea[id="Açıklama"]').val());
+                data.append('DeaktivasyonKodu', $('#DeaktivasyonDiv input[id="DeaktivasyonKodu"]').find(':selected').val());
+                data.append('KayıtDışıFirmaBilgisi', $('#DeaktivasyonDiv input[id="KayıtDışıFirmaBilgisi"]').val());
+            }
+
+
+
+            $.ajax({
+                url: "/KareKod/BildirimEmriEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message);
+                        setTimeout(() => {
+                            window.location.href = "/KareKod/BildirimEmirleri";
+                        }, 1000);
+                    } else {
+                        errorAlert(data.message);
+                    }
+                },
+            });
+
+
+        })
+
+
+
+    })
+    function setSelectedValueDiv(selectedvalue) {
+        console.log();
+        if (selectedvalue == 1) {
+            $('#ÜretimDiv').removeAttr('hidden')
+            $('#SatışDiv').attr('hidden', true)
+            $('#SatışİptalDiv').attr('hidden', true)
+            $('#İhracatDiv').attr('hidden', true)
+            $('#DeaktivasyonDiv').attr('hidden', true)
+
+        }
+        else if (selectedvalue == 2) {
+            $('#SatışDiv').removeAttr('hidden')
+            $('#ÜretimDiv').attr('hidden', true)
+            $('#SatışİptalDiv').attr('hidden', true)
+            $('#İhracatDiv').attr('hidden', true)
+            $('#DeaktivasyonDiv').attr('hidden', true)
+        }
+        else if (selectedvalue == 3) {
+            $('#SatışİptalDiv').removeAttr('hidden')
+            $('#ÜretimDiv').attr('hidden', true)
+            $('#SatışDiv').attr('hidden', true)
+            $('#İhracatDiv').attr('hidden', true)
+            $('#DeaktivasyonDiv').attr('hidden', true)
+        }
+        else if (selectedvalue == 4) {
+            $('#İhracatDiv').removeAttr('hidden')
+            $('#ÜretimDiv').attr('hidden', true)
+            $('#SatışDiv').attr('hidden', true)
+            $('#SatışİptalDiv').attr('hidden', true)
+            $('#DeaktivasyonDiv').attr('hidden', true)
+        }
+        else if (selectedvalue == 6) {
+            $('#DeaktivasyonDiv').removeAttr('hidden')
+            $('#ÜretimDiv').attr('hidden', true)
+            $('#SatışDiv').attr('hidden', true)
+            $('#SatışİptalDiv').attr('hidden', true)
+            $('#İhracatDiv').attr('hidden', true)
+        }
+        else {
+            $('#SatışDiv').attr('hidden', true)
+            $('#ÜretimDiv').attr('hidden', true)
+            $('#SatışİptalDiv').attr('hidden', true)
+            $('#İhracatDiv').attr('hidden', true)
+            $('#DeaktivasyonDiv').attr('hidden', true)
+        }
+
+
+    }
+
+</script>*@

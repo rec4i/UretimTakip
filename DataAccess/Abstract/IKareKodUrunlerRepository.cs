@@ -13,6 +13,8 @@ namespace DataAccess.Abstract
     {
         List<KareKodUrunler> GetAllIncluded(Expression<Func<KareKodUrunler, bool>> filter = null);
         KareKodUrunler GetLast(Expression<Func<KareKodUrunler, bool>> filter = null);
+        KareKodUrunler GetFirst(Expression<Func<KareKodUrunler, bool>> filter = null);
+        KareKodUrunler GetMaxSn(Expression<Func<KareKodUrunler, bool>> filter = null);
         List<KareKodUrunler> GetAllIncludedPagination(Expression<Func<KareKodUrunler, bool>> filter = null, string offset = null, string limit = null, string search = null);
         int GetAllIncludedPaginationCount(Expression<Func<KareKodUrunler, bool>> filter = null, string offset = null, string limit = null, string search = null);
     }

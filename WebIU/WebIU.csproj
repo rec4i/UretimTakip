@@ -5,7 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Views\KareKod\İstasyonListesi.cshtml" />
+    <Compile Remove="Models\NewFolder\**" />
+    <Content Remove="Models\NewFolder\**" />
+    <EmbeddedResource Remove="Models\NewFolder\**" />
+    <None Remove="Models\NewFolder\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\KareKod\EmirEkle.cshtml" />
+    <Content Remove="Views\KareKod\Istasyon.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +46,6 @@
 
   <ItemGroup>
     <Folder Include="Models\ExportedFile\" />
-    <Folder Include="Models\NewFolder\" />
     <Folder Include="Views\NewFolder\" />
     <Folder Include="wwwroot\images\DeviceImages\" />
     <Folder Include="wwwroot\FileUploads\" />
@@ -50,15 +56,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Views\KareKod\İstasyonListesi.cshtml" />
+    <None Include="Views\KareKod\EmirEkle.cshtml" />
+    <None Include="Views\KareKod\Istasyon.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\KareKod\İstasyonListesi.cshtml" />
+    <_WebToolingArtifacts Remove="properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\KareKod\İstasyonListesi.cshtml" />
+    <Content Include="properties\launchSettings.json" />
   </ItemGroup>
 
 </Project>

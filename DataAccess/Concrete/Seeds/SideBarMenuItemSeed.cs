@@ -101,13 +101,14 @@ namespace DataAccess.Concrete.Seeds
                 new SideBarMenuItem{Id=53,Name="İş Emirleri",IsParent=false,ParentId=52,IconCss = "nav-icon far fa-circle text-info",Url = "/Karekod/Index",Row=1},
                 new SideBarMenuItem{Id=54,Name="Bildirim Emirleri",IsParent=false,ParentId=52,IconCss = "nav-icon far fa-circle text-info",Url = "/KareKod/BildirimEmirleri",Row=1},
                 new SideBarMenuItem{Id=68,Name="Ana Urunler",IsParent=false,ParentId=52,IconCss = "nav-icon far fa-circle text-info",Url = "/KareKod/AnaUrunler",Row=1},
-                new SideBarMenuItem{Id=72,Name="İstasyonlar",IsParent=false,ParentId=52,IconCss = "nav-icon far fa-circle text-info",Url = "/KareKod/İstasyonListesi",Row=1},
-
+                new SideBarMenuItem{Id=72,Name="İstasyonlar",IsParent=false,ParentId=52,IconCss = "nav-icon far fa-circle text-info",Url = "/KareKod/Istasyon",Row=1},
+                new SideBarMenuItem{Id=75,Name="Aktarım",IsParent=false,ParentId=52,IconCss = "nav-icon far fa-circle text-info",Url = "/KareKod/Aktarım",Row=1},
+                      new SideBarMenuItem{Id=77,Name="Müşteriler",IsParent=false,ParentId=52,IconCss = "nav-icon far fa-circle text-info",Url = "/KareKod/Müşteriler",Row=1},
 
 
                 new SideBarMenuItem{Id=55,Name="Tanımlar",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
                 new SideBarMenuItem{Id=56,Name="Stok Kodu Tanımı",IsParent=false,ParentId=55,IconCss = "nav-icon far fa-circle text-info",Url = "/Tanımlar/StokKoduTanım",Row=1},
-                new SideBarMenuItem{Id=57,Name="Cari Kodu Tanımı",IsParent=false,ParentId=55,IconCss = "nav-icon far fa-circle text-info",Url = "/Tanımalr/CariKoduTanım",Row=1},
+                new SideBarMenuItem{Id=57,Name="Cari Kodu Tanımı",IsParent=false,ParentId=55,IconCss = "nav-icon far fa-circle text-info",Url = "/Tanımlar/CariKoduTanım",Row=1},
 
 
 
@@ -116,8 +117,11 @@ namespace DataAccess.Concrete.Seeds
                 new SideBarMenuItem{Id=70,Name="İlaç Fırın",IsParent=false,ParentId=69,IconCss = "nav-icon far fa-circle text-info",Url = "/FabrikaMakinaYönetimi/Fırın",Row=1},
 
 
+                new SideBarMenuItem{Id=73,Name="Döküman Yönetimi",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
+                new SideBarMenuItem{Id=74,Name="Dökümanlar",IsParent=false,ParentId=73,IconCss = "nav-icon far fa-circle text-info",Url = "/Döküman/Index",Row=1},
 
-                //72
+
+                //77
 
             };
 

@@ -1,0 +1,86 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>İstasyon Adı</label>
+                        <input type="text" id="IstasyonAdı" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Ip Adresi</label>
+                        <input data-Mask="ipAdress" type="text" id="IpAdresi" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Port Numarası</label>
+                        <input data-Mask="portNumber" type="text" class="form-control" id="Port" name="name" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>X1Jet Ip Adresi</label>
+                        <input data-Mask="ipAdress" type="text" class="form-control" id="X1JetIpAdresi" name="name" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Yazıcı Ip Adresi</label>
+                        <input data-Mask="ipAdress" type="text" class="form-control" id="YazıcıIpAdresi" name="name" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button id="Kaydet" class="btn btn-warning"><i class="fa fa-save"></i> Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#Kaydet').click(function () {
+            var data = new FormData();
+            data.append('IstasyonAdı', $('#IstasyonAdı').val())
+            data.append('IpAdresi', $('#IpAdresi').val())
+            data.append('Port', $('#Port').val())
+            data.append('X1JetIpAdresi', $('#X1JetIpAdresi').val())
+            data.append('YazıcıIpAdresi', $('#YazıcıIpAdresi').val())
+            $.ajax({
+                url: "/KareKod/IstasyonAdd",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                        setInterval(() => {
+                            window.location.href = "/Karekod/Istasyon";
+                        }, 1000);
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+
+
+        })
+
+
+    })
+</script>

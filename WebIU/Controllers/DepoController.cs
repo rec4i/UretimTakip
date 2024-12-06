@@ -1,4 +1,5 @@
 ﻿using DataAccess.Abstract;
+using DataAccess.Concrete;
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Mvc;
 using WebIU.Models.DepoViewModels;
@@ -10,9 +11,11 @@ namespace WebIU.Controllers
     public class DepoController : Controller
     {
         private readonly IDepoRepository _depoRepository;
-        public DepoController(IDepoRepository depoRepository)
+        private readonly IProgramŞirketGrupRepository _programŞirketGrupRepository;
+        public DepoController(IDepoRepository depoRepository, IProgramŞirketGrupRepository programŞirketGrupRepository)
         {
             _depoRepository = depoRepository;
+            _programŞirketGrupRepository = programŞirketGrupRepository;
         }
 
 
@@ -21,12 +24,14 @@ namespace WebIU.Controllers
             return View();
         }
 
-        public IActionResult DepoEkle(string DepoAdı, string Adres)
+        public async Task<IActionResult> DepoEkle(string DepoAdı, string Adres)
         {
+            var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
+
             Depo entitiy = new Depo();
             entitiy.DepoAdı = DepoAdı;
             entitiy.DepoAdres = Adres;
-
+            entitiy.ProgramŞirketGrupId = userGroup;
             _depoRepository.Add(entitiy);
 
 

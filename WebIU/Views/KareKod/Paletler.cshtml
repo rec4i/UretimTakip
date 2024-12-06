@@ -1,0 +1,94 @@
+﻿@model List<Entities.Concrete.OtherEntities.KareKodPalet>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Oluşturulma Tarihi</th>
+                                        <th>Seri No</th>
+                                        <th>SSCC</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.Id</td>
+                                            <td>@item.AddedDate.ToString("yyyy-MM-dd : HH.mm.ss")</td>
+                                            <td>@item.SeriNo</td>
+                                            <td>@item.SSCC</td>
+                                            <td>
+                                                <button class="btn btn-primary" dataId="@item.Id" dataIsEmriId="@item.KareKodIsEmriId" id="SSCCYazır"><i class="fa fa-print"></i> SSCC YAZIR</button>
+                                                <button class="btn btn-primary" dataId="@item.Id" dataIsEmriId="@item.KareKodIsEmriId" id="TümYeniSSCCYazır"><i class="fa fa-print"></i>Tüm Yeni SSCC YAZIR</button>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('*#SSCCYazır').click(function () {
+            var data = new FormData();
+            data.append('PaletId', $(this).attr('dataId'))
+            data.append('IsEmriıd', $(this).attr('dataIsEmriId'))
+
+            $.ajax({
+                url: "/KareKod/PaletSSCCYadır",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+        })
+        $('*#TümYeniSSCCYazır').click(function () {
+            var data = new FormData();
+            data.append('PaletId', $(this).attr('dataId'))
+            data.append('IsEmriıd', $(this).attr('dataIsEmriId'))
+            $.ajax({
+                url: "/KareKod/TümYeniSSCCYazır",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+        })
+
+    })
+</script>

@@ -6,6 +6,8 @@ namespace WebIU.Models.CariViewModels
     {
         public string CariKodTanım { get; set; }
         public int ParentId { get; set; }
-      
+
+        public string CariKodu { get; set; }
+
     }
 }

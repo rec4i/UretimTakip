@@ -12,10 +12,12 @@ namespace Entities.Concrete.OtherEntities
         public int? ProgramŞirketGrupId { get; set; }
         public ProgramŞirketGrup? ProgramŞirketGrup { get; set; }
         public string StokAdı { get; set; }
-        public string Açıklama { get; set; }
+        public string? Açıklama { get; set; }
+        public int ÜstStokId { get; set; }
+        public int? BirimId { get; set; }
+        public Birim? Birim { get; set; }
 
-        public int BirimId { get; set; }
-        public Birim Birim { get; set; }
+
 
         public string StokKodu { get; set; }
 

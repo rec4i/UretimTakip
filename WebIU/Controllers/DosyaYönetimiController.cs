@@ -83,7 +83,7 @@ namespace WebIU.Controllers
                 CopyDirectory(path, copyPath);
             }
 
-            string command = "DosyaKontrolAppv2.exe ";
+            string command = "DosyaKontrolAppv2.exe";
             string arguments = $"{rootpath}wwwroot\\YazilacakDosyalar 192.168.1.34 {dosya.Guid} {clientIp}";
 
             // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
@@ -172,45 +172,45 @@ namespace WebIU.Controllers
 
 
 
-            string[] files = Directory.GetFiles(rootpath);
+            //string[] files = Directory.GetFiles(rootpath);
 
-            var dosyaAdı = files.Where(o => o.Contains("DosyaKontrolApp.exe"));
+            //var dosyaAdı = files.Where(o => o.Contains("DosyaKontrolApp.exe"));
 
-            // Mevcut dosya yolu
-            string oldFilePath = dosyaAdı.FirstOrDefault();
+            //// Mevcut dosya yolu
+            //string oldFilePath = dosyaAdı.FirstOrDefault();
 
-            // Yeni dosya yolu (dosyanın yeni adı)
-            string newFilePath = $"DosyaKontrolApp{dosya.Guid}.exe";
-
-
-            try
-            {
-                // Dosyanın adını değiştirmek için dosyayı taşı
-                System.IO.File.Copy(oldFilePath, newFilePath);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Bir hata oluştu: {ex.Message}");
-            }
+            //// Yeni dosya yolu (dosyanın yeni adı)
+            //string newFilePath = $"DosyaKontrolApp{dosya.Guid}.exe";
 
 
-            string command = $"DosyaKontrolApp{dosya.Guid}.exe";
-            string arguments = rootpath + $"wwwroot\\IslenecekDosyalar 192.168.1.34 {dosya.Guid} {clientIp} {dosya.DosyaAdı} 1";
+            //try
+            //{
+            //    // Dosyanın adını değiştirmek için dosyayı taşı
+            //    System.IO.File.Copy(oldFilePath, newFilePath);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"Bir hata oluştu: {ex.Message}");
+            //}
 
-            // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
-            ProcessStartInfo processStartInfo = new ProcessStartInfo();
-            processStartInfo.FileName = "cmd.exe";
-            processStartInfo.Arguments = $"/c {command} {arguments}";
-            processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
-            processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
-            processStartInfo.CreateNoWindow = false; // Pencere açmamak için
 
-            // Process sınıfı ile işlemi başlat
-            using (Process process = new Process())
-            {
-                process.StartInfo = processStartInfo;
-                process.Start();
-            }
+            //string command = $"DosyaKontrolApp{dosya.Guid}.exe";
+            //string arguments = rootpath + $"wwwroot\\IslenecekDosyalar 192.168.1.34 {dosya.Guid} {clientIp} {dosya.DosyaAdı} 1";
+
+            //// ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
+            //ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            //processStartInfo.FileName = "cmd.exe";
+            //processStartInfo.Arguments = $"/c {command} {arguments}";
+            //processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
+            //processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
+            //processStartInfo.CreateNoWindow = false; // Pencere açmamak için
+
+            //// Process sınıfı ile işlemi başlat
+            //using (Process process = new Process())
+            //{
+            //    process.StartInfo = processStartInfo;
+            //    process.Start();
+            //}
 
 
 
@@ -265,82 +265,82 @@ namespace WebIU.Controllers
             var destinationDir = rootpath + "wwwroot/DosyaYönetimi/" + CreateFileDestinaton(varolanDosya.ParentId) + varolanDosya.DosyaAdı;
             CopyDirectoryAndCreateDatabeseObject(rootpath + "wwwroot/YazilacakDosyalar/" + Guid, destinationDir, dosya.Id, UserId, IslemTuru, Gerekce);
             string folderPath = rootpath + "wwwroot/YazilacakDosyalar/" + Guid;
-            try
-            {
-                if (Directory.Exists(folderPath))
-                {
+            //try
+            //{
+            //    if (Directory.Exists(folderPath))
+            //    {
 
 
-                    string[] files = Directory.GetFiles(rootpath);
+            //        string[] files = Directory.GetFiles(rootpath);
 
-                    var dosyaAdı = files.Where(o => o.Contains("DosyaKontrolApp.exe"));
+            //        var dosyaAdı = files.Where(o => o.Contains("DosyaKontrolApp.exe"));
 
-                    // Mevcut dosya yolu
-                    string oldFilePath = dosyaAdı.FirstOrDefault();
+            //        // Mevcut dosya yolu
+            //        string oldFilePath = dosyaAdı.FirstOrDefault();
 
-                    // Yeni dosya yolu (dosyanın yeni adı)
-                    string newFilePath = $"DosyaKontrolApp{dosya.Guid}.exe";
-
-
-                    try
-                    {
-                        // Dosyanın adını değiştirmek için dosyayı taşı
-                        System.IO.File.Copy(oldFilePath, newFilePath);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Bir hata oluştu: {ex.Message}");
-                    }
+            //        // Yeni dosya yolu (dosyanın yeni adı)
+            //        string newFilePath = $"DosyaKontrolApp{dosya.Guid}.exe";
 
 
-
-                    var _processes = Process.GetProcesses()
-                               .ToList().Where(o => o.ProcessName.Contains("DosyaKontrolApp" + dosya.Guid));
-                    // Diğer işlemleri sonlandır
-                    foreach (var process in _processes)
-                    {
-                        process.Kill();
-                        process.WaitForExit(); // İsteğe bağlı: işlem tamamen kapanana kadar bekler
-                    }
-
-
-                    string command = $"DosyaKontrolApp{dosya.Guid}.exe";
-                    string arguments = rootpath + $"wwwroot\\YazilacakDosyalar 192.168.1.34 {dosya.Guid} {remoteIp} {dosya.DosyaAdı} 0";
-
-                    // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
-                    ProcessStartInfo processStartInfo = new ProcessStartInfo();
-                    processStartInfo.FileName = "cmd.exe";
-                    processStartInfo.Arguments = $"/c {command} {arguments}";
-                    processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
-                    processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
-                    processStartInfo.CreateNoWindow = false; // Pencere açmamak için
-
-                    // Process sınıfı ile işlemi başlat
-                    using (Process process = new Process())
-                    {
-                        process.StartInfo = processStartInfo;
-                        process.Start();
-                    }
+            //        try
+            //        {
+            //            // Dosyanın adını değiştirmek için dosyayı taşı
+            //            System.IO.File.Copy(oldFilePath, newFilePath);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Console.WriteLine($"Bir hata oluştu: {ex.Message}");
+            //        }
 
 
 
+            //        var _processes = Process.GetProcesses()
+            //                   .ToList().Where(o => o.ProcessName.Contains("DosyaKontrolApp" + dosya.Guid));
+            //        // Diğer işlemleri sonlandır
+            //        foreach (var process in _processes)
+            //        {
+            //            process.Kill();
+            //            process.WaitForExit(); // İsteğe bağlı: işlem tamamen kapanana kadar bekler
+            //        }
 
 
-                }
-                else
-                {
-                    Console.WriteLine("Klasör bulunamadı.");
-                    res.status = 0;
-                    res.message = "Klasör bulunamadı ";
-                    return Json(res);
-                }
-            }
-            catch (Exception ex)
-            {
-                res.status = 0;
-                res.message = "Hata " + ex.Message;
-                return Json(res);
-            }
+            //        string command = $"DosyaKontrolApp{dosya.Guid}.exe";
+            //        string arguments = rootpath + $"wwwroot\\YazilacakDosyalar 192.168.1.34 {dosya.Guid} {remoteIp} {dosya.DosyaAdı} 0";
+
+            //        // ProcessStartInfo sınıfı ile işlem bilgilerini ayarla
+            //        ProcessStartInfo processStartInfo = new ProcessStartInfo();
+            //        processStartInfo.FileName = "cmd.exe";
+            //        processStartInfo.Arguments = $"/c {command} {arguments}";
+            //        processStartInfo.RedirectStandardOutput = true; // Çıktıyı yakalamak için
+            //        processStartInfo.UseShellExecute = false; // Yeni bir pencere açmadan çalıştırmak için
+            //        processStartInfo.CreateNoWindow = false; // Pencere açmamak için
+
+            //        // Process sınıfı ile işlemi başlat
+            //        using (Process process = new Process())
+            //        {
+            //            process.StartInfo = processStartInfo;
+            //            process.Start();
+            //        }
+
+
+
+
+
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Klasör bulunamadı.");
+            //        res.status = 0;
+            //        res.message = "Klasör bulunamadı ";
+            //        return Json(res);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    res.status = 0;
+            //    res.message = "Hata " + ex.Message;
+            //    return Json(res);
+            //}
             res.status = 1;
             res.message = "İşlem Başarılı";
             return Json(res);

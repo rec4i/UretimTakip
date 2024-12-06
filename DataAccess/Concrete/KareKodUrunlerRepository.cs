@@ -34,11 +34,10 @@ namespace DataAccess.Concrete
             using (var context = new AppIdentityDbContext())
             {
                 var entities = filter == null
-                    ? context.Set<KareKodUrunler>().Where("IsDeleted == false")
-
+                    ? context.Set<KareKodUrunler>().Where("IsDeleted == false").OrderByDescending(o => o.Id)
 
                     .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList()
-                    : context.Set<KareKodUrunler>().Where("IsDeleted == false").Where(filter)
+                    : context.Set<KareKodUrunler>().Where("IsDeleted == false").Where(filter).OrderByDescending(o => o.Id)
 
 
                      .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList();
@@ -65,6 +64,33 @@ namespace DataAccess.Concrete
                     ? context.Set<KareKodUrunler>().Where("IsDeleted == false").OrderByDescending(o => o.Id).FirstOrDefault()
 
                     : context.Set<KareKodUrunler>().Where("IsDeleted == false").Where(filter).OrderByDescending(o => o.Id).FirstOrDefault();
+
+
+                return entities;
+            }
+        }
+        public KareKodUrunler GetMaxSn(Expression<Func<KareKodUrunler, bool>> filter = null)
+        {
+            using (var context = new AppIdentityDbContext())
+            {
+                var entities = filter == null
+                    ? context.Set<KareKodUrunler>().Where("IsDeleted == false").OrderByDescending(o => o.Sn).FirstOrDefault()
+
+                    : context.Set<KareKodUrunler>().Where("IsDeleted == false").Where(filter).OrderByDescending(o => o.Sn).FirstOrDefault();
+
+
+                return entities;
+            }
+        }
+
+        public KareKodUrunler GetFirst(Expression<Func<KareKodUrunler, bool>> filter = null)
+        {
+            using (var context = new AppIdentityDbContext())
+            {
+                var entities = filter == null
+                    ? context.Set<KareKodUrunler>().Where("IsDeleted == false").OrderBy(o => o.Sn).FirstOrDefault()
+
+                    : context.Set<KareKodUrunler>().Where("IsDeleted == false").Where(filter).OrderBy(o => o.Sn).FirstOrDefault();
 
 
                 return entities;

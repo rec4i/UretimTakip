@@ -14,5 +14,6 @@ namespace Entities.Concrete.OtherEntities
         public string? DepoAdı { get; set; }
         public string? DepoAdres { get; set; }
         public List<Stok> Stoks { get; set; }
+        public string DepoKodu { get; set; }
     }
 }

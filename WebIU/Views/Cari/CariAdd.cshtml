@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col">
                         <label>Cari Kodu:</label>
-                        <input type="text" class="form-control" name="name" id="Kod" value="" />
+                        <input type="text" class="form-control" name="name" id="Kod" value="@Model.CariKodu" />
                     </div>
                 </div>
                 <div class="row">
@@ -55,7 +55,7 @@
             var data = new FormData();
             data.append('Ad', $('#Ad').val())
             data.append('Adres', $('#Adres').val())
-            data.append('Kod', $('#Adres').val())
+            data.append('Kod', $('#Kod').val())
             data.append('ParentId', @Model.ParentId)
 
 

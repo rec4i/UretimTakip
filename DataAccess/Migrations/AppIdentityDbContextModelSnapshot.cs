@@ -3519,6 +3519,131 @@ namespace DataAccess.Migrations
                     b.ToTable("DosyaYetkiYetkis");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.Döküman", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Adı")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DosyaYolu")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dökümans");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.DökümanAlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AlanTipi")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DefaultString")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DolduralacakAlanString")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DökümanId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DökümanId");
+
+                    b.ToTable("DökümanAlans");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.DökümanSelectBoxItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DökümanAlanId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ItemValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DökümanAlanId");
+
+                    b.ToTable("DökümanSelectBoxItems");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.ExportedFile", b =>
                 {
                     b.Property<int>("Id")
@@ -3738,6 +3863,387 @@ namespace DataAccess.Migrations
                     b.ToTable("KareKodAnaUruns");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodBildirimEmri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Adet")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Açıklama")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BildirimDurumu")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DökümanNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DökümanTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FaturaNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KareKodAnaUrunId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KareKodBildirimTürüId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KareKodDeaktivasyonTürüId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KareKodMüşteriId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PtsGönderimDurumu")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Receiver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceiverDetail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SiparişNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KareKodAnaUrunId");
+
+                    b.HasIndex("KareKodBildirimTürüId");
+
+                    b.HasIndex("KareKodDeaktivasyonTürüId");
+
+                    b.HasIndex("KareKodMüşteriId");
+
+                    b.ToTable("KareKodBildirimEmris");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodBildirimStokMTM", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BildirimDurumu")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("KareKodBildirimEmriId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KareKodStokId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KareKodBildirimEmriId");
+
+                    b.HasIndex("KareKodStokId");
+
+                    b.ToTable("KareKodBildirimStokMTMs");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodBildirimTürü", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BildirimTürü")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BildirimTürüKodu")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KareKodBildirimTürüs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Üretim",
+                            BildirimTürüKodu = "M",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Satış",
+                            BildirimTürüKodu = "S",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Satış Iptal",
+                            BildirimTürüKodu = "C",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Ihracat",
+                            BildirimTürüKodu = "X",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Ithalat",
+                            BildirimTürüKodu = "I",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Deaktivasyon",
+                            BildirimTürüKodu = "D",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Mal Alım",
+                            BildirimTürüKodu = "A",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Mal Iade",
+                            BildirimTürüKodu = "F",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Mal Devir",
+                            BildirimTürüKodu = "S",
+                            IsDeleted = false,
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BildirimTürü = "Mal Devir Iptal",
+                            BildirimTürüKodu = "C",
+                            IsDeleted = false,
+                            Status = true
+                        });
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodBildirimUrun", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KareKodUrunlerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KareKodUrunlerId");
+
+                    b.ToTable("KareKodBildirimUruns");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodDeaktivasyonTürü", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeaktivasyonKodu")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Sebep")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KareKodDeaktivasyonTürüs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeaktivasyonKodu = "10",
+                            IsDeleted = false,
+                            Sebep = "SİSTEMDEN ÇIKARMA",
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeaktivasyonKodu = "20",
+                            IsDeleted = false,
+                            Sebep = "ÜRETİM FİRELERİ",
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeaktivasyonKodu = "30",
+                            IsDeleted = false,
+                            Sebep = "GERİ ÇEKME SEBEBİYLE İMHA",
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeaktivasyonKodu = "40",
+                            IsDeleted = false,
+                            Sebep = "MİAT SEBEBİYLE İMHA",
+                            Status = true
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DeaktivasyonKodu = "50",
+                            IsDeleted = false,
+                            Sebep = "REVİZYON",
+                            Status = true
+                        });
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodIsEmri", b =>
                 {
                     b.Property<int>("Id")
@@ -3772,6 +4278,12 @@ namespace DataAccess.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("KareKodIsEmriIstasyonMTMId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KareKodIsEmriIstasyonMTMId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("Lot")
                         .IsRequired()
@@ -3811,7 +4323,358 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("BaseProductId");
 
+                    b.HasIndex("KareKodIsEmriIstasyonMTMId1");
+
                     b.ToTable("kareKodIsEmris");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodIsEmriIstasyonMTM", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("KareKodIsEmriId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KareKodIstasyonId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KareKodIsEmriIstasyonMTMs");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodIstasyon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAdresi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IstasyonAdı")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("KareKodIsEmriIstasyonMTMId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KareKodIsEmriIstasyonMTMId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Port")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("X1JetIpAdresi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("YazıcıIpAdresi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KareKodIsEmriIstasyonMTMId1");
+
+                    b.ToTable("KareKodIstasyons");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodKoli", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("KareKodIsEmriId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaletSeriNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SSCC")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeriNo")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KareKodIsEmriId");
+
+                    b.ToTable("KareKodKolis");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodMüşteri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Adres")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Adı")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GLN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ToGLN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KareKodMüşteris");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodMüşteriYetkilileri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AdSoyad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("KareKodMüşteriId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KareKodMüşteriId");
+
+                    b.ToTable("KareKodMüşteriYetkilileri");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodPalet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("KareKodIsEmriId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SSCC")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeriNo")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KareKodIsEmriId");
+
+                    b.ToTable("KareKodPalets");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodStok", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Bn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BoxSscc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gtin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InStock")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Md")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NotificationId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NotificationStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PackSscc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaletSscc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QrCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Sn")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Xd")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KareKodStoks");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodUrunler", b =>
@@ -3853,7 +4716,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PackSscc")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PaletSn")
@@ -3882,10 +4744,15 @@ namespace DataAccess.Migrations
                     b.Property<int>("WoorId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("WorkOrderId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Xd")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkOrderId");
 
                     b.ToTable("KareKodUrunlers");
                 });
@@ -4142,10 +5009,9 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Açıklama")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BirimId")
+                    b.Property<int?>("BirimId")
                         .HasColumnType("int");
 
                     b.Property<int?>("DepoId")
@@ -4173,6 +5039,9 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("UpdateUserId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ÜstStokId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -5236,7 +6105,35 @@ namespace DataAccess.Migrations
                             ParentId = 52,
                             Row = 1,
                             Status = true,
-                            Url = "/KareKod/İstasyonListesi"
+                            Url = "/KareKod/Istasyon"
+                        },
+                        new
+                        {
+                            Id = 75,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Aktarım",
+                            ParentId = 52,
+                            Row = 1,
+                            Status = true,
+                            Url = "/KareKod/Aktarım"
+                        },
+                        new
+                        {
+                            Id = 77,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Müşteriler",
+                            ParentId = 52,
+                            Row = 1,
+                            Status = true,
+                            Url = "/KareKod/Müşteriler"
                         },
                         new
                         {
@@ -5277,7 +6174,7 @@ namespace DataAccess.Migrations
                             ParentId = 55,
                             Row = 1,
                             Status = true,
-                            Url = "/Tanımalr/CariKoduTanım"
+                            Url = "/Tanımlar/CariKoduTanım"
                         },
                         new
                         {
@@ -5305,6 +6202,33 @@ namespace DataAccess.Migrations
                             Row = 1,
                             Status = true,
                             Url = "/FabrikaMakinaYönetimi/Fırın"
+                        },
+                        new
+                        {
+                            Id = 73,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon fa-solid fa-user-group",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = true,
+                            Name = "Döküman Yönetimi",
+                            Row = 3,
+                            Status = true,
+                            Url = "#"
+                        },
+                        new
+                        {
+                            Id = 74,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon far fa-circle text-info",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Dökümanlar",
+                            ParentId = 73,
+                            Row = 1,
+                            Status = true,
+                            Url = "/Döküman/Index"
                         });
                 });
 
@@ -5633,6 +6557,28 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.DökümanAlan", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.Döküman", "Döküman")
+                        .WithMany()
+                        .HasForeignKey("DökümanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Döküman");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.DökümanSelectBoxItem", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.DökümanAlan", "DökümanAlan")
+                        .WithMany()
+                        .HasForeignKey("DökümanAlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DökümanAlan");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.Iş", b =>
                 {
                     b.HasOne("Entities.Concrete.OtherEntities.ProgramŞirketGrup", "ProgramŞirketGrup")
@@ -5665,6 +6611,63 @@ namespace DataAccess.Migrations
                     b.Navigation("Reçete");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodBildirimEmri", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodAnaUrun", "KareKodAnaUrun")
+                        .WithMany()
+                        .HasForeignKey("KareKodAnaUrunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodBildirimTürü", "KareKodBildirimTürü")
+                        .WithMany()
+                        .HasForeignKey("KareKodBildirimTürüId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodDeaktivasyonTürü", "KareKodDeaktivasyonTürü")
+                        .WithMany()
+                        .HasForeignKey("KareKodDeaktivasyonTürüId");
+
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodMüşteri", "KareKodMüşteri")
+                        .WithMany()
+                        .HasForeignKey("KareKodMüşteriId");
+
+                    b.Navigation("KareKodAnaUrun");
+
+                    b.Navigation("KareKodBildirimTürü");
+
+                    b.Navigation("KareKodDeaktivasyonTürü");
+
+                    b.Navigation("KareKodMüşteri");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodBildirimStokMTM", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodBildirimEmri", "KareKodBildirimEmri")
+                        .WithMany()
+                        .HasForeignKey("KareKodBildirimEmriId");
+
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodStok", "KareKodStok")
+                        .WithMany()
+                        .HasForeignKey("KareKodStokId");
+
+                    b.Navigation("KareKodBildirimEmri");
+
+                    b.Navigation("KareKodStok");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodBildirimUrun", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodUrunler", "KareKodUrunler")
+                        .WithMany()
+                        .HasForeignKey("KareKodUrunlerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KareKodUrunler");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodIsEmri", b =>
                 {
                     b.HasOne("Entities.Concrete.OtherEntities.KareKodAnaUrun", "BaseProduct")
@@ -5673,7 +6676,58 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodIsEmriIstasyonMTM", "KareKodIsEmriIstasyonMTM")
+                        .WithMany()
+                        .HasForeignKey("KareKodIsEmriIstasyonMTMId1");
+
                     b.Navigation("BaseProduct");
+
+                    b.Navigation("KareKodIsEmriIstasyonMTM");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodIstasyon", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodIsEmriIstasyonMTM", "KareKodIsEmriIstasyonMTM")
+                        .WithMany()
+                        .HasForeignKey("KareKodIsEmriIstasyonMTMId1");
+
+                    b.Navigation("KareKodIsEmriIstasyonMTM");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodKoli", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodIsEmri", "KareKodIsEmri")
+                        .WithMany()
+                        .HasForeignKey("KareKodIsEmriId");
+
+                    b.Navigation("KareKodIsEmri");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodMüşteriYetkilileri", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodMüşteri", "KareKodMüşteri")
+                        .WithMany("KareKodMüşteriYetkilileris")
+                        .HasForeignKey("KareKodMüşteriId");
+
+                    b.Navigation("KareKodMüşteri");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodPalet", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodIsEmri", "KareKodIsEmri")
+                        .WithMany()
+                        .HasForeignKey("KareKodIsEmriId");
+
+                    b.Navigation("KareKodIsEmri");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodUrunler", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.KareKodIsEmri", "WorkOrder")
+                        .WithMany()
+                        .HasForeignKey("WorkOrderId");
+
+                    b.Navigation("WorkOrder");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.ProgramŞirketKullanıcı", b =>
@@ -5760,9 +6814,7 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Entities.Concrete.OtherEntities.Birim", "Birim")
                         .WithMany("Stoks")
-                        .HasForeignKey("BirimId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BirimId");
 
                     b.HasOne("Entities.Concrete.OtherEntities.Depo", null)
                         .WithMany("Stoks")
@@ -5979,6 +7031,11 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.OtherEntities.İşEmri", b =>
                 {
                     b.Navigation("Uruns");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.KareKodMüşteri", b =>
+                {
+                    b.Navigation("KareKodMüşteriYetkilileris");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.ProgramŞirketGrup", b =>

@@ -15,8 +15,7 @@ namespace Entities.Concrete.OtherEntities
 
         public int? ParentId { get; set; }
         public string Ad { get; set; }
-        public string Adres { get; set; }
-
+        public string? Adres { get; set; }
 
 
         //1 Müşteri
@@ -24,5 +23,7 @@ namespace Entities.Concrete.OtherEntities
         public int Tür { get; set; }
 
         public string? CariKodu { get; set; }
+
+        public List<CariHareket> CariHarekets { get; set; }
     }
 }

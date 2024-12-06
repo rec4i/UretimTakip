@@ -1,0 +1,310 @@
+﻿@model Entities.Concrete.OtherEntities.KareKodBildirimEmri
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Aranacak İçerik :</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-9">
+                        <input autofocus type="text" class="form-control" name="name" id="ManuelEklemeInput" value="" />
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#İçeriklerModal">Aranacak İçerikler</button>
+                    </div>
+                    <div class="col-1">
+                        <button class="btn btn-warning" id="KaydetBtn2"><i class="fa fa-save"></i>ESKİ/YENİ Kaydet</button>
+                    </div>
+                    <div class="col-1">
+                        <button class="btn btn-warning" id="KaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="OrderList"
+                                               data-toolbar="#OrderListToolBar"
+                                               data-pagination="true"
+                                               data-side-pagination="server"
+                                               data-id-field="id"
+                                               data-page-list="[10, 25, 50, 100, all]"
+                                               data-locale="Tr-tr"
+                                               data-search="true"
+                                               data-show-refresh="true"
+                                               data-show-export="true">
+                                            <thead>
+                                                <tr>
+
+                                                    <th data-field="id" data-title="Id " data-width="50" data-sortable="false"></th>
+                                                    <th data-field="sn" data-title="SeriNo" data-width="1500" data-sortable="false"></th>
+                                                    <th data-field="boxSscc" data-title="Box Sscc" data-width="1500" data-sortable="false"></th>
+                                                    <th data-field="paletSscc" data-title="Palet Sscc" data-width="1500" data-sortable="false"></th>
+                                                    <th data-field="qrCode" data-title="Qr Code" data-width="1500" data-sortable="false"></th>
+                                                    <th data-field="bn" data-title="LOT" data-width="50" data-sortable="false"></th>
+                                                    <th data-title="Actions" data-sortable="false"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="İçeriklerModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">      <label>Aranacak İçerikler</label></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Aranacak İçerik</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="İçeriklerTbody">
+                                    <tr id="Silinecekİçerik">
+                                        <td colspan="2" class="text-center">Hiç İçerik Bulunamadı</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    function SatırSil(element) {
+        $(element).parent().parent().remove();
+        var gerçekİçerikCounter = $('#Gerçekİçerik').each(function () { }).length
+        console.log(gerçekİçerikCounter);
+        var BosSatır = '' +
+            ' <tr id="Silinecekİçerik">' +
+            '     <td  colspan="2" class="text-center">Hiç İçerik Bulunamadı</td>' +
+            ' </tr>' +
+            '';
+        if (gerçekİçerikCounter <= 0) {
+            $('#İçeriklerTbody').append(BosSatır)
+        }
+    }
+    $(document).ready(function () {
+        var BosSatır = '' +
+            ' <tr>' +
+            '     <td id="Silinecekİçerik" colspan="2" class="text-center">Hiç İçerik Bulunamadı</td>' +
+            ' </tr>' +
+            '';
+        var GerçekSatır = '' +
+            ' <tr id="Gerçekİçerik">' +
+            '     <td>123123123</td>' +
+            '     <td><button id="SatırSil" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>' +
+            ' </tr>' +
+            '';
+
+        $('#ManuelEklemeInput').on('keypress', function (event) {
+            if (event.which === 13) {  // 13, Enter tuşunun kodudur
+                var silinecekİçerikCounter = $('#Silinecekİçerik').each(function () { }).length
+                console.log(silinecekİçerikCounter);
+                if (silinecekİçerikCounter >= 1) {
+                    $('#Silinecekİçerik').each(function () { $(this).remove() })
+                   
+                    var GerçekSatır = '' +
+                        ' <tr id="Gerçekİçerik">' +
+                        '     <td  data="' + $(this).val() + '"  id="Aranacaçİçerik">' + $(this).val() + '</td>' +
+                        '     <td><button id="SatırSil" onclick="SatırSil(this)" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>' +
+                        ' </tr>' +
+                        '';
+                    $('#İçeriklerTbody').append(GerçekSatır)
+                    if ($("td[data=" + $(this).val() + "]").each(function () { }).length >= 1) {
+                        $(this).val("")
+                        return;
+                    }
+                }
+                else {
+
+                    var GerçekSatır = '' +
+                        ' <tr id="Gerçekİçerik">' +
+                        '     <td data="' + $(this).val() + '" id="Aranacaçİçerik">' + $(this).val() + '</td>' +
+                        '     <td><button id="SatırSil" onclick="SatırSil(this)" class="btn btn-danger"><i class="fa fa-trash"></i></button></td>' +
+                        ' </tr>' +
+                        '';
+                    if ($("td[data=" + $(this).val() + "]").each(function () { }).length >= 1) {
+                        $(this).val("")
+                        return;
+                    }
+                    $('#İçeriklerTbody').append(GerçekSatır)
+                }
+                $(this).val("")
+            }
+        });
+
+        $('#KaydetBtn').click(function () {
+            var data = new FormData();
+            data.append('Id', getParameterByName("Id"))
+            $('#Aranacaçİçerik').each(function () {
+                data.append('Aranacakİçerik[]', $(this).attr('data'))
+            })
+
+            $.ajax({
+                url: "/KareKod/BildirimEmriİçerikEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+
+        })
+        $('#KaydetBtn2').click(function () {
+            var data = new FormData();
+            data.append('Id', getParameterByName("Id"))
+            $('#Aranacaçİçerik').each(function () {
+                data.append('Aranacakİçerik[]', $(this).attr('data'))
+            })
+
+            $.ajax({
+                url: "/KareKod/BildirimEmriİçerikEkle2",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+
+        })
+
+
+
+        OrderTablosuDoldur()
+    })
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/KareKod/BildirimİçeriğiPagination?Id=" + getParameterByName("Id"),
+            columns: [
+                [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+            console.log(row);
+            //value += "<button id='OrderConfrimationEditBtn' odrderId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button>";
+            value += "<a href='/KareKod/IstasyonEdit?Id=" + row["id"] + "'  odrderId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</a>";
+            value += "<button id='IşSil' bildirimId='" + getParameterByName("Id") + "' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+
+            return value
+        }
+        function afterLoad() {
+            $('*#IşSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                data.append('bildirimId', getParameterByName("Id"))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/KareKod/BildirimUrunSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+        }
+
+    }
+</script>

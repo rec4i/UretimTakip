@@ -11,6 +11,9 @@
                                     Yeni İş Emri Oluştur
                                 </a>
                             </div>
+                            <div class="p-2">
+                                <a href="/KareKod/UrunBul" class="btn btn-primary"><i class="fa fa-search"></i> Ürün Bul</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -46,11 +49,13 @@
                                                data-show-export="true">
                                             <thead>
                                                 <tr>
+                                                    <th data-field="id" data-title="Ürün İsimi" data-sortable="false"></th>
                                                     <th data-field="baseProduct.name" data-title="Ürün İsimi" data-sortable="false"></th>
+                                                    <th data-field="orderStatus" data-title="Durum" data-sortable="false"></th>
                                                     <th data-field="createdDate" data-title="Oluşturulma Tarihi" data-sortable="false"></th>
                                                     <th data-field="expirationDate" data-title="SK. Tarihi" data-sortable="false"></th>
                                                     <th data-field="lot" data-title="Lot" data-sortable="false"></th>
-                                                    <th data-field="plannedProduct" data-title="Planlanan Adet" data-sortable="false"></th>
+                                                    <th data-field="plannedProduct" data-title="Üretilen Adet/Planlanan Adet" data-sortable="false"></th>
                                                     <th data-field="boxCount" data-title="Koli Sayısı" data-sortable="false"></th>
                                                     <th data-field="paletCount" data-title="Palet Sayısı" data-sortable="false"></th>
                                                     <th data-field="productPerPack" data-title="Kolideki Paket Adeti" data-sortable="false"></th>
@@ -74,8 +79,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
-
         OrderTablosuDoldur()
     })
     function OrderTablosuDoldur() {
@@ -85,10 +88,21 @@
             columns: [
                 [
                     {},
+
+                    {
+                        formatter: UrunAdıFormatter
+                    },
+                    {
+                        formatter: StatusFormatter
+                    },
                     {},
                     {},
-                    {},
-                    {},
+                    {
+                        
+                    },
+                    {
+                        formatter: CounterFormatter
+},
                     {},
                     {},
                     {},
@@ -100,16 +114,80 @@
             ],
             onLoadSuccess: afterLoad,
         })
+        function UrunAdıFormatter(value, row) {
+            return row["baseProduct"]["name"] + " " + row["baseProduct"]["unit"]
+
+        }
+        function StatusFormatter(value) {
+            if (value == 0) {
+                return '<small class="badge badge-warning"><i class="far fa-clock"></i> Üretilebilir</small>'
+            }
+            if (value == 1) {
+                return '<small class="badge badge-success"><i class="far fa-clock"></i> İş Emri Kapatıldı</small>'
+            }
+        }
+        function CounterFormatter(value, row) {
+            var data = new FormData();
+            data.append('Id', row["id"])
+            var productCount = 0;
+            $.ajax({
+                url: "/KareKod/GetProductCount",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    productCount = data;
+
+                },
+            });
+            return productCount + "/" + value;
+        }
         function ActionFormatter(value, row) {
             var value = "";
-            value += "<a href='/KareKod/AnaUrunEdit?Id=" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</a>";
+            //value += "<a href='/KareKod/AnaUrunEdit?Id=" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</a> ";
+            value += "<button id='ÜretimEkranıGit' href='/KareKod/UretimEkranı?Id=" + row["id"] + "' orderStatus='" + row["orderStatus"] + "' class='btn btn-primary'><i class='fa fa-edit'></i> Üretime Başla</button>";
+            value += " <button id='ÜretimiBitir' rowId='" + row["id"] + "' class='btn btn-danger'>Üretimi Bitir</button>";
             value += " <button id='IsEmriSil' rowId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
-
-
             return value
         }
         function afterLoad() {
-            $('#IsEmriSil').click(function () {
+            $('*#ÜretimEkranıGit').click(function () {
+                if ($(this).attr('orderStatus') == 0) {
+                    window.location.href = $(this).attr('href')
+                }
+                else {
+                    errorAlert("İş Emri Kapatıldığı İçin Üretim Yapamzsınız")
+                }
+
+
+            })
+            $('*#ÜretimiBitir').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('rowId'))
+
+                $.ajax({
+                    url: "/KareKod/ÜretimiBitir",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                        OrderTablosuDoldur()
+                    },
+                });
+            })
+
+
+            $('*#IsEmriSil').click(function () {
                 var data = new FormData();
                 data.append('Id', $(this).attr('rowId'))
 

@@ -33,9 +33,12 @@ namespace WebIU.Controllers
 
 
 
-                var buttonDurumlar = modbusClient.ReadCoils(1, 2);
+                var buttonDurumlar = modbusClient.ReadCoils(1, 5);
                 model.FırınDurdurSayac = buttonDurumlar[0];
                 model.SogutmaBaslatSayac = buttonDurumlar[1];
+                model.FırınÇalışmaDurum = buttonDurumlar[2];
+                model.SogutmaCalısmaDurum = buttonDurumlar[3];
+
 
 
 
@@ -45,7 +48,7 @@ namespace WebIU.Controllers
 
                 // Örneğin: Holding register 40001 adresinden itibaren 5 adet register oku
                 int startAddress = 0; // 40001 adresi Modbus protokolünde 0 ile temsil edilir
-                int numRegisters = 8;
+                int numRegisters = 10;
 
                 int[] registers = modbusClient.ReadHoldingRegisters(startAddress, numRegisters);
 
@@ -58,6 +61,10 @@ namespace WebIU.Controllers
                 model.BASDK = registers[5];
                 model.BITST = registers[6];
                 model.BITDK = registers[7];
+
+                model.FırınKapatmaSure = registers[9];
+                model.FırınSogutmaSure = registers[8];
+
 
                 modbusClient.Disconnect();
 
@@ -92,17 +99,28 @@ namespace WebIU.Controllers
                 bool[] coils = new bool[] { model.FırınDurdurSayac, model.SogutmaBaslatSayac };
                 modbusClient.WriteMultipleCoils(1, coils);
 
+                //Baslat DurdurYaz
+                bool[] _coils = new bool[] { model.FırınBaslat, model.FırınKapat, model.SogutmaBaslat, model.SogutmaKapat };
+                modbusClient.WriteMultipleCoils(5, _coils);
+
+                Thread.Sleep(1000);
+                //Baslat DurdurYaz
+                bool[] __coils = new bool[] { false, false, false, false };
+                modbusClient.WriteMultipleCoils(5, __coils);
+
                 // Holding register yaz
                 int[] registers = new int[]
                 {
-            model.SBASST,
-            model.SBASDK,
-            model.SBITST,
-            model.SBITDK,
-            model.BASST,
-            model.BASDK,
-            model.BITST,
-            model.BITDK
+                    model.SBASST,
+                    model.SBASDK,
+                    model.SBITST,
+                    model.SBITDK,
+                    model.BASST,
+                    model.BASDK,
+                    model.BITST,
+                    model.BITDK,
+                    model.FırınSogutmaSure,
+                    model.FırınKapatmaSure,
                 };
                 modbusClient.WriteMultipleRegisters(0, registers);
 

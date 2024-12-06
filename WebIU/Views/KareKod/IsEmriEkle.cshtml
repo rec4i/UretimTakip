@@ -10,12 +10,22 @@
                         <select id="BaseProductId" class="form-control">
                             @foreach (var item in Model.KareKodAnaUruns)
                             {
-                                <option value="@item.Id">@item.Name</option>
+                                <option value="@item.Id">@item.Name @item.Unit</option>
                             }
                         </select>
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col">
+                        <label>İstasyon :</label>
+                        <select id="IstasyonId" class="form-control">
+                            @foreach (var item in Model.KareKodIstasyons)
+                            {
+                                <option value="@item.Id">@item.IstasyonAdı</option>
+                            }
+                        </select>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <label>Oluşturma Tarihi:</label>
@@ -35,8 +45,6 @@
                         <input type="text" id="Lot" class="form-control" value="" />
                     </div>
                 </div>
-
-
                 <div class="row">
                     <div class="col-6">
                         <div class="row">
@@ -119,6 +127,8 @@
 
 <script>
     $(document).ready(function () {
+
+
         getProducAndFill($('#BaseProductId').find(':selected').val())
 
         $('#BaseProductId').change(function () {
@@ -145,6 +155,8 @@
             data.append('KolidekiÜrünSayısı', $('#KolidekiÜrünAdeti').val());
             data.append('PalettekiKoliSayısı', $('#PalettekiKoliAdeti').val());
             data.append('Açıklama', $('#Description').val());
+            data.append('IstasyonId', $('#IstasyonId').val());
+
 
             $.ajax({
                 url: "/KareKod/IsEmriEkle",

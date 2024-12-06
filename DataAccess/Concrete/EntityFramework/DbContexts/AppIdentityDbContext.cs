@@ -100,12 +100,38 @@ namespace DataAccess.Concrete.EntityFramework.DbContexts
 
         public DbSet<KareKodIsEmri> kareKodIsEmris { get; set; }
 
+
+        public DbSet<Döküman> Dökümans { get; set; }
+        public DbSet<DökümanAlan> DökümanAlans { get; set; }
+        public DbSet<DökümanSelectBoxItem> DökümanSelectBoxItems { get; set; }
+
+        public DbSet<KareKodIstasyon> KareKodIstasyons { get; set; }
+        public DbSet<KareKodIsEmriIstasyonMTM> KareKodIsEmriIstasyonMTMs { get; set; }
+
+        public DbSet<KareKodBildirimEmri> KareKodBildirimEmris { get; set; }
+        public DbSet<KareKodBildirimUrun> KareKodBildirimUruns { get; set; }
+
+        public DbSet<KareKodBildirimTürü> KareKodBildirimTürüs { get; set; }
+
+        public DbSet<KareKodDeaktivasyonTürü> KareKodDeaktivasyonTürüs { get; set; }
+
+        public DbSet<KareKodMüşteri> KareKodMüşteris { get; set; }
+        public DbSet<KareKodMüşteriYetkilileri> KareKodMüşteriYetkilileri { get; set; }
+
+        public DbSet<KareKodStok> KareKodStoks { get; set; }
+
+        public DbSet<KareKodKoli> KareKodKolis { get; set; }
+        public DbSet<KareKodPalet> KareKodPalets { get; set; }
+        public DbSet<KareKodBildirimStokMTM> KareKodBildirimStokMTMs { get; set; }
+
+        public DbSet<CariHareket> CariHarekets { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.MenuItemSeed();
             modelBuilder.CountriesSeed();
             modelBuilder.BirimiSeeds();
-
+            modelBuilder.KareKodBildirimTürüSeed();
+            modelBuilder.KareKodDeaktivasyonTürüSeeds();
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }

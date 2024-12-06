@@ -1,11 +1,22 @@
-﻿function successAlert(message) {
+﻿function successAlert(message, duration) {
     Swal.fire({
         position: 'bottom-end',
         text: '' + message,
         showConfirmButton: false,
-        timer: 1500,
+        timer: duration == null ? 1500 : duration,
         icon: 'success'
     })
+}
+function getParameterByName(name) {
+    // name parametresi ile eşleşen parametreyi bulmak için regex oluştur
+    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    const results = regex.exec(window.location.href);
+
+    // Parametre bulunamazsa null döner
+    if (!results) return null;
+
+    // Bulunan parametreyi decode ederek döner
+    return decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 function errorAlert(message) {
     Swal.fire({
@@ -82,6 +93,7 @@ $(document).ready(function () {
     $('[data-Mask="decimal"]').inputmask({ 'alias': 'currency', radixPoint: ',', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
     $('[data-Mask="numeric"]').inputmask({ 'alias': 'numeric', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
     $('[data-Mask="biggerThanZero"]').inputmask('numeric', { min: 1, rightAlign: false });
+    $('[data-Mask="biggerThanEqualZero"]').inputmask('numeric', { min: 0, rightAlign: false });
     $('[data-Mask="TelefonNumarası"]').inputmask({ 'mask': '0 (999) 999 99 99', 'removeMaskOnSubmit': true });
     $('[data-Mask="OneToTwelve"]').inputmask({ 'mask': '0 (999) 999 99 99', 'removeMaskOnSubmit': true });
     $('[data-Mask="OneToTwelve"]').inputmask({
@@ -92,6 +104,24 @@ $(document).ready(function () {
             var value = pastedValue.toString().replace(/[^0-9]/g, '');
             return value;
         }
+    });
+    $('[data-Mask="portNumber"]').inputmask({
+        mask: "99999",
+        greedy: false,
+        jitMasking: true,
+        placeholder: "",
+        oncomplete: function () {
+            var value = $(this).val();
+            if (parseInt(value) > 65535) {
+                alert("Port numarası 65535'ten büyük olamaz.");
+                $(this).val("");
+            }
+        }
+    });
+    $('[data-Mask="ipAdress"]').inputmask({
+        alias: "ip",
+        greedy: false,
+        jitMasking: true
     });
     $('[data-Mask="ZeroToTwelve"]').inputmask({
         mask: "09",

@@ -34,6 +34,7 @@
                             <thead>
                                 <tr>
                                     <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="stokKodu" data-title="Stok Kodu" data-sortable="false"></th>
                                     <th data-field="stokAdı" data-title="Stok Adı" data-sortable="false"></th>
                                     <th data-field="birim.birimKodu" data-title="Birim" data-sortable="false"></th>
                                     <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>
@@ -62,45 +63,60 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
             <div class="modal-body" id="StokOluşturModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>Stok Kodu:</label>
+                        <input type="text" id="StokKodu" class="form-control" value="" />
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <label>Stok Adı:</label>
                         <input type="text" id="StokAdı" class="form-control" value="" />
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label>Stok Birimi:</label>
-                        <select id="BirimId" class="form-control">
-                            @foreach (var item in Model.Birims)
-                            {
-                                <option value="@item.Id">@item.BirimKodu (@item.DönüşümAçıklama)</option>
-                            }
-                        </select>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="DetayCheckBox">
+                            <label class="form-check-label" for="DetayCheckBox">Detay Bilgi Girişi</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="DetayDiv" hidden>
+                    <div class="row">
+                        <div class="col">
+                            <label>Stok Birimi:</label>
+                            <select id="BirimId" class="form-control">
+                                @foreach (var item in Model.Birims)
+                                {
+                                    <option value="@item.Id">@item.BirimKodu (@item.DönüşümAçıklama)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Depo :</label>
+                            <select id="DepoId" class="form-control" style="width:100%">
+                                @foreach (var item in Model.Depos)
+                                {
+                                    <option value="@item.Id">@item.DepoAdı </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label>Stok Başlangıç Adeti:</label>
+                            <input type="text" data-Mask="decimal" id="StokBaşlangıçAdeti" class="form-control" value="" />
+                        </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col">
-                        <label>Depo :</label>
-                        <select id="DepoId" class="form-control" style="width:100%">
-                            @foreach (var item in Model.Depos)
-                            {
-                                <option value="@item.Id">@item.DepoAdı </option>
-                            }
-                        </select>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col">
-                        <label>Stok Başlangıç Adeti:</label>
-                        <input type="text" data-Mask="decimal" id="StokBaşlangıçAdeti" class="form-control" value="" />
-                    </div>
-                </div>
 
                 <div class="row">
                     <div class="col">
@@ -154,16 +170,16 @@
                 </div>
 
                 @*<div class="row">
-                    <div class="col">
-                        <label>Depo :</label>
-                        <select id="DepoIdDüzenle" class="form-control" style="width:100%">
-                            @foreach (var item in Model.Depos)
-                            {
-                                <option value="@item.Id">@item.DepoAdı </option>
-                            }
-                        </select>
-                    </div>
-                </div>*@
+                        <div class="col">
+                            <label>Depo :</label>
+                            <select id="DepoIdDüzenle" class="form-control" style="width:100%">
+                                @foreach (var item in Model.Depos)
+                                {
+                                    <option value="@item.Id">@item.DepoAdı </option>
+                                }
+                            </select>
+                        </div>
+                    </div>*@
 
 
 
@@ -196,7 +212,18 @@
 <script>
 
     $(document).ready(function () {
+        $('#DetayCheckBox').click(function () {
+            //DetayDiv
+            if ($(this).is(':checked')) {
+                $('#DetayDiv').removeAttr('hidden')
+            }
+            else {
+                $('#DetayDiv').attr('hidden','true')
+            }
+        })
 
+        $("#StokKodu").inputmask("@Model.StokKoduTanım");
+        $("#StokKodu").val("@Model.StokKoduHazır");
         $('#KullanılıcakStokSelect').select2({
             dropdownParent: $("#ReçeteOluşturModal")
         })
@@ -219,6 +246,10 @@
 
         $('#StokKaydetBtn').click(function () {
             var data = new FormData();
+
+            data.append('Baslıkmı', $('#DetayCheckBox').is(':checked'))
+            data.append('StokKodu', $('#StokKodu').val())
+            data.append('ÜstStokId', @Model.ÜstStokId)
             data.append('StokAdı', $('#StokAdı').val())
             data.append('BirimId', $('#BirimId').find(':selected').val())
             data.append('DepoId', $('#DepoId').find(':selected').val())
@@ -291,9 +322,10 @@
     function OrderTablosuDoldur() {
         $('#OrderList').bootstrapTable("destroy")
         $('#OrderList').bootstrapTable({
-            url: "/Stok/StokPagination",
+            url: "/Stok/StokPagination?ÜstStokId=@Model.ÜstStokId",
             columns: [
                 [
+                    {},
                     {},
                     {},
                     {},
@@ -312,7 +344,7 @@
             var value = "";
             value += "<button id='StokDüzenleModalAçBtn' StokId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button>";
             value += "<button id='StokSil' StokId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
-
+            value += "<a href='/Stok/Index?ÜstStokId=" + row["id"] + "&StokKoduHazır=" + row["stokKodu"] +"' StokId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-arrow-right'></i></a>";
 
             return value
         }
@@ -332,7 +364,7 @@
             //
         }
         function afterLoad() {
-            $('#StokSil').click(function () {
+            $('*#StokSil').click(function () {
 
                 var data = new FormData();
                 data.append('Id', $(this).attr('StokId'))
@@ -372,7 +404,7 @@
             })
 
 
-            $('#StokDüzenleModalAçBtn').click(function () {
+            $('*#StokDüzenleModalAçBtn').click(function () {
 
                 $('#StokDüzenleModal').modal('show')
                 var data = new FormData();

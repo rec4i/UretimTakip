@@ -6,6 +6,7 @@ namespace WebIU.Models.KareKodViewModels
     {
         public string Gtin { get; set; }
         public string Expire { get; set; }
+        public string GozukenExpire { get; set; }
         public string Lot { get; set; }
         public string Serial { get; set; }
         public string LastSerial { get; set; }
