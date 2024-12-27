@@ -16,6 +16,7 @@ namespace Entities.Concrete.OtherEntities
         public int? ParentId { get; set; }
         public string Ad { get; set; }
         public string? Adres { get; set; }
+        public string? VergiNo { get; set; }
 
 
         //1 Müşteri

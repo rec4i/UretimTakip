@@ -1,4 +1,4 @@
-﻿
+﻿@model WebIU.Models.DepoViewModels.DepoIndexViewModel
 <div class="row">
     <div class="col">
         <div class="card">
@@ -68,6 +68,12 @@
                 </div>
                 <div class="row">
                     <div class="col">
+                        <label>Depo Kodu:</label>
+                        <input type="text" id="DepoKodu" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <label>Adres :</label>
                         <textarea class="form-control" id="Adres" rows="3"></textarea>
                     </div>
@@ -108,6 +114,12 @@
                 </div>
                 <div class="row">
                     <div class="col">
+                        <label>Depo Kodu:</label>
+                        <input type="text" id="DepoKoduDüzenle" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <label>Adres :</label>
                         <textarea class="form-control" id="AdresDüzenle" rows="3"></textarea>
                     </div>
@@ -134,6 +146,13 @@
 
 <script>
     $(document).ready(function () {
+         $('#DepoKodu').inputmask('@Model.DepoKoduTanım',
+     {
+         'definitions': {
+             'H': { validator: "[A-Z-0-9]", cardinality: 1 }
+         }
+     }
+ );
         OrderTablosuDoldur()
         $('#DepoEkleModalAçBtn').click(function () {
             $('#DepoEkleModal').modal('show')
@@ -144,6 +163,7 @@
             //data.append('Id', $(this).attr('StokId'))
             data.append('DepoAdı', $('#DepoAdı').val())
             data.append('Adres', $('#Adres').val())
+            data.append('DepoKodu', $('#DepoKodu').val())
 
             $.ajax({
                 url: "/Depo/DepoEkle",
@@ -169,6 +189,7 @@
             var data = new FormData();
             data.append('Id', $(this).attr('DepoId'))
             data.append('DepoAdı', $('#DepoAdıDüzenle').val())
+            data.append('DepoKodu', $('#DepoKoduDüzenle').val())
             data.append('Adres', $('#AdresDüzenle').val())
 
             $.ajax({

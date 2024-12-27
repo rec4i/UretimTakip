@@ -33,7 +33,9 @@
                                     <th data-field="id" data-title="id" hidden data-sortable="false"></th>
                                     <th data-field="cariKodu" data-title="Cari Kodu" data-sortable="false"></th>
                                     <th data-field="ad" data-title="Müşteri Adı" data-sortable="false"></th>
+                                    <th data-field="vergiNo" data-title="Vergi no" data-sortable="false"></th>
                                     <th data-field="adres" data-title="Adres" data-sortable="false"></th>
+                                    <th data-field="borç" data-title="Borç Alacak" data-sortable="false"></th>
                                     <th data-title="Actions" data-sortable="false"></th>
                                 </tr>
                             </thead>
@@ -62,6 +64,10 @@
                     {},
                     {},
                     {},
+                    {},
+                    {
+                        formatter:BorçAlacakFormatter
+                    },
                     {
                         formatter: ActionFormatter
                     },
@@ -69,6 +75,29 @@
             ],
             onLoadSuccess: afterLoad,
         })
+        function BorçAlacakFormatter(value , row) {
+            var data = new FormData();
+            data.append('cariId', row["id"])
+
+            var kalanBorç = "";
+            $.ajax({
+                url: "/Cari/ToplamBorçGetir",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        kalanBorç = data.data;
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+             return "<input class='form-control' disabled value='" + kalanBorç + "' data-Mask='decimal'></input>";;
+        }
         function ActionFormatter(value, row) {
             console.log(row);
             var value = "";
@@ -80,7 +109,7 @@
             return value
         }
         function afterLoad() {
-
+            DataMask()
             $('#IşSil').click(function () {
                 var data = new FormData();
                 data.append('Id', $(this).attr('IşId'))

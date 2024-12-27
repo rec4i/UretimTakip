@@ -14,7 +14,7 @@ namespace Entities.Concrete.OtherEntities
         public Urun? Urun { get; set; }
 
         public int? IşId { get; set; }
-        public Iş? Iş { get; set; }
+        public İş? Iş { get; set; }
 
         public int? İşEmriId { get; set; }
         public İşEmri? İşEmri { get; set; }

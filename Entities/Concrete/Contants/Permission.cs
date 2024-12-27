@@ -140,6 +140,10 @@ namespace Entities.Concrete.Contants
         {
             public const string Index = "Permission.Depo.Index";
         }
+        public static class Kasa
+        {
+            public const string Index = "Permission.Kasa.Index";
+        }
 
         public static class Program
         {
@@ -160,13 +164,19 @@ namespace Entities.Concrete.Contants
             public const string Index = "Permission.Şantiye.Index";
 
         }
+        public static class SorumluKullanıcı
+        {
+            public const string Index = "Permission.SorumluKullanıcı.Index";
 
+        }
 
 
         public static class Tanımlar
         {
             public const string StokKoduTanım = "Permission.Tanımlar.StokKoduTanım";
             public const string CariKoduTanım = "Permission.Tanımlar.CariKoduTanım";
+            public const string DepoKoduTanım = "Permission.Tanımlar.DepoKoduTanım";
+            public const string KasaKoduTanım = "Permission.Tanımlar.KasaKoduTanım";
 
         }
         public static class DosyaYönetimi
@@ -202,6 +212,14 @@ namespace Entities.Concrete.Contants
         {
             public const string Index = "Permission.Döküman.Index";
         }
+
+
+        public static class SeriNo
+        {
+            public const string FaturaSeriNoTanım = "Permission.SeriNo.FaturaSeriNoTanım";
+            public const string ÖdemeSeriNoTanım = "Permission.SeriNo.ÖdemeSeriNoTanım";
+        }
+
 
 
         //PharmacyListManager

@@ -19,8 +19,9 @@ namespace WebIU.Controllers
         private readonly IStokHarektiRepository _stokHarektiRepository;
         private readonly IStokKoduTanımRepository _stokKoduTanımRepository;
         private readonly IProgramŞirketGrupRepository _programŞirketGrupRepository;
-
-        public StokController(IStokRepository stokRepository, IBirimRepository birimRepository, IDepoRepository depoRepository, IStokHarektiRepository stokHarektiRepository, IStokKoduTanımRepository stokKoduTanımRepository, IProgramŞirketGrupRepository programŞirketGrupRepository)
+        private readonly IFiyatRepository _fiyatRepository;
+        private readonly IBarkodRepository _barkodRepository;
+        public StokController(IStokRepository stokRepository, IBirimRepository birimRepository, IDepoRepository depoRepository, IStokHarektiRepository stokHarektiRepository, IStokKoduTanımRepository stokKoduTanımRepository, IProgramŞirketGrupRepository programŞirketGrupRepository, IFiyatRepository fiyatRepository, IBarkodRepository barkodRepository)
         {
             _stokRepository = stokRepository;
             _birimRepository = birimRepository;
@@ -28,6 +29,45 @@ namespace WebIU.Controllers
             _stokHarektiRepository = stokHarektiRepository;
             _stokKoduTanımRepository = stokKoduTanımRepository;
             _programŞirketGrupRepository = programŞirketGrupRepository;
+            _fiyatRepository = fiyatRepository;
+            _barkodRepository = barkodRepository;
+        }
+
+        public async Task<IActionResult> StokDüzenle(int StokId)
+        {
+            var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
+            var entity = _stokRepository.Get(o => o.Id == StokId);
+            StokDüzenleViewModel model = new StokDüzenleViewModel();
+            model.Stok = entity;
+            model.Birims = _birimRepository.GetAll();
+            model.Depos = _depoRepository.GetAll(o => o.ProgramŞirketGrupId == userGroup);
+            return View(model);
+        }
+        public IActionResult GetFiyatPagination(int offset, int limit, List<int> orderStatusId, string search, int StokId)
+        {
+            FiyatPaginatonModel model = new FiyatPaginatonModel();
+            model.rows = _fiyatRepository.GetAllIncludedPagination(o => o.StokId == StokId, offset.ToString(), limit.ToString(), search);
+            model.total = _fiyatRepository.GetAllIncludedPaginationCount(o => o.Id == StokId);
+            model.totalNotFiltered = _fiyatRepository.GetAllIncludedPaginationCount(o => o.Id == StokId);
+
+            return Json(model);
+        }
+
+        public IActionResult FiyatEkle(int StokId, decimal BirimFiyat, decimal KdvOranı)
+        {
+            JsonResponseModel res = new JsonResponseModel();
+
+            Fiyat fiyat = new Fiyat();
+            fiyat.StokId = StokId;
+            fiyat.GeçerliFiyat = BirimFiyat;
+            fiyat.GeçerliKdvOranı = KdvOranı;
+            fiyat.AddedDate = DateTime.Now;
+            _fiyatRepository.Add(fiyat);
+
+
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
         }
 
         public async Task<IActionResult> Index(int ÜstStokId, string StokKoduHazır)
@@ -60,7 +100,6 @@ namespace WebIU.Controllers
             return Json(res);
 
         }
-
 
         private (string, bool) KodDüzenle(string cariKodu)
         {
@@ -114,7 +153,37 @@ namespace WebIU.Controllers
 
         }
 
-        public async Task<IActionResult> StokKaydet(string StokKodu, string StokAdı, int BirimId, string Açıklama, decimal StokAdeti, int DepoId, bool Baslıkmı, int ÜstStokId)
+        public async Task<IActionResult> BarkodEkle(int StokId, string Barkod)
+        {
+            var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
+            JsonResponseModel res = new JsonResponseModel();
+            try
+            {
+                var barkodVarmı = _barkodRepository.GetAll(o => o.İçerik == Barkod && o.ProgramŞirketGrupId == userGroup);
+                if (barkodVarmı.Count() >= 1)
+                {
+                    res.status = 0;
+                    res.message = "Gönderilen Barkod Daha Önceden Kullanılmış";
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            Barkod barkod = new Barkod();
+            barkod.StokId = StokId;
+            barkod.İçerik = Barkod;
+            barkod.ProgramŞirketGrupId = userGroup;
+
+            _barkodRepository.Add(barkod);
+
+
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+
+        public async Task<IActionResult> StokKaydet(string StokKodu, string StokAdı, int BirimId, string Açıklama, decimal StokAdeti, int DepoId, bool Baslıkmı, int ÜstStokId, decimal GeçerliKdvOranı, decimal GeçerliFiyat, string Barkod)
         {
             var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
             JsonResponseModel res = new JsonResponseModel();
@@ -123,8 +192,9 @@ namespace WebIU.Controllers
             {
                 Stok entity = new Stok();
                 entity.StokAdı = StokAdı;
-                entity.BirimId = Baslıkmı == false ? null : BirimId;
+                entity.BirimId = BirimId ;
                 entity.Açıklama = Açıklama;
+                entity.DepoId = DepoId;
                 entity.ÜstStokId = ÜstStokId;
                 entity.StokKodu = KodDüzenle(StokKodu).Item1;
                 entity.ProgramŞirketGrupId = userGroup;
@@ -147,13 +217,34 @@ namespace WebIU.Controllers
 
             if (Baslıkmı == true)
             {
-                StokHareket stokHarekti = new StokHareket();
-                stokHarekti.StokId = addedEntity.Id;
-                stokHarekti.Adet = StokAdeti;
-                stokHarekti.HareketTipi = 1;
-                stokHarekti.DepoId = DepoId;
-                _stokHarektiRepository.Add(stokHarekti);
+
+                //try
+                //{
+                //    StokHareket stokHarekti = new StokHareket();
+                //    stokHarekti.StokId = addedEntity.Id;
+                //    stokHarekti.Adet = StokAdeti;
+                //    stokHarekti.HareketTipi = 1;
+                //    stokHarekti.DepoId = DepoId;
+                //    _stokHarektiRepository.Add(stokHarekti);
+                //}
+                //catch (Exception)
+                //{
+                //    res.status = 0;
+                //    res.message = "Stok Hareketi Oluşturulurken Hata Oluştur Lütfen Yöneticiye Danışın";
+                //    return Json(res);
+                //}
             }
+            Fiyat fiyat = new Fiyat();
+
+            fiyat.StokId = addedEntity.Id;
+            fiyat.GeçerliFiyat = GeçerliFiyat;
+            fiyat.GeçerliKdvOranı = GeçerliKdvOranı;
+            _fiyatRepository.Add(fiyat);
+
+            Barkod barkod = new Barkod();
+            barkod.İçerik = Barkod;
+            barkod.StokId = addedEntity.Id;
+            barkod.ProgramŞirketGrupId = userGroup;
 
 
             res.status = 1;
@@ -172,14 +263,13 @@ namespace WebIU.Controllers
             res.message = "İşlem Başarılı";
             return Json(res);
         }
-
+        [HttpPost]
         public IActionResult StokDüzenle(int Id, string StokAdı, int BirimId, string Açıklama, decimal StokAdeti, int DepoId)
         {
             var entity = _stokRepository.Get(o => o.Id == Id);
             entity.StokAdı = StokAdı;
             entity.BirimId = BirimId;
             entity.Açıklama = Açıklama;
-            //entity.DepoId = DepoId;
             _stokRepository.Update(entity);
 
 
@@ -188,13 +278,27 @@ namespace WebIU.Controllers
             res.message = "İşlem Başarılı";
             return Json(res);
         }
-
-        public IActionResult StokPagination(int offset, int limit, List<int> orderStatusId, string search, int ÜstStokId)
+        public async Task<IActionResult> BarkodPagination(int offset, int limit, List<int> orderStatusId, string search, int StokId)
         {
+            var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
+
+            BarkodPaginationViewModel model = new BarkodPaginationViewModel();
+            model.rows = _barkodRepository.GetAllIncludedPagination(o => o.StokId == StokId && o.ProgramŞirketGrupId == userGroup, offset.ToString(), limit.ToString(), search);
+            model.total = _barkodRepository.GetAllIncludedPaginationCount(o => o.StokId == StokId && o.ProgramŞirketGrupId == userGroup);
+            model.totalNotFiltered = _barkodRepository.GetAllIncludedPaginationCount(o => o.StokId == StokId && o.ProgramŞirketGrupId == userGroup);
+
+
+            return Json(model);
+        }
+
+        public async Task<IActionResult> StokPagination(int offset, int limit, List<int> orderStatusId, string search, int ÜstStokId)
+        {
+            var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
+
             StokPaginatonModel model = new StokPaginatonModel();
-            model.rows = _stokRepository.GetAllIncludedPagination(o => o.ÜstStokId == ÜstStokId, offset.ToString(), limit.ToString(), search);
-            model.total = _stokRepository.GetAllIncludedPaginationCount(o => o.ÜstStokId == ÜstStokId);
-            model.totalNotFiltered = _stokRepository.GetAllIncludedPaginationCount(o => o.ÜstStokId == ÜstStokId);
+            model.rows = _stokRepository.GetAllIncludedPagination(o => o.ÜstStokId == ÜstStokId && o.ProgramŞirketGrupId == userGroup, offset.ToString(), limit.ToString(), search);
+            model.total = _stokRepository.GetAllIncludedPaginationCount(o => o.ÜstStokId == ÜstStokId && o.ProgramŞirketGrupId == userGroup);
+            model.totalNotFiltered = _stokRepository.GetAllIncludedPaginationCount(o => o.ÜstStokId == ÜstStokId && o.ProgramŞirketGrupId == userGroup);
 
 
             return Json(model);

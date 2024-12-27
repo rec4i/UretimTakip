@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IIşRepository : IEntityRepositoryBase<Iş>
+    public interface IIşRepository : IEntityRepositoryBase<İş>
     {
-        List<Iş> GetAllIncluded(Expression<Func<Iş, bool>> filter = null);
-        List<Iş> GetAllIncludedPagination(Expression<Func<Iş, bool>> filter = null, string offset = null, string limit = null, string search = null);
-        int GetAllIncludedPaginationCount(Expression<Func<Iş, bool>> filter = null, string offset = null, string limit = null, string search = null);
+        List<İş> GetAllIncluded(Expression<Func<İş, bool>> filter = null);
+        List<İş> GetAllIncludedPagination(Expression<Func<İş, bool>> filter = null, string offset = null, string limit = null, string search = null);
+        int GetAllIncludedPaginationCount(Expression<Func<İş, bool>> filter = null, string offset = null, string limit = null, string search = null);
     }
 }

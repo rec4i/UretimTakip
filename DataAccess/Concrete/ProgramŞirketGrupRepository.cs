@@ -69,7 +69,7 @@ namespace DataAccess.Concrete
             using (var context = new AppIdentityDbContext())
             {
                 var userId = await _userManager.FindByNameAsync(_httpContextAccessor.HttpContext.User.Identity.Name);
-                var res = context.Set<ProgramŞirketKullanıcı>().Where(o => o.UserId == userId.Id).FirstOrDefault().Id;
+                var res = context.Set<ProgramŞirketKullanıcı>().Where(o => o.UserId == userId.Id).FirstOrDefault().ProgramŞirketGrupId;
 
                 return res;
             }

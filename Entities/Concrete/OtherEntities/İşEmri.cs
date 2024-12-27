@@ -17,7 +17,18 @@ namespace Entities.Concrete.OtherEntities
         public string Açıklama { get; set; }
         public string İşEmriAdı { get; set; }
         public int HedefÜretim { get; set; }
+
         public List<Urun> Uruns { get; set; }
+
+
+
+        //public DateTime? BaşlamaTarihi { get; set; }
+        //public DateTime? BitişTarihi { get; set; }
+
+
+        public DateTime? HedefBaşlamaTarihi { get; set; }
+        public DateTime? HedefBitişTarihi { get; set; }
+
 
     }
 }

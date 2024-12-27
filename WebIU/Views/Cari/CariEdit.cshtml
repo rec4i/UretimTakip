@@ -10,10 +10,17 @@
                         <input type="text" class="form-control" name="name" id="Ad" value="@Model.Cari.Ad" />
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col">
-                        <label>Müşteri Adı:</label>
+                        <label>Müşteri Kodu:</label>
                         <input type="text" class="form-control" name="name" id="Kod" value="@Model.Cari.CariKodu" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Vergi No :</label>
+                        <input type="text" class="form-control" name="name" id="VergiNo" value="@Model.Cari.VergiNo" />
                     </div>
                 </div>
                 <div class="row">
@@ -58,6 +65,7 @@
             data.append('Ad', $('#Ad').val())
             data.append('Kod', $('#Kod').val())
             data.append('Adres', $('#Adres').val())
+            data.append('VergiNo', $('#VergiNo').val())
 
 
             $.ajax({

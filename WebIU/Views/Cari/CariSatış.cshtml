@@ -1,0 +1,795 @@
+﻿@model WebIU.Models.CariViewModels.CariSatışViewModel
+
+@{
+
+    var cardRengi = "";
+    if (Model.FaturaTürü == 1)
+    {
+        cardRengi = "primary";
+    }
+    if (Model.FaturaTürü == 2)
+    {
+        cardRengi = "secondary";
+    }
+    if (Model.FaturaTürü == 3)
+    {
+        cardRengi = "danger";
+
+    }
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <label>Müşteri Adı</label>
+                                        <input disabled type="text" class="form-control" name="name" value="@Model.Cari.Ad" />
+                                    </div>
+                                    <div class="col-3">
+                                        <label>Vergi No</label>
+                                        <input disabled type="text" class="form-control" name="name" value="@Model.Cari.VergiNo" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label>Toplam Bakiye</label>
+                                        <input disabled type="text" class="form-control" name="name" value="" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Adres </label>
+                                        <textarea disabled class="form-control" rows="4">@Model.Cari.Adres</textarea>
+                                        @*<input disabled type="text" class="form-control" name="name" value="@Model.Cari.Adres" />*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card card-@cardRengi">
+            <div class="card-header">
+                @if (Model.FaturaTürü == 1)
+                {
+                    <label>Alış Faturası</label>
+                }
+                @if (Model.FaturaTürü == 2)
+                {
+                    <label>Satış Faturası</label>
+                }
+                @if (Model.FaturaTürü == 3)
+                {
+                    <label>İade Faturası</label>
+                }
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <label>Fatura No</label>
+                    </div>
+                    <div class="col-4">
+                        <label>Seri No</label>
+                    </div>
+                    <div class="col-2">
+                        <label>No</label>
+                    </div>
+                    <div class="col-2">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <input class="form-control" type="text" id="FaturaNo" value="" />
+                    </div>
+                    <div class="col-4">
+
+                        <select class="form-control" id="SeriNoSelect">
+                            @foreach (var item in Model.FaturaSeris)
+                            {
+                                <option value="@item.Id">@item.SeriNo</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <input class="form-control" type="text" id="FaturaSeriNo" value="" />
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" id="YeniFaturaNoGetir"><i class="fa fa-circle-arrow-left"></i> Yeni No Oluştur</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <label>Depo Adı:</label>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <input class="form-control" disabled type="text" id="DepoAdı" name="name" value="" />
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" id="DepoSeçBtn"><i class="fa fa-search"></i> Depo Seç</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <div class="d-flex flex-row-reverse">
+                                    <div class="p-2">
+                                        <button id="SatırEkleBtn" class="btn btn-primary"><i class="fa fa-plus"></i> Satır Ekle</button>
+                                    </div>
+                                    <div class="p-2">
+                                        <button class="btn btn-warning" id="faturaKaydet"><i class="fa fa-save"></i> Fatura Kaydet</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <table id="OrderList"
+                                                               data-toolbar="#OrderListToolBar"
+                                                               data-pagination="true"
+                                                               data-side-pagination="server"
+                                                               data-id-field="id"
+                                                               data-page-list="[10, 25, 50, 100, all]"
+                                                               data-locale="Tr-tr"
+                                                               data-search="true"
+                                                               data-show-refresh="true"
+                                                               data-show-export="true">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th data-field="StokId" data-title="StokId" hidden data-sortable="false"></th>
+                                                                    <th data-field="StokAdı" data-title="Stok Adı" data-sortable="false"></th>
+                                                                    <th data-field="StokKodu" data-title="Stok Kodu" data-sortable="false"></th>
+                                                                    <th data-field="Birim" data-title="Birim" data-sortable="false"></th>
+                                                                    <th data-field="Miktar" data-title="Miktar" data-sortable="false"></th>
+                                                                    <th data-field="Fiyat" data-title="Fiyat" data-sortable="false"></th>
+                                                                    <th data-field="Kdv" data-title="Kdv" data-sortable="false"></th>
+                                                                    <th data-field="ToplamTutar" data-title="Toplam Tutar" data-sortable="false"></th>
+                                                                    <th data-title="Actions" data-sortable="false"></th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-9 text-right">
+                                <label>Toplam Kdv'siz Tutar :</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" disabled class="form-control" id="ToplamKdvsizTutar" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9 text-right">
+                                <label>Toplam Kdv :</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" disabled id="ToplamKdv" name="name" value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9 text-right">
+                                <label>Toplam  Tutar :</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" disabled id="ToplamTutar" name="name" value="" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="DepoAraModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">Depo Ara</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="DepoAraModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>Depo Adı:</label>
+                        <input type="text" id="DepoAdı" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Depo Kodu:</label>
+                        <input type="text" id="DepoKodu" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Depo Adı</th>
+                                        <th>Depo Kodu</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="DepoAraTbody">
+                                    <tr>
+                                        <td colspan="4">Hiç Veri Bulunamadı</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="SatışSatırEkleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">Stok Ara</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="SatışSatırEkleModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>Stok Adı:</label>
+                        <input type="text" id="StokAdı" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Stok Kodu:</label>
+                        <input type="text" id="StokKodu" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Stok Adı</th>
+                                        <th>Stok Kodu</th>
+                                        <th>Birim</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="StokAraTbody">
+                                    <tr>
+                                        <td colspan="4">Hiç Veri Bulunamadı</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="BirimFiyatGirModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">Birim Fiyat Gir</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="BirimFiyatGirModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>Birim Fiyat:</label>
+                        <input type="text" id="birimFiyat" data-Mask="decimal" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Kdv:</label>
+                        <input type="text" id="KdvOranı" data-Mask="decimal" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Miktar :</label>
+                        <input type="text" id="Miktar" data-Mask="decimal" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="SatırEkleKaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function debounce(func, delay) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+    $(document).ready(function () {
+        $('#DepoSeçBtn').click(function () {
+
+            $('#DepoAraModal').modal('show')
+
+        })
+
+
+        $('#SeriNoSelect').change(function () {
+            $('#FaturaSeriNo').val("")
+        })
+
+        $('#YeniFaturaNoGetir').click(function () {
+            var seriNo = $('#FaturaSeriNo').val()
+            if (seriNo == "") {
+                var Id = $("#SeriNoSelect").find(':selected').val();
+                var data = new FormData();
+                data.append('Id', Id)
+                $.ajax({
+                    url: "/Cari/YeniSeriNoGetir",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            $('#FaturaSeriNo').val(data.data)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                    },
+                });
+            }
+            else {
+                console.log("else");
+                seriNo = parseInt(seriNo) +1
+                $('#FaturaSeriNo').val(seriNo)
+            }
+        })
+
+        $('#faturaKaydet').click(function () {
+            var tabloİçeriği = $('#OrderList').bootstrapTable('getData')
+            console.log(tabloİçeriği);
+            var data = new FormData();
+            for (var i = 0; i < tabloİçeriği.length; i++) {
+                data.append("StokIds[]", tabloİçeriği[i].StokId)
+                data.append("Fiyats[]", tabloİçeriği[i].Fiyat)
+                data.append("Kdv[]", tabloİçeriği[i].Kdv)
+                data.append("Miktars[]", tabloİçeriği[i].Miktar)
+            }
+            data.append("CariId", @Model.Cari.Id)
+            data.append("FaturaTuru", @Model.FaturaTürü)
+            data.append("FaturaNo", $('#FaturaNo').val())
+            data.append("SeriNoId", $('#SeriNoSelect').find(":selected").val())
+            data.append("SeriNo", $('#FaturaSeriNo').val())
+            data.append("DepoId", $(this).attr('depoid'))
+            $.ajax({
+                url: "/Cari/FaturaOlustur",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+
+                        setTimeout(() => { window.location.href = "/Cari/CariDetay?Id=@Model.Cari.Id" }, 1000)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+        })
+
+          $('#DepoKodu').inputmask('@Model.DepoKoduTanım',
+          {
+              'definitions': {
+                  'H': { validator: "[A-Z-0-9]", cardinality: 1 }
+              }
+          }
+      );
+
+  $('#DepoAdı').on('input', debounce(function () {
+      var kod = $(this).val();
+      var data = new FormData();
+      data.append('StokAdı', kod)
+      data.append('StokKodu', "")
+
+      $.ajax({
+          url: "/Cari/DepoAra",
+          type: "POST",
+          processData: false,
+          contentType: false,
+          async: false,
+          data: data,
+          success: function (data) {
+              if (data.status == 1) {
+                  fillDepoTablo(data.data)
+              }
+              else {
+                  errorAlert(data.message)
+              }
+          },
+      });
+
+  }, 500));
+
+  $('#DepoKodu').on('input', debounce(function () {
+      var kod = $(this).val();
+      var data = new FormData();
+      data.append('StokAdı', "")
+      data.append('StokKodu', kod)
+
+      $.ajax({
+          url: "/Cari/DepoAra",
+          type: "POST",
+          processData: false,
+          contentType: false,
+          async: false,
+          data: data,
+          success: function (data) {
+              if (data.status == 1) {
+                  console.log(data.data);
+                  fillDepoTablo(data.data)
+              }
+              else {
+                  errorAlert(data.message)
+              }
+          },
+      });
+
+  }, 500));
+
+        $('#StokKodu').inputmask('@Model.StokKoduTanım',
+            {
+                'definitions': {
+                    'H': { validator: "[A-Z-0-9]", cardinality: 1 }
+                }
+            }
+        );
+
+        $('#StokAdı').on('input', debounce(function () {
+            var kod = $(this).val();
+            var data = new FormData();
+            data.append('StokAdı', kod)
+            data.append('StokKodu', "")
+
+            $.ajax({
+                url: "/Cari/StokAra",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        fillCariTablo(data.data)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+
+        }, 500));
+
+        $('#StokKodu').on('input', debounce(function () {
+            var kod = $(this).val();
+            var data = new FormData();
+            data.append('StokAdı', "")
+            data.append('StokKodu', kod)
+
+            $.ajax({
+                url: "/Cari/StokAra",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        console.log(data.data);
+                        fillCariTablo(data.data)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+
+        }, 500));
+
+
+        $('#SatırEkleBtn').click(function () {
+            $('#SatışSatırEkleModal').modal('show')
+        })
+        $('#SatırEkleKaydetBtn').click(function () {
+
+            var stokId = $(this).attr('stokId')
+            var tabloİçeriği = $('#OrderList').bootstrapTable('getData')
+            for (var i = 0; i < tabloİçeriği.length; i++) {
+                if (tabloİçeriği[i].StokId == stokId) {
+                    errorAlert("Ekleme Çalıştığınız Ürün Listesinde Bulunmakta !")
+                    return;
+                }
+            }
+            var data = new FormData();
+            data.append('Id', stokId)
+
+            $.ajax({
+                url: "/Cari/StokGetir",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        $('#OrderList').bootstrapTable('insertRow', {
+                            index: 0,
+                            row: {
+                                StokId: data.data.id,
+                                StokKodu: data.data.stokKodu,
+                                StokAdı: data.data.stokAdı,
+                                Birim: data.data.birim.birimKodu,
+                                Miktar: $('#Miktar').val(),
+                                Fiyat: $('#birimFiyat').val(),
+                                Kdv: $('#KdvOranı').val(),
+                                ToplamTutar: new Intl.NumberFormat('tr-TR', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }).format(((parseFloat($('#birimFiyat').val().replaceAll(".", "")) + (parseFloat($('#birimFiyat').val().replaceAll(".", "")) / parseFloat(100) * parseFloat($('#KdvOranı').val().replaceAll(".", "")))) * parseFloat($('#Miktar').val().replaceAll(".", ""))))
+                            }
+                        })
+                        successAlert("İşlem Başarılı")
+                        $('#BirimFiyatGirModal').modal('hide')
+
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+            tabloİçeriği = $('#OrderList').bootstrapTable('getData')
+            var ToplamTutar = 0;
+            var ToplamKdvSizTutar = 0;
+            var toplamKdv = 0;
+            for (var i = 0; i < tabloİçeriği.length; i++) {
+                var fiyat = parseFloat(tabloİçeriği[i].Fiyat.replaceAll(".", ""))
+                var kdv = parseFloat(tabloİçeriği[i].Kdv.replaceAll(".", ""));
+                var miktar = parseFloat(tabloİçeriği[i].Miktar.replaceAll(".", ""));
+
+                ToplamTutar += ((fiyat + (fiyat / 100 * kdv)) * miktar)
+                ToplamKdvSizTutar += fiyat * miktar
+                toplamKdv += (fiyat / 100 * kdv) * miktar
+            }
+            $('#ToplamKdvsizTutar').val(new Intl.NumberFormat('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(ToplamKdvSizTutar))
+
+
+
+            $('#ToplamKdv').val(new Intl.NumberFormat('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(toplamKdv))
+            $('#ToplamTutar').val(new Intl.NumberFormat('tr-TR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(ToplamTutar))
+        })
+
+        OrderTablosuDoldur()
+    })
+    function fillDepoTablo(data) {
+        console.log(data);
+        $('#DepoAraTbody').empty();
+        for (var i = 0; i < data.length; i++) {
+            var variable = '' +
+                '<tr>' +
+                '   <td>' + data[i].depoAdı + '</td>' +
+                '   <td>' + data[i].depoKodu + '</td>' +
+                '   <td>' +
+                '       <button depoKodu="' + data[i].depoKodu + '" depoAdı="' + data[i].depoAdı + '" depoId="' + data[i].id + '" id="depoSeçBtn" class="btn btn-primary">Seç</button>' +
+                '   </td>' +
+                '</tr>' +
+                '';
+
+
+            $('#DepoAraTbody').append(variable)
+        }
+        if (data.length <= 0) {
+            var boş = '' +
+                '<tr>' +
+                '   <td colspan="3">Hiç Veri Bulunamadı</td>' +
+                '</tr>' +
+                '';
+            $('#DepoAraTbody').append(boş)
+
+        }
+        $('*#depoSeçBtn').click(function () {
+            var depoKodu = $(this).attr('depoKodu')
+            var depoAdı = $(this).attr('depoAdı')
+            var depoId = $(this).attr('depoId')
+
+            $('#DepoAdı').val(depoAdı)
+            $('#faturaKaydet').attr('depoId', depoId)
+
+            $('#SatırEkleKaydetBtn').attr('StokId', depoId)
+            $('#SatırEkleKaydetBtn').attr('StokAdı', depoAdı)
+            $('#DepoAraModal').modal('hide')
+
+        })
+
+    }
+        function fillCariTablo(data) {
+            console.log(data);
+            $('#StokAraTbody').empty();
+            for (var i = 0; i < data.length; i++) {
+                var variable = '' +
+                    '<tr>' +
+                    '   <td>' + data[i].stokAdı + '</td>' +
+                    '   <td>' + data[i].stokKodu + '</td>' +
+                    '   <td>' + (data[i].birim == null ? "" : data[i].birim.birimKodu)  + '</td>' +
+                    '   <td>' +
+                    '       <button stokKodu="' + data[i].stokKodu + '" StokAdı="' + data[i].stokAdı + '" StokId="' + data[i].id + '" id="stokSeçBtn" class="btn btn-primary">Seç</button>' +
+                    '   </td>' +
+                    '</tr>' +
+                    '';
+
+
+                $('#StokAraTbody').append(variable)
+            }
+            if (data.length <= 0) {
+                var boş = '' +
+                    '<tr>' +
+                    '   <td colspan="4">Hiç Veri Bulunamadı</td>' +
+                    '</tr>' +
+                    '';
+                $('#StokAraTbody').append(boş)
+
+            }
+            $('*#stokSeçBtn').click(function () {
+                var stokKodu = $(this).attr('stokKodu')
+                var StokAdı = $(this).attr('StokAdı')
+                var StokId = $(this).attr('StokId')
+
+
+                var kod = $(this).val();
+                var data = new FormData();
+                data.append('StokId', StokId)
+
+                $.ajax({
+                    url: "/Cari/SonFiyatGetir",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            console.log(data.data);
+                            $('#birimFiyat').val(data.data.geçerliFiyat)
+                            $('#KdvOranı').val(data.data.geçerliKdvOranı)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                    },
+                });
+
+                $('#SatırEkleKaydetBtn').attr('StokId', StokId)
+                $('#SatırEkleKaydetBtn').attr('StokAdı', StokAdı)
+                $('#SatırEkleKaydetBtn').attr('StokId', StokId)
+
+                $('#SatışSatırEkleModal').modal('hide')
+                $('#BirimFiyatGirModal').modal('show')
+
+            })
+
+        }
+          function OrderTablosuDoldur() {
+          $('#OrderList').bootstrapTable({
+              columns: [
+                  [
+                      {},
+                      {},
+                      {},
+                      {},
+                      {},
+                      {},
+                      {},
+                      {},
+                      {
+                         formatter: ActionFormatter,
+                      },
+                  ]
+              ],
+              onAll: afterLoad
+          })
+          function ActionFormatter(value, row) {
+              var value = "";
+              value += "<button id='StokSil' stokId='" + row['StokId'] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+              return value;
+          }
+           function afterLoad() {
+
+              $('#StokSil').click(function () {
+                  var StokId = $(this).attr('stokId')
+                  $('#OrderList').bootstrapTable('remove', {
+                      field: 'StokId',
+                      values: StokId
+                  })
+              })
+
+
+
+
+          }
+      }
+
+</script>

@@ -56,12 +56,12 @@ namespace WebIU.Controllers
             return Json(res);
         }
 
-        public IActionResult ProgramKullanıcıPaginaiton(int offset, int limit, List<int> orderStatusId, string search)
+        public IActionResult ProgramKullanıcıPaginaiton(int offset, int limit, List<int> orderStatusId, string search, int GrupId)
         {
             ProgramKullanıcıPaginationModel model = new ProgramKullanıcıPaginationModel();
-            model.rows = _programŞirketKullanıcıRepository.GetAllIncludedPagination(null, offset.ToString(), limit.ToString(), search);
-            model.total = _programŞirketKullanıcıRepository.GetAllIncludedPaginationCount();
-            model.totalNotFiltered = _programŞirketKullanıcıRepository.GetAllIncludedPaginationCount();
+            model.rows = _programŞirketKullanıcıRepository.GetAllIncludedPagination(o=> o.ProgramŞirketGrupId == GrupId, offset.ToString(), limit.ToString(), search);
+            model.total = _programŞirketKullanıcıRepository.GetAllIncludedPaginationCount(o => o.ProgramŞirketGrupId == GrupId);
+            model.totalNotFiltered = _programŞirketKullanıcıRepository.GetAllIncludedPaginationCount(o => o.ProgramŞirketGrupId == GrupId);
             return Json(model);
         }
 

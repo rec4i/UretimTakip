@@ -5,10 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Models\NewFolder\**" />
-    <Content Remove="Models\NewFolder\**" />
-    <EmbeddedResource Remove="Models\NewFolder\**" />
-    <None Remove="Models\NewFolder\**" />
+    <Compile Remove="Views\NewFolder\**" />
+    <Content Remove="Views\NewFolder\**" />
+    <EmbeddedResource Remove="Views\NewFolder\**" />
+    <None Remove="Views\NewFolder\**" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Views\KareKod\EmirEkle.cshtml" />
@@ -46,7 +46,6 @@
 
   <ItemGroup>
     <Folder Include="Models\ExportedFile\" />
-    <Folder Include="Views\NewFolder\" />
     <Folder Include="wwwroot\images\DeviceImages\" />
     <Folder Include="wwwroot\FileUploads\" />
     <Folder Include="wwwroot\DosyaYönetimi\" />

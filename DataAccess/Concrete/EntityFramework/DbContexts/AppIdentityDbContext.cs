@@ -59,7 +59,7 @@ namespace DataAccess.Concrete.EntityFramework.DbContexts
 
         public DbSet<Reçete> Reçetes { get; set; }
         public DbSet<Tezgah> Tezgah { get; set; }
-        public DbSet<Iş> Işs { get; set; }
+        public DbSet<İş> İşs { get; set; }
         public DbSet<İşEmri> İşEmris { get; set; }
         public DbSet<Reçete_Iş_MTM> Reçete_Iş_MTM { get; set; }
         public DbSet<Reçete_Tezgah_MTM> Reçete_Tezgah_MTM { get; set; }
@@ -125,6 +125,38 @@ namespace DataAccess.Concrete.EntityFramework.DbContexts
         public DbSet<KareKodBildirimStokMTM> KareKodBildirimStokMTMs { get; set; }
 
         public DbSet<CariHareket> CariHarekets { get; set; }
+        public DbSet<Fiyat> Fiyats { get; set; }
+        public DbSet<DepoKoduTanım> DepoKoduTanıms { get; set; }
+        public DbSet<Barkod> Barkods { get; set; }
+
+        public DbSet<FaturaBaslık> FaturaBaslıks { get; set; }
+        public DbSet<FaturaDetay> FaturaDetay { get; set; }
+        public DbSet<FaturaSeri> FaturaSeris { get; set; }
+        public DbSet<Ödeme> Ödemes { get; set; }
+        public DbSet<Kasa> Kasa { get; set; }
+        public DbSet<KasaKoduTanım> KasaKoduTanıms { get; set; }
+        public DbSet<ÖdemeSeri> ÖdemeSeris { get; set; }
+        public DbSet<İşEmriDurum> İşEmriDurums { get; set; }
+
+        public DbSet<Reçete_Iş_MTM_KullanılacakStok> Reçete_Iş_MTM_KullanılacakStoks { get; set; }
+        public DbSet<Reçete_Iş_MTM_ÜretilecekStok> Reçete_Iş_MTM_ÜretilecekStoks { get; set; }
+
+
+        public DbSet<SorumluKullanıcıGrup> SorumluKullanıcıGrups { get; set; }
+        public DbSet<SorumluKullanıcı> SorumluKullanıcıs { get; set; }
+
+
+
+        //SorumluKullanıcıGrup
+        //FaturaSeri
+        //ÖdemeSeri
+        //Ödeme
+        //Kasa
+        //KasaKoduTanım
+
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.MenuItemSeed();

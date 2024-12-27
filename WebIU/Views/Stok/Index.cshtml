@@ -78,6 +78,23 @@
                 </div>
                 <div class="row">
                     <div class="col">
+                        <label>Stok Birimi:</label>
+                        <select id="BirimId" class="form-control">
+                            @foreach (var item in Model.Birims)
+                            {
+                                <option value="@item.Id">@item.BirimKodu (@item.DönüşümAçıklama)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Barkod:</label>
+                        <input type="text" id="Barkod" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="DetayCheckBox">
                             <label class="form-check-label" for="DetayCheckBox">Detay Bilgi Girişi</label>
@@ -87,17 +104,6 @@
                 <div id="DetayDiv" hidden>
                     <div class="row">
                         <div class="col">
-                            <label>Stok Birimi:</label>
-                            <select id="BirimId" class="form-control">
-                                @foreach (var item in Model.Birims)
-                                {
-                                    <option value="@item.Id">@item.BirimKodu (@item.DönüşümAçıklama)</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
                             <label>Depo :</label>
                             <select id="DepoId" class="form-control" style="width:100%">
                                 @foreach (var item in Model.Depos)
@@ -105,6 +111,18 @@
                                     <option value="@item.Id">@item.DepoAdı </option>
                                 }
                             </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Geçerli Fiyat :</label>
+                            <input type="text" id="GeçerliFiyat" data-Mask="decimal" class="form-control" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Geçerli Kdv'oranı</label>
+                            <input type="text" id="GeçerliKdvOranı" data-Mask="decimal" class="form-control" value="" />
                         </div>
                     </div>
 
@@ -140,7 +158,7 @@
 </div>
 
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="StokDüzenleModal" aria-labelledby="GenericModal" aria-hidden="true">
+<!--<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="StokDüzenleModal" aria-labelledby="GenericModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="min-width:1500px">
         <div class="modal-content">
             <div class="modal-header">
@@ -161,29 +179,24 @@
                 <div class="row">
                     <div class="col">
                         <select id="BirimIdDüzenle" class="form-control">
-                            @foreach (var item in Model.Birims)
-                            {
-                                <option value="@item.Id">@item.BirimKodu (@item.DönüşümAçıklama)</option>
-                            }
                         </select>
                     </div>
-                </div>
-
-                @*<div class="row">
-                        <div class="col">
-                            <label>Depo :</label>
-                            <select id="DepoIdDüzenle" class="form-control" style="width:100%">
-                                @foreach (var item in Model.Depos)
-                                {
-                                    <option value="@item.Id">@item.DepoAdı </option>
-                                }
-                            </select>
-                        </div>
-                    </div>*@
-
+                </div>-->
+@*<div class="row">
+        <div class="col">
+            <label>Depo :</label>
+            <select id="DepoIdDüzenle" class="form-control" style="width:100%">
+                @foreach (var item in Model.Depos)
+                {
+                    <option value="@item.Id">@item.DepoAdı </option>
+                }
+            </select>
+        </div>
+    </div>*@
 
 
-                <div class="row">
+
+<!--<div class="row">
                     <div class="col">
                         <label>Açıklama:</label>
                         <textarea id="AçıklamaDüzenle" class="form-control" rows="3"></textarea>
@@ -202,7 +215,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 
 
@@ -221,8 +234,14 @@
                 $('#DetayDiv').attr('hidden','true')
             }
         })
+        $('#StokKodu').inputmask('@Model.StokKoduTanım',
+    {
+        'definitions': {
+            'H': { validator: "[A-Z-0-9]", cardinality: 1 }
+        }
+    }
+);
 
-        $("#StokKodu").inputmask("@Model.StokKoduTanım");
         $("#StokKodu").val("@Model.StokKoduHazır");
         $('#KullanılıcakStokSelect').select2({
             dropdownParent: $("#ReçeteOluşturModal")
@@ -254,9 +273,10 @@
             data.append('BirimId', $('#BirimId').find(':selected').val())
             data.append('DepoId', $('#DepoId').find(':selected').val())
             data.append('Açıklama', $('#Açıklama').val())
-            data.append('StokAdeti', $('#StokBaşlangıçAdeti').val())
-
-
+           // data.append('StokAdeti', $('#StokBaşlangıçAdeti').val())
+            data.append('GeçerliKdvOranı', $('#GeçerliKdvOranı').val())
+            data.append('GeçerliFiyat', $('#GeçerliFiyat').val())
+            data.append('Barkod', $('#Barkod').val())
             $.ajax({
                 url: "/Stok/StokKaydet",
                 type: "POST",
@@ -277,38 +297,38 @@
 
         })
 
-        $('#StokKaydetBtnDüzenle').click(function () {
-            var data = new FormData();
-            data.append('Id', $(this).attr('StokId'))
-            data.append('StokAdı', $('#StokAdıDüzenle').val())
-            data.append('BirimId', $('#BirimIdDüzenle').find(':selected').val())
-            data.append('DepoId', $('#DepoIdDüzenle').find(':selected').val())
+        //$('#StokKaydetBtnDüzenle').click(function () {
+        //    var data = new FormData();
+        //    data.append('Id', $(this).attr('StokId'))
+        //    data.append('StokAdı', $('#StokAdıDüzenle').val())
+        //    data.append('BirimId', $('#BirimIdDüzenle').find(':selected').val())
+        //    data.append('DepoId', $('#DepoIdDüzenle').find(':selected').val())
 
-            data.append('Açıklama', $('#AçıklamaDüzenle').val())
-            //data.append('StokAdeti', $('#StokBaşlangıçAdetiDüzenle').val())
+        //    data.append('Açıklama', $('#AçıklamaDüzenle').val())
+        //    //data.append('StokAdeti', $('#StokBaşlangıçAdetiDüzenle').val())
 
-            $.ajax({
-                url: "/Stok/StokDüzenle",
-                type: "POST",
-                processData: false,
-                contentType: false,
-                async: false,
-                data: data,
-                success: function (data) {
-                    if (data.status == 1) {
-                        successAlert(data.message)
-                    }
-                    else {
-                        errorAlert(data.message)
-                    }
-                    OrderTablosuDoldur()
-                    $('#StokDüzenleModal').modal('hide')
-                    OrderTablosuDoldur()
+        //    $.ajax({
+        //        url: "/Stok/StokDüzenle",
+        //        type: "POST",
+        //        processData: false,
+        //        contentType: false,
+        //        async: false,
+        //        data: data,
+        //        success: function (data) {
+        //            if (data.status == 1) {
+        //                successAlert(data.message)
+        //            }
+        //            else {
+        //                errorAlert(data.message)
+        //            }
+        //            OrderTablosuDoldur()
+        //            $('#StokDüzenleModal').modal('hide')
+        //            OrderTablosuDoldur()
 
-                },
-            });
+        //        },
+        //    });
 
-        })
+        //})
 
 
 
@@ -342,7 +362,7 @@
         })
         function ActionFormatter(value, row) {
             var value = "";
-            value += "<button id='StokDüzenleModalAçBtn' StokId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button>";
+            value += "<a href='/Stok/StokDüzenle?StokId=" + row["id"]+"' id='StokDüzenleModalAçBtn' StokId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</a>";
             value += "<button id='StokSil' StokId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
             value += "<a href='/Stok/Index?ÜstStokId=" + row["id"] + "&StokKoduHazır=" + row["stokKodu"] +"' StokId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-arrow-right'></i></a>";
 
@@ -350,13 +370,22 @@
         }
         function StokSay(value, row) {
             var ToplamStok = 0;
-            console.log(row["stokHarekets"])
             for (var i = 0; i < row["stokHarekets"].length; i++) {
-                //row["stokHarekets"][i].hareketTipi
-                if (row["stokHarekets"][i].hareketTipi == 1) {
+                console.log(row["stokHarekets"][i].faturaBaslık.id);
+                console.log(row["stokHarekets"][i].faturaBaslık.isDeleted);
+                if (row["stokHarekets"][i].faturaBaslık.isDeleted == null) {
+                    continue;
+                }
+                if (row["stokHarekets"][i].faturaBaslık.isDeleted == true) {
+                    continue;
+                }
+                if (row["stokHarekets"][i].hareketTipi == 3) {
                     ToplamStok = ToplamStok + row["stokHarekets"][i].adet
                 }
-                if (row["stokHarekets"][i].hareketTipi == 2) {
+                if (row["stokHarekets"][i].hareketTipi == 4) {
+                    ToplamStok = ToplamStok - row["stokHarekets"][i].adet
+                }
+                if (row["stokHarekets"][i].hareketTipi == 5) {
                     ToplamStok = ToplamStok - row["stokHarekets"][i].adet
                 }
             }

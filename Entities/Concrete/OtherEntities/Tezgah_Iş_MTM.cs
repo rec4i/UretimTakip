@@ -13,6 +13,6 @@ namespace Entities.Concrete.OtherEntities
         public Tezgah Tezgah { get; set; }
 
         public int IşId { get; set; }
-        public Iş Iş { get; set; }
+        public İş Iş { get; set; }
     }
 }

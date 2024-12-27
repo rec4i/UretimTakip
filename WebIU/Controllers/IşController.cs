@@ -48,11 +48,12 @@ namespace WebIU.Controllers
 
 
 
-        public IActionResult IşEkle(string IşAdı, string Açıklama)
+        public IActionResult IşEkle(string IşAdı, string Açıklama, int İşTamamlanmaSüresi)
         {
-            Iş entitiy = new Iş();
+            İş entitiy = new İş();
             entitiy.IşAdı = IşAdı;
             entitiy.Açıklama = Açıklama;
+            entitiy.İşTamamlanmaSüresi = İşTamamlanmaSüresi;
 
             _ışRepository.Add(entitiy);
 

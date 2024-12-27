@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete.OtherEntities
 {
-    public class Iş : BaseEntity
+    public class FaturaSeri : BaseEntity
     {
         public int? ProgramŞirketGrupId { get; set; }
         public ProgramŞirketGrup? ProgramŞirketGrup { get; set; }
-        public string IşAdı { get; set; }
-        public string Açıklama { get; set; }
 
-        public int? TezgahId { get; set; }
-        public Tezgah? Tezgah { get; set; }
+        public List<FaturaBaslık> FaturaBaslıks { get; set; }
+        public string SeriNo { get; set; }
 
-        public List<Reçete_Iş_MTM> Reçete_Iş_MTMs { get; set; }
+        //1 Alış Faturası
+        //2 Satış Faturası
+        //3 İade Faturası
+        public int SeriTürü { get; set; }
     }
-
 }

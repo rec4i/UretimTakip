@@ -1,0 +1,226 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button class="btn btn-primary" id="SeriNoOluşturBtn"><i class="fa fa-plus"></i>Yeni Seri No Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="OrderList"
+                               data-toolbar="#OrderListToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="seriNo" data-title="Seri No" data-sortable="false"></th>
+                                    <th data-field="seriTürü" data-title="Seri No Türü" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="SeriNoEkleMOdal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle"> Stok Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="StokDüzenleModalBody">
+
+                <div class="row">
+                    <div class="col">
+                        <label>Seri No</label>
+                        <input type="text" id="SeriNo" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Seri No türü</label>
+                        <select id="SeriNoTürü" class="form-control">
+                            <option value="1">Nakit Ödeme</option>
+                            <option value="2">Kart Ödeme</option>
+                            <option value="3">Çek Ödeme</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="SeriNoKaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#SeriNoKaydetBtn').click(function () {
+            var data = new FormData();
+
+            data.append('SeriNoTürü', $('#SeriNoTürü').find(':selected').val())
+            data.append('SeriNo', $('#SeriNo').val())
+            $.ajax({
+                url: "/SeriNo/ÖdemeSeniNoEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    OrderTablosuDoldur()
+                },
+            });
+        })
+
+
+        OrderTablosuDoldur()
+        $('#SeriNoOluşturBtn').click(function () {
+            $('#SeriNoEkleMOdal').modal('show')
+        })
+    })
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/SeriNo/ÖdemeSeriNoTanımPaginaiton",
+            columns: [
+                [
+                    {},
+                    {},
+                    {
+                        formatter: SeriNoTürüFormatter
+                    },
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function SeriNoTürüFormatter(value, row) {
+            if (value == 1) {
+                return "Nakit Ödeme"
+            }
+            if (value == 2) {
+                return "Kart Ödeme"
+            }
+            if (value == 3) {
+                return "Çek Ödeme"
+            }
+            return value
+        }
+        function ActionFormatter(value, row) {
+            console.log(row);
+            var value = "";
+            value += "<button id='IşSil' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+            return value
+        }
+        function afterLoad() {
+
+            $('#IşSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/SeriNo/ÖdemeSeriNoSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+
+
+            $('#IşDüzenleModalAçBtn').click(function () {
+                $('#IşDüzenleModal').modal('show')
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                $('#İşDüzenleBtn').attr('IşId', $(this).attr('IşId'))
+
+                $.ajax({
+                    url: "/Iş/GetIş",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        $('#IşAdıDüzenle').val(data[0].işAdı)
+                        $('#AçıklamaDüzenle').val(data[0].açıklama)
+                    },
+                });
+
+            })
+
+        }
+    }
+</script>

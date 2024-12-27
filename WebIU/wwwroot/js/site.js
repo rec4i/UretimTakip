@@ -87,8 +87,7 @@ $('#select-all').click(function (event) {
         });
     }
 });
-
-$(document).ready(function () {
+function DataMask() {
     $('[data-Mask="currency"]').inputmask({ 'alias': 'currency', radixPoint: ',', negative: false, rightAlign: true, 'removeMaskOnSubmit': true });
     $('[data-Mask="decimal"]').inputmask({ 'alias': 'currency', radixPoint: ',', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
     $('[data-Mask="numeric"]').inputmask({ 'alias': 'numeric', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
@@ -183,6 +182,107 @@ $(document).ready(function () {
             return value >= 0 && value <= 24;
         }
     });
+}
+$(document).ready(function () {
+    $('[data-Mask="currency"]').inputmask({ 'alias': 'currency', radixPoint: ',', negative: false, rightAlign: true, 'removeMaskOnSubmit': true });
+    $('[data-Mask="decimal"]').inputmask({ 'alias': 'currency', radixPoint: ',', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
+    $('[data-Mask="bigDecimal"]').inputmask({ 'alias': 'decimal', radixPoint: ',', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
+    $('[data-Mask="numeric"]').inputmask({ 'alias': 'numeric', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
+    $('[data-Mask="biggerThanZero"]').inputmask('numeric', { min: 1, rightAlign: false });
+    $('[data-Mask="biggerThanEqualZero"]').inputmask('numeric', { min: 0, rightAlign: false });
+    $('[data-Mask="TelefonNumarası"]').inputmask({ 'mask': '0 (999) 999 99 99', 'removeMaskOnSubmit': true });
+    $('[data-Mask="OneToTwelve"]').inputmask({ 'mask': '0 (999) 999 99 99', 'removeMaskOnSubmit': true });
+    $('[data-Mask="OneToTwelve"]').inputmask({
+        mask: '9[9]',
+        placeholder: '',
+        regex: "^(1[0-2]|[1-9])$",
+        onBeforePaste: function (pastedValue) {
+            var value = pastedValue.toString().replace(/[^0-9]/g, '');
+            return value;
+        }
+    });
+    $('[data-Mask="portNumber"]').inputmask({
+        mask: "99999",
+        greedy: false,
+        jitMasking: true,
+        placeholder: "",
+        oncomplete: function () {
+            var value = $(this).val();
+            if (parseInt(value) > 65535) {
+                alert("Port numarası 65535'ten büyük olamaz.");
+                $(this).val("");
+            }
+        }
+    });
+    $('[data-Mask="ipAdress"]').inputmask({
+        alias: "ip",
+        greedy: false,
+        jitMasking: true
+    });
+    $('[data-Mask="ZeroToTwelve"]').inputmask({
+        mask: "09",
+        placeholder: "0",
+        onBeforePaste: function (pastedValue) {
+            return pastedValue;
+        },
+        definitions: {
+            '0': {
+                validator: "[0-1]",
+                cardinality: 1,
+            },
+            '9': {
+                validator: "[0-9]",
+                cardinality: 1,
+            }
+        },
+        postValidation: function (buffer) {
+            var value = parseInt(buffer.join(''));
+            return value >= 0 && value <= 12;
+        }
+    });
+    $('[data-Mask="ZeroToFiftyNine"]').inputmask({
+        mask: "09",
+        placeholder: "0",
+        onBeforePaste: function (pastedValue) {
+            return pastedValue;
+        },
+        definitions: {
+            '0': {
+                validator: "[0-5]",
+                cardinality: 1,
+            },
+            '9': {
+                validator: "[0-9]",
+                cardinality: 1,
+            }
+        },
+        postValidation: function (buffer) {
+            var value = parseInt(buffer.join(''));
+            return value >= 0 && value <= 59;
+        }
+    });
+    $('[data-Mask="SıfırdanYirmiDörte"]').inputmask({
+        mask: "09",
+        placeholder: "0",
+        definitions: {
+            '0': {
+                validator: "[0-2]",
+                cardinality: 1,
+            },
+            '9': {
+                validator: "[0-9]",
+                cardinality: 1,
+            }
+        },
+        postValidation: function (buffer) {
+            var value = parseInt(buffer.join(''));
+            return value >= 0 && value <= 24;
+        }
+    });
+    //Modal Kapatma Butonu
+    $('button[data-dismiss="modal"]').click(function () {
+        $(this).parent().parent().parent().parent().modal('hide')
+    })
 })
 
 

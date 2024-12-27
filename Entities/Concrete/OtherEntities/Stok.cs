@@ -17,6 +17,11 @@ namespace Entities.Concrete.OtherEntities
         public int? BirimId { get; set; }
         public Birim? Birim { get; set; }
 
+        public int? DepoId { get; set; }
+        public Depo? Depo { get; set; }
+
+
+        public List<Fiyat> FiyatListesi { get; set; }
 
 
         public string StokKodu { get; set; }

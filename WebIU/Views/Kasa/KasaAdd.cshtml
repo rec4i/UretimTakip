@@ -1,0 +1,85 @@
+﻿@model WebIU.Models.KasaViewModels.KasaAddViewModel
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Kasa Kodu : </label>
+                        <input type="text" class="form-control" id="KasaKodu" value="@Model.ParentKod" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Kasa Adı :</label>
+                        <input type="text" class="form-control" id="KasaAdı" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Açıklama</label>
+                        <textarea class="form-control" id="Açıklama" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="Kaydet"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#KasaKodu').inputmask('@Model.Tanım',
+            {
+                'definitions': {
+                    'H': { validator: "[A-Z-0-9]", cardinality: 1 }
+                }
+            }
+        );
+            $('#Kaydet').click(function () {
+                var data = new FormData();
+                data.append('KasaAdı', $('#KasaAdı').val())
+                data.append('KasaKodu', $('#KasaKodu').val())
+                data.append('Açıklama', $('#Açıklama').val())
+                data.append('ParentId', @Model.ParentId)
+
+
+                $.ajax({
+                    url: "/Kasa/KasaAdd",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                            setTimeout(() => { window.location.href = "/Kasa/Index?ParentId=@Model.ParentId" }, 1000)
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                        OrderTablosuDoldur()
+                    },
+                });
+
+
+            })
+
+
+        })
+</script>

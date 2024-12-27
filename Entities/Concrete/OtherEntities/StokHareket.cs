@@ -19,13 +19,16 @@ namespace Entities.Concrete.OtherEntities
 
         //1 Depo Stok Girişi
         //2 Depo Stok Çıkışı
-        ////3 Cari Satış
-        ////4 Ürün Satın Alma 
+        //3 Fatura Alış
+        //4 Fatura Satış
+        //5 Fatura İade
         public int? HareketTipi { get; set; }
         public decimal? Adet { get; set; }
 
-        public int CariId { get; set; }
-        public Cari Cari { get; set; }
+        public int? FaturaBaslıkId { get; set; }
+        public FaturaBaslık? FaturaBaslık { get; set; }
+        public int? CariId { get; set; }
+        public Cari? Cari { get; set; }
 
     }
 }

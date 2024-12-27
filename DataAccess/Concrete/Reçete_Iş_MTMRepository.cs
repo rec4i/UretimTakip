@@ -25,10 +25,13 @@ namespace DataAccess.Concrete
                     ? context.Set<Reçete_Iş_MTM>().Where("IsDeleted == false")
                     .Include("Reçete")
                     .Include("Iş")
+                    .Include("SorumluKullanıcıGrup")
                     .ToList().ToList()
                     : context.Set<Reçete_Iş_MTM>().Where("IsDeleted == false").Where(filter)
                   .Include("Reçete")
                     .Include("Iş")
+                    .Include("SorumluKullanıcıGrup")
+
                     .ToList();
                 return entities;
             }
@@ -42,11 +45,13 @@ namespace DataAccess.Concrete
                     ? context.Set<Reçete_Iş_MTM>().Where("IsDeleted == false")
                  .Include("Reçete")
                     .Include("Iş")
+                    .Include("SorumluKullanıcıGrup")
 
                     .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList()
                     : context.Set<Reçete_Iş_MTM>().Where("IsDeleted == false").Where(filter)
                      .Include("Reçete")
                     .Include("Iş")
+                    .Include("SorumluKullanıcıGrup")
 
                   .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList();
                 return entities;

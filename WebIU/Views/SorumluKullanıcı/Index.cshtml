@@ -1,0 +1,426 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button class="btn btn-primary" id="YeniGrupEkleBtn"><i class="fa fa-plus"></i> Yeni Grup Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <label>Sorumlu Kullanıcı Grupları </label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="SorumluKullanıcıTablo"
+                               data-toolbar="#SorumluKullanıcıTabloToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="grupAdı" data-title="Grup Adı" data-sortable="false"></th>
+                                    <th data-field="" data-title="Kullanıcılar" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="SorumluKullanıcıGrupEkleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle"> Reçeteye Yeni İş Ekle </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="SorumluKullanıcıGrupEkleModalBody">
+
+                <div class="row">
+                    <div class="col">
+                        <label>Grup Adı</label>
+                        <input class="form-control" type="text" id="GrupAdı" name="name" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="YeniGrupKaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="SorumluKullanıcıEkleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1500px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle"> Reçeteye Yeni İş Ekle </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="SorumluKullanıcıEkleModalBody">
+                <div class="row">
+                    <div class="col-10">
+                        <label>Kullanıcı Adı</label>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <select style="width:100%" class="form-control" id="KullanıcıAdıSelect">
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary btn-block" id="SorumluKullanıcıEkleModalKaydetBtn"><i class="fa fa-plus"></i> Ekle</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <label>Sorumlu Kullanıcılar </label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="SorumluKullanıcılarTablo"
+                                               data-toolbar="#SorumluKullanıcılarTabloToolBar"
+                                               data-pagination="true"
+                                               data-side-pagination="server"
+                                               data-id-field="id"
+                                               data-page-list="[10, 25, 50, 100, all]"
+                                               data-locale="Tr-tr"
+                                               data-search="true"
+                                               data-show-refresh="true"
+                                               data-show-export="true">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                                    <th data-field="user.userName" data-title="Kullanıcı Adı" data-sortable="false"></th>
+                                                    <th data-title="Actions" data-sortable="false"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#SorumluKullanıcıEkleModalKaydetBtn').click(function () {
+            var userSelect = $('#KullanıcıAdıSelect').select2('data');
+            var grupId = $(this).attr('GrupId');
+            var data = new FormData();
+
+            data.append('GrupId', grupId)
+            data.append('UserId', userSelect[0].id)
+
+            $.ajax({
+                url: "/SorumluKullanıcı/KullanıcıEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    SorumluKullanıcıTabloDoldur(grupId)
+                },
+            });
+
+        })
+
+        $('#KullanıcıAdıSelect').select2({
+            dropdownParent: $('#SorumluKullanıcıEkleModal'),
+            ajax: {
+                url: '/SorumluKullanıcı/KullanıcıAra', // AJAX isteği yapılacak URL
+                dataType: 'json',
+                delay: 250, // AJAX isteği arasındaki gecikme
+                data: function (params) {
+                    return {
+                        UserName: params.term // Arama parametresi
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id, // Her öğenin benzersiz kimliği
+                                text: item.userName, // Select2'de görüntülenecek metin
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1, // Minimum karakter sayısı
+            placeholder: 'Bir seçenek arayın', // Placeholder metni
+            allowClear: true // Temizleme butonunu etkinleştir
+        });
+
+
+
+
+        $('#YeniGrupKaydetBtn').click(function () {
+            var data = new FormData();
+            data.append('GrupAdı', $('#GrupAdı').val())
+
+            $.ajax({
+                url: "/SorumluKullanıcı/GrupEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                    SorumluKullanıcıGrupTabloDoldur()
+
+                },
+            });
+        })
+
+        $('#YeniGrupEkleBtn').click(function () {
+            $('#SorumluKullanıcıGrupEkleModal').modal('show')
+        })
+
+        SorumluKullanıcıGrupTabloDoldur();
+
+    })
+    function SorumluKullanıcıTabloDoldur(grupId) {
+        $('#SorumluKullanıcılarTablo').bootstrapTable("destroy")
+        $('#SorumluKullanıcılarTablo').bootstrapTable({
+            url: "/SorumluKullanıcı/SorumluKullanıcıPaginaiton?GrupId=" + grupId,
+            columns: [
+                [
+                    {},
+                    {},
+
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+
+
+        function ActionFormatter(value, row) {
+            var value = "";
+            value += "<button id='SorumluKullanıcıSil' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+
+
+            $('*#SorumluKullanıcıSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/SorumluKullanıcı/KullanıcıSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                SorumluKullanıcıGrupTabloDoldur()
+                                SorumluKullanıcıTabloDoldur(grupId)
+                            },
+                        });
+                    }
+                })
+
+            })
+
+        }
+
+    }
+    function SorumluKullanıcıGrupTabloDoldur() {
+        $('#SorumluKullanıcıTablo').bootstrapTable("destroy")
+        $('#SorumluKullanıcıTablo').bootstrapTable({
+            url: "/SorumluKullanıcı/SorumluKullanıcıGrupPaginaiton?Id=",
+            columns: [
+                [
+                    {},
+                    {},
+                    {
+                        formatter: KullanıcıFormatter
+                    },
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function KullanıcıFormatter(value, row) {
+
+            var kullanıcılar = "";
+            var data = new FormData();
+            data.append('Id', row["id"])
+
+            $.ajax({
+                url: "/SorumluKullanıcı/GrupKullanıcıları",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        console.log(data.data);
+                        for (var i = 0; i < data.data.length; i++) {
+                            kullanıcılar += "-" + data.data[i].user.userName + "</br>"
+                        }
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+
+            return kullanıcılar;
+        }
+
+        function ActionFormatter(value, row) {
+            var value = "";
+            value += "<button id='SorumluKullanıcıEkleModalAçBtn' rowId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button>";
+            value += "<button id='SorumluKullanıcıGrupSil' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+
+            return value
+        }
+        function afterLoad() {
+            $('*#SorumluKullanıcıEkleModalAçBtn').click(function () {
+                $('#SorumluKullanıcıEkleModal').modal('show')
+                $('#SorumluKullanıcıEkleModalKaydetBtn').attr('GrupId', $(this).attr("rowId"))
+                SorumluKullanıcıTabloDoldur($(this).attr("rowId"))
+            })
+
+            $('#SorumluKullanıcıGrupSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/SorumluKullanıcı/GrupSil",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                SorumluKullanıcıGrupTabloDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+        }
+
+    }
+
+</script>
+
+
+
+
+

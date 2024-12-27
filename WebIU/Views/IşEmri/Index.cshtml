@@ -84,6 +84,22 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-6">
+                        <label>Hedef Başlama Tarihi:</label>
+                    </div>
+                    <div class="col-6">
+                        <label>Hedef Bitiş Tarihi:</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <input type="datetime-local" id="HedefBaşlamaTarihi" class="form-control" value="@(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))" />
+                    </div>
+                    <div class="col-6">
+                        <input type="datetime-local" id="HedefBitişTarihi" class="form-control" value="@(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))" />
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-12">
                         <label>Reçete :</label>
                         <select style="width:100%" id="ReçeteSelect" class="form-control">
@@ -110,7 +126,7 @@
 
 
 
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="QrKodBastırModal" aria-labelledby="GenericModal" aria-hidden="true">
+@*<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="QrKodBastırModal" aria-labelledby="GenericModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="min-width:1500px">
         <div class="modal-content">
             <div class="modal-header">
@@ -129,7 +145,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col">
                         <div class="card">
@@ -151,8 +166,6 @@
                                                 <tr>
                                                     <th data-field="id" data-title="id" hidden data-sortable="false"></th>
                                                     <th data-field="guid" data-title="Guid" data-sortable="false"></th>
-                                                    @*<th data-field="hedefÜretim" data-title="Hedeflenen Adet" data-sortable="false"></th>
-                                                        <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>*@
                                                     <th data-title="Actions" data-sortable="false"></th>
                                                 </tr>
                                             </thead>
@@ -169,7 +182,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -261,6 +274,8 @@
             data.append('İşEmriAdı', $('#İşEmriAdı').val())
             data.append('Açıklama', $('#Açıklama').val())
             data.append('HedefAdet', $('#HedeflenenAdet').val())
+            data.append('HedefBaşlamaTarihi', $('#HedefBaşlamaTarihi').val())
+            data.append('HedefBitişTarihi', $('#HedefBitişTarihi').val())
             data.append('ReçeteId', $('#ReçeteSelect').find(':selected').val())
 
 
@@ -410,11 +425,19 @@
         })
         function ActionFormatter(value, row) {
             var value = "";
-            value += "<button id='TezgahDüzenleModalAçBtn' TezgahId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-qrcode'></i> Qr Kodu Bastır</button> ";
+            value += "<button id='İşEmriDüzenle' TezgahId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-qrcode'></i> İş Emri Düzenle</button> ";
+            //value += "<button id='TezgahDüzenleModalAçBtn' TezgahId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-qrcode'></i> Qr Kodu Bastır</button> ";
             value += "<button id='TezgahSil' TezgahId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
             return value
         }
         function afterLoad() {
+            $('*#İşEmriDüzenle').click(function () {
+                var işEmriId = $(this).attr('TezgahId')
+
+                window.location.href = "/IşEmri/İşEmriDüzenle?Id=" + işEmriId
+
+
+            })
             $('*#TezgahSil').click(function () {
                 var data = new FormData();
                 data.append('Id', $(this).attr('TezgahId'))
@@ -460,7 +483,6 @@
                 var data = new FormData();
                 data.append('Id', $(this).attr('TezgahId'))
                 $('#YeniTezgahDüzenleBtn').attr('TezgahId', $(this).attr('TezgahId'))
-
 
                 QrTablosuDoldur($(this).attr('TezgahId'))
                 //$.ajax({

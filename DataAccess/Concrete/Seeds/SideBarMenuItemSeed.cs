@@ -48,6 +48,7 @@ namespace DataAccess.Concrete.Seeds
                 new SideBarMenuItem{Id=61,Name="Üretim",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
                 new SideBarMenuItem{Id=62,Name="Reçete",IsParent=false,ParentId=61,IconCss = "nav-icon far fa-circle text-info",Url = "/Reçete/Index",Row=2},
                 new SideBarMenuItem{Id=63,Name="Tezgah",IsParent=false,ParentId=61,IconCss = "nav-icon far fa-circle text-info",Url = "/Tezgah/Index",Row=3},
+                new SideBarMenuItem{Id=88,Name="Sorumlu Kullanıcılar",IsParent=false,ParentId=61,IconCss = "nav-icon far fa-circle text-info",Url = "/SorumluKullanıcı/Index",Row=3},
                 new SideBarMenuItem{Id=64,Name="Iş",IsParent=false,ParentId=61,IconCss = "nav-icon far fa-circle text-info",Url = "/Iş/Index",Row=4},
                 new SideBarMenuItem{Id=65,Name="Iş Emri",IsParent=false,ParentId=61,IconCss = "nav-icon fa-solid fa-receipt",Url = "/IşEmri/Index",Row=1},
 
@@ -109,6 +110,8 @@ namespace DataAccess.Concrete.Seeds
                 new SideBarMenuItem{Id=55,Name="Tanımlar",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
                 new SideBarMenuItem{Id=56,Name="Stok Kodu Tanımı",IsParent=false,ParentId=55,IconCss = "nav-icon far fa-circle text-info",Url = "/Tanımlar/StokKoduTanım",Row=1},
                 new SideBarMenuItem{Id=57,Name="Cari Kodu Tanımı",IsParent=false,ParentId=55,IconCss = "nav-icon far fa-circle text-info",Url = "/Tanımlar/CariKoduTanım",Row=1},
+                new SideBarMenuItem{Id=78,Name="Depo Kodu Tanımı",IsParent=false,ParentId=55,IconCss = "nav-icon far fa-circle text-info",Url = "/Tanımlar/DepoKoduTanım",Row=1},
+                new SideBarMenuItem{Id=79,Name="Kasa Kodu Tanımı",IsParent=false,ParentId=55,IconCss = "nav-icon far fa-circle text-info",Url = "/Tanımlar/KasaKoduTanım",Row=1},
 
 
 
@@ -121,7 +124,14 @@ namespace DataAccess.Concrete.Seeds
                 new SideBarMenuItem{Id=74,Name="Dökümanlar",IsParent=false,ParentId=73,IconCss = "nav-icon far fa-circle text-info",Url = "/Döküman/Index",Row=1},
 
 
-                //77
+                 new SideBarMenuItem{Id=82,Name="Seri No Tanımları",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
+                new SideBarMenuItem{Id=83,Name="Fatura Seri No Tanımı",IsParent=false,ParentId=82,IconCss = "nav-icon far fa-circle text-info",Url = "/SeriNo/FaturaSeriNoTanım",Row=1},
+                new SideBarMenuItem{Id=84,Name="Ödeme Seri No Tanımı",IsParent=false,ParentId=82,IconCss = "nav-icon far fa-circle text-info",Url = "/SeriNo/ÖdemeSeriNoTanım",Row=1},
+
+
+                new SideBarMenuItem{Id=85,Name="Kasa",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
+                new SideBarMenuItem{Id=86,Name="Kasa",IsParent=false,ParentId=85,IconCss = "nav-icon far fa-circle text-info",Url = "/Kasa/Index",Row=1},
+                //88
 
             };
 

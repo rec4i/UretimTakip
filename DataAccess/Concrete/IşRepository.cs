@@ -13,27 +13,27 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
-    public class IşRepository : EntityReposiyoryBase<Iş, AppIdentityDbContext>, IIşRepository
+    public class IşRepository : EntityReposiyoryBase<İş, AppIdentityDbContext>, IIşRepository
     {
-        public List<Iş> GetAllIncluded(Expression<Func<Iş, bool>> filter = null)
+        public List<İş> GetAllIncluded(Expression<Func<İş, bool>> filter = null)
         {
             using (var context = new AppIdentityDbContext())
             {
                 var entities = filter == null
-                    ? context.Set<Iş>().Where("IsDeleted == false")
+                    ? context.Set<İş>().Where("IsDeleted == false")
                 .ToList().ToList()
-                    : context.Set<Iş>().Where("IsDeleted == false").Where(filter)
+                    : context.Set<İş>().Where("IsDeleted == false").Where(filter)
                 .ToList();
                 return entities;
             }
         }
 
-        public List<Iş> GetAllIncludedPagination(Expression<Func<Iş, bool>> filter = null, string offset = null, string limit = null, string search = null)
+        public List<İş> GetAllIncludedPagination(Expression<Func<İş, bool>> filter = null, string offset = null, string limit = null, string search = null)
         {
             using (var context = new AppIdentityDbContext())
             {
                 var entities = filter == null
-                    ? context.Set<Iş>().Where("IsDeleted == false")
+                    ? context.Set<İş>().Where("IsDeleted == false")
                       .Where(o =>
                     search == null ? o.IşAdı == o.IşAdı :
                     o.IşAdı.ToLower().Contains(search.ToLower())
@@ -41,7 +41,7 @@ namespace DataAccess.Concrete
 
 
                .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList()
-                    : context.Set<Iş>().Where("IsDeleted == false").Where(filter)
+                    : context.Set<İş>().Where("IsDeleted == false").Where(filter)
                    .Where(o =>
                     search == null ? o.IşAdı == o.IşAdı :
                     o.IşAdı.ToLower().Contains(search.ToLower())
@@ -53,13 +53,13 @@ namespace DataAccess.Concrete
         }
 
 
-        public int GetAllIncludedPaginationCount(Expression<Func<Iş, bool>> filter = null, string offset = null, string limit = null, string search = null)
+        public int GetAllIncludedPaginationCount(Expression<Func<İş, bool>> filter = null, string offset = null, string limit = null, string search = null)
         {
             using (var context = new AppIdentityDbContext())
             {
                 var entities = filter == null
-                    ? context.Set<Iş>().Where("IsDeleted == false").ToList().Count()
-                    : context.Set<Iş>().Where("IsDeleted == false").Where(filter).ToList().Count();
+                    ? context.Set<İş>().Where("IsDeleted == false").ToList().Count()
+                    : context.Set<İş>().Where("IsDeleted == false").Where(filter).ToList().Count();
                 return entities;
             }
         }
