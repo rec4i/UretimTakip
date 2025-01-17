@@ -1,0 +1,127 @@
+﻿@model WebIU.Controllers.RivaController.CariHareketlerViewModel
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Cari Kodu :</label>
+                        <input disabled type="text" class="form-control" name="CariKodu" id="CariKodu" value="@Model.rivaCari.CA_KOD" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Cari Adı :</label>
+                        <input disabled type="text" class="form-control" name="CariAdı" id="CariAdı" value="@Model.rivaCari.CA_UNVAN" />
+                    </div>
+                </div>
+                @{
+                    string borçBgColor = "";
+                    @if ((Model.rivaCari.CA_ALACAK - Model.rivaCari.CA_BORC) >= 0)
+                    {
+                        borçBgColor = "success";
+                    }
+                    else
+                    {
+                        borçBgColor = "danger";
+
+                    }
+                }
+                <div class="row">
+                    <div class="col">
+                        <label>Bakiye :</label>
+                        <input disabled type="text" class="form-control bg-@borçBgColor" name="Bakiye" id="Bakiye" value="@(Model.rivaCari.CA_ALACAK - Model.rivaCari.CA_BORC)" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Borç :</label>
+                        <input disabled type="text" class="form-control" name="BORÇ" id="Borç" value="@Model.rivaCari.CA_BORC" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Alacak :</label>
+                        <input disabled type="text" class="form-control" name="Alacak" id="Alacak" value="@Model.rivaCari.CA_ALACAK" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    string bgcolor = "";
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card card-primary">
+            <div class="card-header">
+                <label>Cari Hareketler</label>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach (var item in Model.cariHareket)
+                    {
+                        @if (Convert.ToDecimal(item.CH_TUTAR) <= 0)
+                        {
+                            bgcolor = "danger";
+                        }
+                        else
+                        {
+                            bgcolor = "success";
+                        }
+                        <div class="col-12 col-6">
+                            <div evrakNo="@item.CH_EVRAK_NO" işlemTipi="@item.CH_ISLEM_TIPI" id="HareketCard" class="card bg-@bgcolor">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>İşlem Tarihi : @item.CH_ISLEM_TARIHI.ToString()</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            @if (item.CH_ISLEM_TIPI == (-12).ToString())
+                                            {
+                                                <label>Hareket Türü : FATURA</label>
+                                            }
+                                            else if (item.CH_ISLEM_TIPI == (-10).ToString())
+                                            {
+                                                <label>Hareket Türü : KASA HAREKETİ</label>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Tutar : @(item.CH_TUTAR <= 0 ?-(item.CH_TUTAR):item.CH_TUTAR )</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Açıklama : @item.CH_ACIKLAMA</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('div[id="HareketCard"][işlemTipi="-12"]').click(function () {
+            var evrakNo = $(this).attr('evrakNo')
+            window.location.href = "/Riva/FaturaGörünüm?EvrakNo=" + evrakNo;
+
+        })
+
+
+    })
+</script>

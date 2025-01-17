@@ -1,0 +1,178 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 col-5">
+                        <input placeholder="Cari Kodu" class="form-control" id="CariKodu" value="" />
+                    </div>
+                    <div class="col-6 col-5">
+                        <input placeholder="Cari Adı" class="form-control" id="CariAdı" value="" />
+                    </div>
+                    <div class="col-12 col-2 pt-2">
+                        <button id="CariAra" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Cari Ara </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div id="content" class="row">
+    @*<div class="col-12 col-6">
+            <div class="card bg-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col text-center">
+                            <label class="">
+                                Cari Kodu :
+                            </label>
+                            <label class="">
+                                Cari Ünvanı:
+                            </label>
+                            <label class="">
+                                Borç:
+                            </label>
+                            <label class="">
+                                Alacak:
+                            </label>
+                            <label class="">
+                                Bakiye:
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</div>
+<div id="scroll-trigger"></div>
+
+
+
+<script type="text/javascript">
+    let currentPage = 1; // Mevcut sayfa numarası
+    let isLoading = false; // Şu anda yükleme işlemi yapılıyor mu?
+    $(document).ready(function () {
+        $('#CariAra').click(function () {
+            $('#content').empty();
+            currentPage = 1;
+            loadMoreContent($('#CariKodu').val(), $('#CariAdı').val());
+        })
+    })
+
+
+
+    function loadMoreContent(CariAdı, CariKodu) {
+        if (isLoading) return; // Zaten yükleme yapılıyorsa çık
+        isLoading = true;
+        // Backend API çağrısı
+        $.ajax({
+            url: '/Riva/CarilerInfinity?curPage=' + currentPage + '&CariAdı=' + CariAdı + '&CariKodu=' + CariKodu, // Backend endpoint
+            method: 'GET',
+            success: function (data) {
+                // Gelen verileri ekle
+                data.data.forEach(item => {
+                    var bgColor = "primary";
+                    if ((item.cA_ALACAK - item.cA_BORC) >= 0) {
+                        bgColor = "success"
+                    }
+                    else {
+                        bgColor = "danger"
+
+                    }
+
+                    var my_var = '  <div class="col-lg-6 col-12">' +
+                        '      <div id="CariCard" cariId="' + item.cA_ID + '" class="card bg-' + bgColor + '">' +
+                        '          <div class="card-body">' +
+                        '              <div class="row">' +
+                        '                  <div class="col">' +
+                        '                      <label class="">' +
+                        '                          Cari Kodu :' + item.cA_KOD +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Cari Ünvanı :' + item.cA_UNVAN +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Borç :  ' + item.cA_BORC +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Alacak : ' + item.cA_ALACAK +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Bakiye : ' + (item.cA_ALACAK - item.cA_BORC) +
+                        '                      </label> </br>' +
+                        '                  </div>' +
+                        '              </div>' +
+                        '          </div>' +
+                        '      </div>' +
+                        '  </div>';
+                    $('#content').append(
+                        my_var
+                    );
+                    $('div[id="CariCard"][cariId="' + item.cA_ID + '"]').click(function () {
+                        var cariId = $(this).attr('cariId');
+                        console.log(cariId);
+                        window.location.href = "/Riva/CariHareketler?CariId=" + cariId
+                    })
+                });
+
+                // Sayfa numarasını artır
+                currentPage++;
+
+                // Daha fazla veri yoksa tetikleyiciyi kaldır
+                if (!data.hasMore) {
+                    $(window).off('scroll', onScrollHandler); // Scroll dinleyicisini kaldır
+                    $('#scroll-trigger').hide(); // Göstergeden kurtul
+                }
+            },
+            error: function () {
+                console.error("Veriler yüklenirken hata oluştu!");
+            },
+            complete: function () {
+                isLoading = false; // İşlem tamamlandı
+            }
+        });
+    }
+
+
+    // Scroll olayını ele al
+    function onScrollHandler() {
+        const scrollTrigger = $('#scroll-trigger').offset().top;
+        const viewportBottom = $(window).scrollTop() + $(window).height();
+
+        // Tetikleme noktasına ulaşıldıysa içerik yükle
+        if (viewportBottom >= scrollTrigger) {
+            loadMoreContent($('#CariKodu').val(), $('#CariAdı').val());
+        }
+    }
+    // İlk scroll olay dinleyicisini başlat
+    $(window).on('scroll', onScrollHandler);
+    // İlk içerik yükleme
+    loadMoreContent($('#CariKodu').val(), $('#CariAdı').val());
+
+
+    // Sadece test amaçlı
+    const mockApi = (page) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const items = Array.from({ length: 10 }, (_, i) => ({
+                    id: page * 10 + i + 1,
+                    name: `Item ${page * 10 + i + 1}`
+                }));
+                resolve({
+                    data: items,
+                    hasMore: page < 5 // 5 sayfa veriden fazlası yok
+                });
+            }, 1000);
+        });
+    };
+
+    // Gerçek backend yerine mock API kullanımı
+    $.ajax = function (options) {
+        const page = new URL(options.url, "http://localhost").searchParams.get("page");
+        mockApi(Number(page)).then(options.success);
+    };
+</script>

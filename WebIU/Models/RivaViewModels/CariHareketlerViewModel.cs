@@ -1,0 +1,4 @@
+﻿namespace WebIU.Models.RivaViewModels
+{
+   
+}
