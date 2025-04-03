@@ -18,6 +18,8 @@ namespace Entities.Concrete.OtherEntities
         public decimal Fiyat { get; set; }
         public decimal KdvOranı { get; set; }
 
+        public int? StokHareketId { get; set; }
+        public StokHareket? StokHareket { get; set; }
 
         public decimal Adet { get; set; }
 

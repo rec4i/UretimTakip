@@ -303,6 +303,214 @@ namespace DataAccess.Migrations
                     b.ToTable("Barkods");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.Belge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BelgeAdı")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Belges");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.BelgeCevap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BelgeSoruId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EvetHayırCevap")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("TarihCevap")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TextAreaCevap")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BelgeSoruId");
+
+                    b.ToTable("BelgeCevaps");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.BelgeSeçenekCevap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BelgeSoruSeçenekId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VerilenCevap")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BelgeSoruSeçenekId");
+
+                    b.ToTable("BelgeSeçenekCevaps");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.BelgeSoru", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Açıklama")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BelgeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BelgeSoruTürü")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DahaSonradanEklenebilirmi")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("SeçenkelerSeçilebilir")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Soru")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BelgeId");
+
+                    b.ToTable("BelgeSorus");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.BelgeSoruSeçenek", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BelgeSoruId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Seçenek")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BelgeSoruId");
+
+                    b.ToTable("BelgeSoruSeçeneks");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.Birim", b =>
                 {
                     b.Property<int>("Id")
@@ -3927,6 +4135,9 @@ namespace DataAccess.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("StokHareketId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StokId")
                         .HasColumnType("int");
 
@@ -3939,6 +4150,8 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FaturaBaslıkId");
+
+                    b.HasIndex("StokHareketId");
 
                     b.HasIndex("StokId");
 
@@ -5507,6 +5720,9 @@ namespace DataAccess.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("TezgahId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
@@ -5527,6 +5743,8 @@ namespace DataAccess.Migrations
                     b.HasIndex("ReçeteId");
 
                     b.HasIndex("SorumluKullanıcıGrupId");
+
+                    b.HasIndex("TezgahId");
 
                     b.ToTable("Reçete_Iş_MTM");
                 });
@@ -5629,6 +5847,47 @@ namespace DataAccess.Migrations
                     b.ToTable("Reçete_Iş_MTM_ÜretilecekStoks");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.Reçete_İş_MTM_DoldurlacakDöküman", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BelgeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("Reçete_Iş_MTMId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BelgeId");
+
+                    b.HasIndex("Reçete_Iş_MTMId");
+
+                    b.ToTable("Reçete_İş_MTM_DoldurlacakDökümen");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.Reçete_Tezgah_MTM", b =>
                 {
                     b.Property<int>("Id")
@@ -5668,6 +5927,254 @@ namespace DataAccess.Migrations
                     b.HasIndex("TezgahId");
 
                     b.ToTable("Reçete_Tezgah_MTM");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.RivaFatura", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BelgeNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("OluşturmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RivaFaturaId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RivaFaturas");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.RivaFaturaSatır", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("GenelTutar")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("RivaFaturaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RivaFaturaSatırId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("birimFiyat")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("iskonto")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("kdv")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("miktar")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ÜrünAdı")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ürünId")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RivaFaturaId");
+
+                    b.ToTable("RivaFaturaSatırs");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.SıcakSatışAyar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CariKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("HızlıButonProfilId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("KrediKasaKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NakitKasaKodu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RivaDbYolu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RivaPass")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RivaUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TermalYazıcıIpAdresi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SıcakSatışAyars");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.SıcakSatışButonProfil", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProfilAdı")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SıcakSatışButonProfils");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.SıcakSatışHızlıButon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ButonAdı")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ButonRengi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RivaStokId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("StokAdı")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("sıcakSatışButonProfilId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("sıcakSatışButonProfilId");
+
+                    b.ToTable("SıcakSatışHızlıButons");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.SorumluKullanıcı", b =>
@@ -5839,8 +6346,14 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LotNo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("ProgramŞirketGrupId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("SonKullanmaTarihi")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -5854,6 +6367,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("UpdateUserId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("İşEmriDurumId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CariId");
@@ -5865,6 +6381,8 @@ namespace DataAccess.Migrations
                     b.HasIndex("ProgramŞirketGrupId");
 
                     b.HasIndex("StokId");
+
+                    b.HasIndex("İşEmriDurumId");
 
                     b.ToTable("StokHarekets");
                 });
@@ -5907,6 +6425,54 @@ namespace DataAccess.Migrations
                     b.HasIndex("ProgramŞirketGrupId");
 
                     b.ToTable("StokKoduTanıms");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.StokLotNo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AddedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Açıklama")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LotNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Miktar")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("SonKullanmaTarihi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("StokId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StokId");
+
+                    b.ToTable("StokLotNos");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.SystemUserLog", b =>
@@ -6531,6 +7097,20 @@ namespace DataAccess.Migrations
                         },
                         new
                         {
+                            Id = 35,
+                            AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IconCss = "nav-icon fa-solid fa-right-from-bracket",
+                            IsDeleted = false,
+                            IsOpen = false,
+                            IsParent = false,
+                            Name = "Announcement List",
+                            ParentId = 34,
+                            Row = 12,
+                            Status = true,
+                            Url = "/Announcement/AnnouncementList"
+                        },
+                        new
+                        {
                             Id = 61,
                             AddedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IconCss = "nav-icon fa-solid fa-user-group",
@@ -6800,7 +7380,7 @@ namespace DataAccess.Migrations
                             ParentId = 66,
                             Row = 1,
                             Status = true,
-                            Url = "/BelgeTasarım/Index"
+                            Url = "/BelgeTasarım/Belgeler"
                         },
                         new
                         {
@@ -7297,6 +7877,42 @@ namespace DataAccess.Migrations
                     b.Navigation("Stok");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.BelgeCevap", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.BelgeSoru", "BelgeSoru")
+                        .WithMany()
+                        .HasForeignKey("BelgeSoruId");
+
+                    b.Navigation("BelgeSoru");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.BelgeSeçenekCevap", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.BelgeSoruSeçenek", "BelgeSoruSeçenek")
+                        .WithMany()
+                        .HasForeignKey("BelgeSoruSeçenekId");
+
+                    b.Navigation("BelgeSoruSeçenek");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.BelgeSoru", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.Belge", "Belge")
+                        .WithMany()
+                        .HasForeignKey("BelgeId");
+
+                    b.Navigation("Belge");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.BelgeSoruSeçenek", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.BelgeSoru", "BelgeSoru")
+                        .WithMany()
+                        .HasForeignKey("BelgeSoruId");
+
+                    b.Navigation("BelgeSoru");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.BlokBilgi", b =>
                 {
                     b.HasOne("Entities.Concrete.OtherEntities.Stok", "Stok")
@@ -7528,6 +8144,10 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.Concrete.OtherEntities.StokHareket", "StokHareket")
+                        .WithMany()
+                        .HasForeignKey("StokHareketId");
+
                     b.HasOne("Entities.Concrete.OtherEntities.Stok", "Stok")
                         .WithMany()
                         .HasForeignKey("StokId")
@@ -7537,6 +8157,8 @@ namespace DataAccess.Migrations
                     b.Navigation("FaturaBaslık");
 
                     b.Navigation("Stok");
+
+                    b.Navigation("StokHareket");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.FaturaSeri", b =>
@@ -7823,11 +8445,17 @@ namespace DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("SorumluKullanıcıGrupId");
 
+                    b.HasOne("Entities.Concrete.OtherEntities.Tezgah", "Tezgah")
+                        .WithMany()
+                        .HasForeignKey("TezgahId");
+
                     b.Navigation("Iş");
 
                     b.Navigation("Reçete");
 
                     b.Navigation("SorumluKullanıcıGrup");
+
+                    b.Navigation("Tezgah");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.Reçete_Iş_MTM_KullanılacakStok", b =>
@@ -7872,6 +8500,21 @@ namespace DataAccess.Migrations
                     b.Navigation("Stok");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.Reçete_İş_MTM_DoldurlacakDöküman", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.Belge", "Belge")
+                        .WithMany()
+                        .HasForeignKey("BelgeId");
+
+                    b.HasOne("Entities.Concrete.OtherEntities.Reçete_Iş_MTM", "Reçete_Iş_MTM")
+                        .WithMany()
+                        .HasForeignKey("Reçete_Iş_MTMId");
+
+                    b.Navigation("Belge");
+
+                    b.Navigation("Reçete_Iş_MTM");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OtherEntities.Reçete_Tezgah_MTM", b =>
                 {
                     b.HasOne("Entities.Concrete.OtherEntities.Reçete", "Reçete")
@@ -7885,6 +8528,33 @@ namespace DataAccess.Migrations
                     b.Navigation("Reçete");
 
                     b.Navigation("Tezgah");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.RivaFaturaSatır", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.RivaFatura", "RivaFatura")
+                        .WithMany()
+                        .HasForeignKey("RivaFaturaId");
+
+                    b.Navigation("RivaFatura");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.SıcakSatışAyar", b =>
+                {
+                    b.HasOne("Entities.Concrete.Identity.AppIdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.SıcakSatışHızlıButon", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.SıcakSatışButonProfil", "sıcakSatışButonProfil")
+                        .WithMany()
+                        .HasForeignKey("sıcakSatışButonProfilId");
+
+                    b.Navigation("sıcakSatışButonProfil");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.SorumluKullanıcı", b =>
@@ -7949,6 +8619,10 @@ namespace DataAccess.Migrations
                         .WithMany("StokHarekets")
                         .HasForeignKey("StokId");
 
+                    b.HasOne("Entities.Concrete.OtherEntities.İşEmriDurum", "İşEmriDurum")
+                        .WithMany()
+                        .HasForeignKey("İşEmriDurumId");
+
                     b.Navigation("Cari");
 
                     b.Navigation("Depo");
@@ -7958,6 +8632,8 @@ namespace DataAccess.Migrations
                     b.Navigation("ProgramŞirketGrup");
 
                     b.Navigation("Stok");
+
+                    b.Navigation("İşEmriDurum");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.StokKoduTanım", b =>
@@ -7967,6 +8643,15 @@ namespace DataAccess.Migrations
                         .HasForeignKey("ProgramŞirketGrupId");
 
                     b.Navigation("ProgramŞirketGrup");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OtherEntities.StokLotNo", b =>
+                {
+                    b.HasOne("Entities.Concrete.OtherEntities.Stok", "Stok")
+                        .WithMany()
+                        .HasForeignKey("StokId");
+
+                    b.Navigation("Stok");
                 });
 
             modelBuilder.Entity("Entities.Concrete.OtherEntities.Tezgah", b =>

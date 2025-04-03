@@ -1,0 +1,310 @@
+﻿@{
+    var bugün = DateTime.Now;
+
+    string buAyBaşı = Convert.ToDateTime((bugün.Year + "-" + bugün.Month + "-" + "1")).ToString("yyyy-MM-dd");
+    string buAySonu = Convert.ToDateTime((bugün.Year + "-" + bugün.Month + "-" + DateTime.DaysInMonth(bugün.Year, bugün.Month))).ToString("yyyy-MM-dd");
+}
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 col-5">
+                        <label class="text-red">*Eğer Boş Bırakılırsa Tüm Stok Kartlarında Arama Yapılır</label>
+                        <select id="StokSearch" multiple style="width: 100%;"></select>
+                    </div>
+                    <div class="col-6 col-5">
+                        <label  class="text-red">*Eğer Boş Bırakılırsa Tüm Carilerde Arama Yapılır</label>
+                        <select id="CariSearch" multiple style="width: 100%;"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label>Başlangıç Tarihi</label>
+                        <input type="date" class="form-control" id="StartDate" name="name" value="@buAyBaşı" />
+                    </div>
+                    <div class="col-6">
+                        <label>Bitiş Tarihi</label>
+                        <input type="date" class="form-control" id="EndDate" name="name" value="@buAySonu" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-2 pt-2">
+                        <button id="RaporGetir" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Rapor Getir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body" id="StokSonuçDiv">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="content" class="row">
+</div>
+<div id="scroll-trigger"></div>
+
+
+<script>
+    let currentPage = 1; // Mevcut sayfa numarası
+
+    $(document).ready(function () {
+
+        $('#RaporGetir').click(function () {
+            $('#content').empty();
+            currentPage = 0;
+            loadMoreContent();
+        })
+
+        $("#CariSearch").select2({
+            placeholder: "Lütfen Cari seçin",
+            allowClear: true,
+            ajax: {
+                url: "/Riva/CariAra", // Örnek API (Kendi API'nı kullan)
+                dataType: "json",
+                delay: 250, // Gecikme süresi (istekleri azaltmak için)
+                data: function (params) {
+                    return {
+                        Aranan: params.term // Kullanıcının yazdığı kelimeyi gönder
+                    };
+                },
+                processResults: function (data) {
+                    if (data == null) {
+                        return;
+                    }
+                    return {
+                        results: data.data.map(function (user) {
+                            return {
+                                id: user.cA_ID,
+                                text: user.cA_UNVAN
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+        $("#StokSearch").select2({
+            placeholder: "Lütfen Stok seçin",
+            allowClear: true,
+            ajax: {
+                url: "/Riva/BarkodUrunAra", // Örnek API (Kendi API'nı kullan)
+                dataType: "json",
+                delay: 250, // Gecikme süresi (istekleri azaltmak için)
+                data: function (params) {
+                    return {
+                        Barkod: params.term // Kullanıcının yazdığı kelimeyi gönder
+                    };
+                },
+                processResults: function (data) {
+                    if (data == null) {
+                        return;
+                    }
+                    return {
+                        results: data.data.map(function (user) {
+                            return {
+                                id: user.sK_ID,
+                                text: user.sK_ISIM
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+
+
+
+    let isLoading = false; // Şu anda yükleme işlemi yapılıyor mu?
+    $(document).ready(function () {
+        $('#CariAra').click(function () {
+            $('#content').empty();
+            currentPage = 1;
+            //loadMoreContent($('#EvrakNo').val(), $('#CariAdı').val(), $('#StartDate').val(), $('#EndDate').val());
+        })
+    })
+
+
+    function loadMoreContent() {
+        var SeçiliStok = $('#StokSearch').select2('data')
+        var SeçiliCari = $('#CariSearch').select2('data')
+
+        if (isLoading) return; // Zaten yükleme yapılıyorsa çık
+        isLoading = true;
+        var data = new FormData();
+        data.append('StartDate', $('#StartDate').val())
+        data.append('EndDate', $('#EndDate').val())
+        data.append('curPage', currentPage)
+
+        for (var i = 0; i < SeçiliStok.length; i++) {
+            data.append('StokIds[]', SeçiliStok[i].id)
+        }
+
+        for (var i = 0; i < SeçiliCari.length; i++) {
+            data.append('CariIds[]', SeçiliCari[i].id)
+        }
+
+        //curPage
+
+        // Backend API çağrısı
+        $.ajax({
+            url: '/Riva/TarihAralıklıStokRaporuInfınıty',
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                // Gelen verileri ekle
+                data.data.forEach(item => {
+                    var my_var = '<div evrakNo="' + item.fT_EVRAK_NO + '" id="FaturaCard" class="col-12 col-6">' +
+                        '      <div class="card bg-primary">' +
+                        '          <div class="card-body">' +
+                        '              <div class="row">' +
+                        '                  <div class="col">' +
+                        '                      <label class="">' +
+                        '                          Tarih : ' + item.fT_TARIH.split("T")[0] +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Evrak No : ' + item.fT_EVRAK_NO +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Cari Ünvanı : ' + item.fT_UNVAN +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Tutar : ' + item.fT_GENEL_TOPLAM +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Kalem Sayısı : ' + item.fT_KALEM_SAYISI +
+                        '                      </label> </br>' +
+                        '                  </div>' +
+                        '              </div>' +
+                        '          </div>' +
+                        '      </div>' +
+                        '  </div>';
+                    $('#content').append(
+                        my_var
+                    );
+                    $('div[id="FaturaCard"][evrakNo="' + item.fT_EVRAK_NO + '"]').click(function () {
+                        var cariId = $(this).attr('evrakNo');
+                        window.location.href = "/Riva/FaturaGörünüm?EvrakNo=" + cariId
+                    })
+                });
+                if (currentPage <= 1) {
+                    $('#StokSonuçDiv').empty()
+                    for (var i = 0; i < data.data2.length; i++) {
+                        if (SeçiliStok.some(x => x.id == data.data2[i].stokId)) {
+                            var my_var = '<div class="row">' +
+                                '    <div class="col">' +
+                                '        <label>Stok Adı</label>' +
+                                '        <input disabled type="text" style="background-color:yellow" class="form-control" id="" value="' + data.data2[i].stokAdı + '" />' +
+                                '    </div>' +
+                                '    <div class="col">' +
+                                '        <label>Miktar</label>' +
+                                '        <input disabled type="text" style="background-color:yellow" class="form-control" id="" value="' + data.data2[i].miktar + '" />' +
+                                '    </div>' +
+                                '</div>';
+                            $('#StokSonuçDiv').append(my_var);
+                        }
+                      
+                    }
+                    for (var i = 0; i < data.data2.length; i++) {
+                        if (!SeçiliStok.some(x => x.id == data.data2[i].stokId)) {
+                            var my_var = '<div class="row">' +
+                                '    <div class="col">' +
+                                '        <label>Stok Adı</label>' +
+                                '        <input disabled type="text" class="form-control" id="" value="' + data.data2[i].stokAdı + '" />' +
+                                '    </div>' +
+                                '    <div class="col">' +
+                                '        <label>Miktar</label>' +
+                                '        <input disabled type="text" class="form-control" id="" value="' + data.data2[i].miktar + '" />' +
+                                '    </div>' +
+                                '</div>';
+                            $('#StokSonuçDiv').append(my_var);
+                        }
+                      
+                    }
+                }
+
+                // Sayfa numarasını artır
+                currentPage++;
+                console.log(currentPage);
+
+                // Daha fazla veri yoksa tetikleyiciyi kaldır
+                if (!data.hasMore) {
+                    $(window).off('scroll', onScrollHandler); // Scroll dinleyicisini kaldır
+                    $('#scroll-trigger').hide(); // Göstergeden kurtul
+                }
+            },
+            error: function () {
+                errorAlert(data.message)
+            },
+            complete: function () {
+                isLoading = false; // İşlem tamamlandı
+            }
+        });
+    }
+
+
+    // Scroll olayını ele al
+    function onScrollHandler() {
+        const scrollTrigger = $('#scroll-trigger').offset().top;
+        const viewportBottom = $(window).scrollTop() + $(window).height();
+
+        // Tetikleme noktasına ulaşıldıysa içerik yükle
+        if (viewportBottom >= scrollTrigger) {
+            var SeçiliStok = $('#StokSearch').select2('data')
+            var SeçiliCari = $('#CariSearch').select2('data')
+            console.log(SeçiliCari.length);
+            if (!(SeçiliStok.length >= 0 || SeçiliCari.length >= 0)) {
+                loadMoreContent()
+            }
+            //loadMoreContent($('#EvrakNo').val(), $('#CariAdı').val(), $('#StartDate').val(), $('#EndDate').val());
+        }
+    }
+    // İlk scroll olay dinleyicisini başlat
+    $(window).on('scroll', onScrollHandler);
+    // İlk içerik yükleme
+    //loadMoreContent($('#EvrakNo').val(), $('#CariAdı').val(), $('#StartDate').val(), $('#EndDate').val());
+
+
+    // Sadece test amaçlı
+    const mockApi = (page) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const items = Array.from({ length: 10 }, (_, i) => ({
+                    id: page * 10 + i + 1,
+                    name: `Item ${page * 10 + i + 1}`
+                }));
+                resolve({
+                    data: items,
+                    hasMore: page < 5 // 5 sayfa veriden fazlası yok
+                });
+            }, 1000);
+        });
+    };
+
+    // Gerçek backend yerine mock API kullanımı
+    $.ajax = function (options) {
+        const page = new URL(options.url, "http://localhost").searchParams.get("page");
+        mockApi(Number(page)).then(options.success);
+    };
+
+</script>

@@ -2,13 +2,18 @@
 using DataAccess.Concrete;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Office.Interop.Excel;
 using System.Threading.Tasks.Dataflow;
+using WebIU.Models;
 using WebIU.Models.HelperModels;
 using WebIU.Models.ReçeteViewModels;
+using static Entities.Concrete.Contants.Permission;
+using Reçete = Entities.Concrete.OtherEntities.Reçete;
 
 namespace WebIU.Controllers
 {
@@ -26,8 +31,10 @@ namespace WebIU.Controllers
 
         private readonly ISorumluKullanıcıGrupRepository _sorumluKullanıcıGrupRepository;
 
+        private readonly IReçete_İş_MTM_DoldurlacakDökümanRepository _reçete_İş_MTM_DoldurlacakDökümanRepository;
 
-        public ReçeteController(IReçeteRepository reçeteReposiyory, IStokRepository stokRepository, IIşRepository ışRepository, ITezgahRepository tezgahRepository, IReçete_Iş_MTMRepository reçete_Iş_MTMRepository, IReçete_Iş_MTM_KullanılacakStokRepository reçete_Iş_MTM_KullanılacakStokRepository, IReçete_Iş_MTM_ÜretilecekStokRepository reçete_Iş_MTM_ÜretilecekStokRepository, ISorumluKullanıcıGrupRepository sorumluKullanıcıGrupRepository)
+
+        public ReçeteController(IReçeteRepository reçeteReposiyory, IStokRepository stokRepository, IIşRepository ışRepository, ITezgahRepository tezgahRepository, IReçete_Iş_MTMRepository reçete_Iş_MTMRepository, IReçete_Iş_MTM_KullanılacakStokRepository reçete_Iş_MTM_KullanılacakStokRepository, IReçete_Iş_MTM_ÜretilecekStokRepository reçete_Iş_MTM_ÜretilecekStokRepository, ISorumluKullanıcıGrupRepository sorumluKullanıcıGrupRepository, IReçete_İş_MTM_DoldurlacakDökümanRepository reçete_İş_MTM_DoldurlacakDökümanRepository)
         {
             _reçeteReposiyory = reçeteReposiyory;
             _stokRepository = stokRepository;
@@ -37,6 +44,15 @@ namespace WebIU.Controllers
             _reçete_Iş_MTM_KullanılacakStokRepository = reçete_Iş_MTM_KullanılacakStokRepository;
             _reçete_Iş_MTM_ÜretilecekStokRepository = reçete_Iş_MTM_ÜretilecekStokRepository;
             _sorumluKullanıcıGrupRepository = sorumluKullanıcıGrupRepository;
+            _reçete_İş_MTM_DoldurlacakDökümanRepository = reçete_İş_MTM_DoldurlacakDökümanRepository;
+        }
+
+        public IActionResult ReçeteİşListesi(int Id)
+        {
+            ReçeteİşListesiViewModel model = new ReçeteİşListesiViewModel();
+            model.ReçeteId = Id;
+
+            return View(model);
         }
 
         public IActionResult SorumluKullanıcıGrubuAra(string GrupAdı)
@@ -48,6 +64,49 @@ namespace WebIU.Controllers
 
         }
 
+        public IActionResult ReçeteİşYineBelgeEkle(int İşId, int BelgeId)
+        {
+            JsonResponseModel res = new JsonResponseModel();
+
+            Reçete_İş_MTM_DoldurlacakDöküman entity = new Reçete_İş_MTM_DoldurlacakDöküman();
+            entity.Reçete_Iş_MTMId = İşId;
+            entity.BelgeId = BelgeId;
+            _reçete_İş_MTM_DoldurlacakDökümanRepository.Add(entity);
+
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+
+        public IActionResult ReçeteİşBelgeSil(int Id)
+        {
+            JsonResponseModel res = new JsonResponseModel();
+            var entity = _reçete_İş_MTM_DoldurlacakDökümanRepository.Get(o => o.Id == Id);
+            _reçete_İş_MTM_DoldurlacakDökümanRepository.Delete(entity);
+
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+
+        public IActionResult ReçeteDoldurlacakBelgePaginaiton(int offset, int limit, string search, int Id)
+        {
+            GenericPaginaitonViewModel<Reçete_İş_MTM_DoldurlacakDöküman> model = new GenericPaginaitonViewModel<Reçete_İş_MTM_DoldurlacakDöküman>();
+            model.rows = _reçete_İş_MTM_DoldurlacakDökümanRepository.GetAllIncludedPagination(o => o.Reçete_Iş_MTMId == Id, o => o.Include(x => x.Belge), offset.ToString(), limit.ToString(), search);
+            model.total = _reçete_İş_MTM_DoldurlacakDökümanRepository.GetAllIncludedPaginationCount(o => o.Reçete_Iş_MTMId == Id, offset.ToString(), limit.ToString(), search);
+            model.totalNotFiltered = _reçete_İş_MTM_DoldurlacakDökümanRepository.GetAllIncludedPaginationCount(o => o.Reçete_Iş_MTMId == Id, offset.ToString(), limit.ToString(), search);
+            return Json(model);
+        }
+
+
+        public IActionResult ReçeteİşGetir(int offset, int limit, string search, int ReçeteId)
+        {
+            GenericPaginaitonViewModel<Reçete_Iş_MTM> model = new GenericPaginaitonViewModel<Reçete_Iş_MTM>();
+            model.rows = _reçete_Iş_MTMRepository.GetAllIncludedPagination(o => o.ReçeteId == ReçeteId, offset.ToString(), limit.ToString(), search);
+            model.total = _reçete_Iş_MTMRepository.GetAllIncludedPaginationCount(o => o.ReçeteId == ReçeteId, offset.ToString(), limit.ToString(), search);
+            model.totalNotFiltered = _reçete_Iş_MTMRepository.GetAllIncludedPaginationCount(o => o.ReçeteId == ReçeteId, offset.ToString(), limit.ToString(), search);
+            return Json(model);
+        }
 
         public IActionResult ReçeteÜretilecekStokSil(int Id)
         {
@@ -59,13 +118,21 @@ namespace WebIU.Controllers
             res.message = "İşlem Başarılı";
             return Json(res);
         }
-
+        public IActionResult DoldurlacakBelgeGetir(int MtmId)
+        {
+            JsonResponseModel res = new JsonResponseModel();
+            var entites = _reçete_İş_MTM_DoldurlacakDökümanRepository.GetAllIncluded(o => o.Reçete_Iş_MTMId == MtmId, x => x.Include(o => o.Belge));
+            res.data = entites;
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
 
 
         public IActionResult KullanılacakStokGetir(int MtmId)
         {
             JsonResponseModel res = new JsonResponseModel();
-            var entites = _reçete_Iş_MTM_KullanılacakStokRepository.GetAllIncluded(o => o.Reçete_Iş_MTMId == MtmId);
+            var entites = _reçete_Iş_MTM_KullanılacakStokRepository.GetAllIncluded(o => o.Reçete_Iş_MTMId == MtmId, o => o.Include(x => x.Stok).Include(x => x.Stok.Birim).Include(x => x.Depo));
             res.data = entites;
             res.status = 1;
             res.message = "İşlem Başarılı";
@@ -74,7 +141,7 @@ namespace WebIU.Controllers
         public IActionResult ÜretilecekStokGetir(int MtmId)
         {
             JsonResponseModel res = new JsonResponseModel();
-            var entites = _reçete_Iş_MTM_ÜretilecekStokRepository.GetAllIncluded(o => o.Reçete_Iş_MTMId == MtmId);
+            var entites = _reçete_Iş_MTM_ÜretilecekStokRepository.GetAllIncluded(o => o.Reçete_Iş_MTMId == MtmId, o => o.Include(x => x.Stok).Include(x => x.Stok.Birim).Include(x => x.Depo));
             res.data = entites;
             res.status = 1;
             res.message = "İşlem Başarılı";
@@ -179,7 +246,7 @@ namespace WebIU.Controllers
         }
 
 
-        public IActionResult ReçeteİşEkle(int ReçeteId, int İşId, string Açıklama, int İşTamamlanmaSüresi, int SorumluGurpId)
+        public IActionResult ReçeteİşEkle(int ReçeteId, int İşId, string Açıklama, int İşTamamlanmaSüresi, int SorumluGurpId, int TezgahId)
         {
             Reçete_Iş_MTM entity = new Reçete_Iş_MTM();
             entity.IşId = İşId;
@@ -187,6 +254,9 @@ namespace WebIU.Controllers
             entity.İşAçıklama = Açıklama;
             entity.İşTamamlanmaSüresi = İşTamamlanmaSüresi;
             entity.SorumluKullanıcıGrupId = SorumluGurpId;
+            entity.TezgahId = TezgahId;
+
+
 
             _reçete_Iş_MTMRepository.Add(entity);
 

@@ -3,6 +3,7 @@ using DataAccess.Concrete;
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using Microsoft.EntityFrameworkCore;
 using WebIU.Models.HelperModels;
 using WebIU.Models.IşEmriViewModels;
 using WebIU.Models.IşModels;
@@ -23,8 +24,15 @@ namespace WebIU.Controllers
         private readonly IReçete_Iş_MTM_KullanılacakStokRepository _reçete_Iş_MTM_KullanılacakStokRepository;
         private readonly IReçete_Iş_MTM_ÜretilecekStokRepository _reçete_Iş_MTM_ÜretilecekStokRepository;
         private readonly IStokRepository _stokRepository;
+        private readonly IReçete_İş_MTM_DoldurlacakDökümanRepository _reçete_İş_MTM_DoldurlacakDökümanRepository;
 
-        public IşEmriController(IIşRepository ışRepository, IReçeteRepository reçeteRepository, IİşEmriRepository işEmriRepository, IUrunRepository urunRepository, IUrunAşamalarıRepository urunAşamalarıRepository, IReçete_Iş_MTMRepository reçete_Iş_MTMRepository, IİşEmriDurumRepository işEmriDurumRepository, IReçete_Iş_MTM_KullanılacakStokRepository reçete_Iş_MTM_KullanılacakStokRepository, IReçete_Iş_MTM_ÜretilecekStokRepository reçete_Iş_MTM_ÜretilecekStokRepository, IStokRepository stokRepository)
+
+        private readonly IStokHarektiRepository _stokHarektiRepository;
+
+        private readonly IBelgeSoruRepository _belgeSoruRepository;
+
+
+        public IşEmriController(IIşRepository ışRepository, IReçeteRepository reçeteRepository, IİşEmriRepository işEmriRepository, IUrunRepository urunRepository, IUrunAşamalarıRepository urunAşamalarıRepository, IReçete_Iş_MTMRepository reçete_Iş_MTMRepository, IİşEmriDurumRepository işEmriDurumRepository, IReçete_Iş_MTM_KullanılacakStokRepository reçete_Iş_MTM_KullanılacakStokRepository, IReçete_Iş_MTM_ÜretilecekStokRepository reçete_Iş_MTM_ÜretilecekStokRepository, IStokRepository stokRepository, IReçete_İş_MTM_DoldurlacakDökümanRepository reçete_İş_MTM_DoldurlacakDöküman, IStokHarektiRepository stokHarektiRepository)
         {
             _ışRepository = ışRepository;
             _reçeteRepository = reçeteRepository;
@@ -36,6 +44,9 @@ namespace WebIU.Controllers
             _reçete_Iş_MTM_KullanılacakStokRepository = reçete_Iş_MTM_KullanılacakStokRepository;
             _reçete_Iş_MTM_ÜretilecekStokRepository = reçete_Iş_MTM_ÜretilecekStokRepository;
             _stokRepository = stokRepository;
+            _reçete_İş_MTM_DoldurlacakDökümanRepository = reçete_İş_MTM_DoldurlacakDöküman;
+
+            _stokHarektiRepository = stokHarektiRepository;
         }
 
         public IActionResult Index()
@@ -44,6 +55,7 @@ namespace WebIU.Controllers
             model.Reçetes = _reçeteRepository.GetAll();
             return View(model);
         }
+
         public IActionResult KullanılacakStokGetir(int işEmriDurumId)
         {
             JsonResponseModel res = new JsonResponseModel();
@@ -57,11 +69,9 @@ namespace WebIU.Controllers
             {
                 var stok = _stokRepository.GetAllIncluded(o => o.Id == item.StokId).FirstOrDefault();
                 KullanılacakStokString += "-" + stok.StokAdı + "";
-                KullanılacakStokString += " " + (item.KullanılacakStokMiktarı * işEmri.HedefÜretim) + " " + stok.Birim.BirimKodu + "</br>";
+                KullanılacakStokString += " " + (item.KullanılacakStokMiktarı) + " " + stok.Birim.BirimKodu + "</br>";
 
             }
-
-
 
             res.data = KullanılacakStokString;
             res.status = 1;
@@ -69,6 +79,139 @@ namespace WebIU.Controllers
             return Json(res);
 
         }
+
+        public IActionResult StokLotNoGetir(int StokId)
+        {
+            var stokHareketleri = _stokHarektiRepository.GetAll(o => o.StokId == StokId);
+            List<string> lotNos = new List<string>();
+            foreach (var _item in stokHareketleri.GroupBy(o => o.LotNo))
+            {
+                var LotNo = _item.FirstOrDefault().LotNo;
+                decimal? miktar = 0M;
+                foreach (var item in _item)
+                {
+                    //1 Depo Stok Girişi +
+                    //2 Depo Stok Çıkışı -
+                    //3 Fatura Alış +
+                    //4 Fatura Satış - 
+                    //5 Fatura İade -
+                    //6 Üretim Stok Kullanımı - 
+                    //7 Üretim Stok Üretimi +
+                    if (item.HareketTipi == 1)
+                    {
+                        miktar = miktar + item.Adet;
+                    }
+                    else if (item.HareketTipi == 2)
+                    {
+                        miktar = miktar - item.Adet;
+                    }
+                    else if (item.HareketTipi == 3)
+                    {
+                        miktar = miktar + item.Adet;
+                    }
+                    else if (item.HareketTipi == 4)
+                    {
+                        miktar = miktar - item.Adet;
+                    }
+                    else if (item.HareketTipi == 5)
+                    {
+                        miktar = miktar - item.Adet;
+                    }
+                    else if (item.HareketTipi == 6)
+                    {
+                        miktar = miktar - item.Adet;
+                    }
+                    else if (item.HareketTipi == 7)
+                    {
+                        miktar = miktar - item.Adet;
+                    }
+                    else if (item.HareketTipi == 8)
+                    {
+                        miktar = miktar + item.Adet;
+                    }
+                }
+                if (miktar > 0)
+                {
+                    lotNos.Add(LotNo);
+                }
+            }
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+
+            res.data = lotNos;
+
+
+
+
+
+
+            return Json(res);
+        }
+
+
+        public IActionResult İşEmriDüzenleStokHareketOluştur(int[] KullanılanStoklar, string[] KullanılanLotlar, decimal[] KullanılanStokMiktarları
+            , int[] ÜretilecekStoklar, string[] ÜretilecekLotlar, decimal[] ÜretilenStokMiktarları
+            , int İşEmriDurumId
+            )
+        {
+
+
+
+            var eskiKullanılıcakStokHareket = _stokHarektiRepository.GetAll(o => o.İşEmriDurumId == İşEmriDurumId);
+            foreach (var item in eskiKullanılıcakStokHareket)
+                _stokHarektiRepository.Delete(item);
+
+
+
+
+            var İşDurums = _işEmriDurumRepository.Get(o => o.Id == İşEmriDurumId);
+            var işEmri = _işEmriRepository.Get(o => o.Id == İşDurums.İşEmriId);
+            var reçeteMtms = _reçete_Iş_MTMRepository.Get(o => o.Id == İşDurums.Reçete_Iş_MTMId);
+
+
+
+
+            JsonResponseModel res = new JsonResponseModel();
+            for (int i = 0; i < KullanılanStoklar.Length; i++)
+            {
+                var kullanılacakStok = _reçete_Iş_MTM_KullanılacakStokRepository.GetAll(o => o.Reçete_Iş_MTMId == reçeteMtms.Id).Where(o => o.StokId == KullanılanStoklar[i]).FirstOrDefault();
+
+                StokHareket stokHareket = new StokHareket();
+                stokHareket.DepoId = kullanılacakStok.DepoId;
+                stokHareket.İşEmriDurumId = İşEmriDurumId;
+                stokHareket.Adet = KullanılanStokMiktarları[i];
+                stokHareket.StokId = KullanılanStoklar[i];
+                stokHareket.LotNo = KullanılanLotlar[i];
+                stokHareket.HareketTipi = 6;
+
+
+                _stokHarektiRepository.Add(stokHareket);
+            }
+
+            for (int i = 0; i < ÜretilecekStoklar.Length; i++)
+            {
+                var üretilecekStok = _reçete_Iş_MTM_ÜretilecekStokRepository.GetAll(o => o.Reçete_Iş_MTMId == reçeteMtms.Id).Where(o => o.StokId == KullanılanStoklar[i]).FirstOrDefault();
+
+                StokHareket stokHareket = new StokHareket();
+                stokHareket.DepoId = üretilecekStok.DepoId;
+                stokHareket.İşEmriDurumId = İşEmriDurumId;
+                stokHareket.Adet = ÜretilenStokMiktarları[i];
+                stokHareket.StokId = ÜretilecekStoklar[i];
+                stokHareket.LotNo = ÜretilecekLotlar[i];
+                stokHareket.HareketTipi = 7;
+
+
+                _stokHarektiRepository.Add(stokHareket);
+            }
+
+
+
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+        }
+
 
         public IActionResult üretilecekStokGetir(int işEmriDurumId)
         {
@@ -83,7 +226,7 @@ namespace WebIU.Controllers
             {
                 var stok = _stokRepository.GetAllIncluded(o => o.Id == item.StokId).FirstOrDefault();
                 KullanılacakStokString += "-" + stok.StokAdı + "";
-                KullanılacakStokString += " " + (item.ÜretilecekStokMiktarı * işEmri.HedefÜretim) + " " + stok.Birim.BirimKodu + "</br>";
+                KullanılacakStokString += " " + (item.ÜretilecekStokMiktarı) + " " + stok.Birim.BirimKodu + "</br>";
 
             }
 
@@ -125,24 +268,6 @@ namespace WebIU.Controllers
                 _işEmriDurumRepository.Add(durum);
             }
 
-            //for (int i = 0; i < HedefAdet; i++)
-            //{
-            //    Urun urun = new Urun();
-            //    urun.İşEmriId = addedEntity.Id;
-            //    var guid = Guid.NewGuid();
-            //    urun.Guid = guid.ToString();
-            //    var addedUrun = _urunRepository.Add(urun);
-
-            //    foreach (var item in reçete)
-            //    {
-            //        UrunAşamaları urunaşama = new UrunAşamaları();
-            //        urunaşama.UrunId = addedUrun.Id;
-            //        urunaşama.IşId = item.Iş.Id;
-            //        urunaşama.İşEmriId = addedEntity.Id;
-            //        _urunAşamalarıRepository.Add(urunaşama);
-
-            //    }
-            //}
             JsonResponseModel res = new JsonResponseModel();
             res.status = 1;
             res.message = "İşlem Başarılı";
@@ -162,21 +287,28 @@ namespace WebIU.Controllers
 
         public IActionResult İşEmriDüzenle(int Id)
         {
-
-
-
-
             return View(Id);
+        }
+
+        public IActionResult İşEmriDurumDoldurulacakBelgeGetir(int işId)
+        {
+            var entity = _işEmriDurumRepository.Get(o => o.Id == işId);
+            var dolduralacakBelgeler = _reçete_İş_MTM_DoldurlacakDökümanRepository.GetAllIncluded(o => o.Reçete_Iş_MTMId == entity.Reçete_Iş_MTMId, o => o.Include(x => x.Belge));
+            JsonResponseModel res = new JsonResponseModel();
+            res.status = 1;
+            res.data = dolduralacakBelgeler;
+            res.message = "İşlem Başarılı";
+            return Json(res);
+
+
         }
 
         public IActionResult İşEmriDurumPaginaiton(int offset, int limit, string search, int İşEmriId)
         {
-            //var test = _işEmriDurumRepository.GetAllIncluded();
             İşEmriDurumViewModel model = new İşEmriDurumViewModel();
-            model.rows = _işEmriDurumRepository.GetAllIncludedPagination(o => o.İşEmriId == İşEmriId, offset.ToString(), limit.ToString(), search);
+            model.rows = _işEmriDurumRepository.GetAllIncludedPagination(o => o.İşEmriId == İşEmriId, o => o.Include(x => x.Yapılacakİş).Include(x => x.İşEmri).Include(x => x.Reçete_Iş_MTM).Include(x => x.Reçete_Iş_MTM.Tezgah).Include(x => x.Reçete_Iş_MTM.Iş), offset.ToString(), limit.ToString(), search);
             model.total = _işEmriDurumRepository.GetAllIncludedPaginationCount(o => o.İşEmriId == İşEmriId, offset.ToString(), limit.ToString(), search);
             model.totalNotFiltered = _işEmriDurumRepository.GetAllIncludedPaginationCount(o => o.İşEmriId == İşEmriId, offset.ToString(), limit.ToString(), search);
-
             return Json(model);
         }
         public IActionResult GetUrunPagination(int offset, int limit, string search, int İşEmriId)
@@ -196,6 +328,24 @@ namespace WebIU.Controllers
             model.totalNotFiltered = _işEmriRepository.GetAllIncludedPaginationCount(null, offset.ToString(), limit.ToString(), search);
 
             return Json(model);
+        }
+
+
+        public IActionResult GetBelgeSoruları(int BelgeId)
+        {
+            JsonResponseModel res = new JsonResponseModel();
+            var belgeSorular = _belgeSoruRepository.GetAll(o => o.BelgeId == BelgeId);
+
+
+
+
+
+            res.status = 1;
+            res.message = "İşlem Başarılı";
+
+            res.data = belgeSorular;
+
+            return Json(res);
         }
     }
 }

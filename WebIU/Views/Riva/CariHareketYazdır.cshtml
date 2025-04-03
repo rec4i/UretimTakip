@@ -1,0 +1,350 @@
+﻿@{
+    Layout = null;
+}
+@model WebIU.Controllers.RivaController.CariHarehetYazdırViewModel
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+        /* A4 Kağıdı Boyutu */
+        @Html.Raw(@"
+@page {
+    size: A4; /* Yazdırma için A4 kağıdı boyutu */
+    margin: 0; /* Yazdırma sırasında kenar boşluklarını sıfırla */
+}
+  @media print {
+   body {
+      -webkit-print-color-adjust: exact;
+   }
+ .no-print {
+                            display: none !important;
+                            }
+}
+
+
+")
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .page {
+        width: 210mm;
+       /*height: 297mm;*/
+        margin: auto;
+        padding: 5mm;
+        box-sizing: border-box;
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+    }
+
+    /* Tabloyu daha sıkı yapmak için margin düzenlemesi */
+   /* table {
+        margin-top: 20px;
+    }*/
+    table {
+        font-size: 10px; /* Daha küçük bir font boyutu */
+    }
+    @{
+        Html.Raw(@"
+
+            ");
+    }
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<div class="page" id="pdf-content">
+    <div class="div no-print">
+        <div class="col">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button class="btn btn-warning" onclick="downloadPDF()"><i class="fa fa-print"></i> İndir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mx-auto">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>
+                            <img src="http://test.yilmaz-ticaret.com/img/orginal.png" class="img" style="max-height:150px;max-width:300px" />
+                        </td>
+                        <td colspan="4" class="text-center">
+                            <h3>
+                                Cari Hareket Raporu
+                            </h3>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="p-1">Cari Adı :</th>
+                            <th class="p-1">@Model.Cari.CA_UNVAN  -  @Model.Cari.CA_KOD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-2">Genel Borç :</td>
+                            <td class="p-2">@Model.Cari.CA_BORC</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2">Genel Alacak :</td>
+                            <td class="p-2">@Model.Cari.CA_ALACAK</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2">Genel Fark :</td>
+                            <td class="p-2">@(Model.Cari.CA_BORC - Model.Cari.CA_ALACAK)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2">Rapor Tarih Aralığı</td>
+                            <td class="p-2">@Model.StartDate.ToString("dd.MM.yyyy") - @Model.EndDate.ToString("dd.MM.yyyy")  </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @{
+        decimal? bakiye = 0M;
+    }
+    @if (!Model.Detaylımı)
+    {
+
+        <div class="row">
+            <div class="col">
+                <div class="table">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="p-1">İşlem Tarihi</th>
+                                <th class="p-1">Hareket Türü</th>
+                                <th class="p-1">Bakiye</th>
+                                <th class="p-1">Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CariHareketler)
+                            {
+                                bakiye += item.CH_TUTAR;
+                                @if (item.CH_ISLEM_TIPI == "-10")
+                                {
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Kasa</td>
+                                        <td class="p-2">@bakiye</td>
+
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+                                else if (item.CH_ISLEM_TIPI == "-3")
+                                {
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Dekont</td>
+                                        <td class="p-2">@bakiye</td>
+
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+                                else if (item.CH_ISLEM_TIPI == "-13")
+                                {
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Devir</td>
+                                        <td class="p-2">@bakiye</td>
+
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+                                else if (item.CH_ISLEM_TIPI == "-12")
+                                {
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Fatura</td>
+                                        <td class="p-2">@bakiye</td>
+
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Tanımlanmamaış İşlem @item.CH_ISLEM_TIPI</td>
+                                        <td class="p-2">@bakiye</td>
+
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+
+
+        <div class="row">
+            <div class="col">
+                <div class="table">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="p-1">İşlem Tarihi</th>
+                                <th class="p-1">Hareket Türü</th>
+                                <th class="p-1">Stok Adı</th>
+                                <th class="p-1">Adet</th>
+                                <th class="p-1">Bakiye</th>
+                                <th class="p-1">Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CariHareketler)
+                            {
+                                @if (item.CH_ISLEM_TIPI == "-10")
+                                {
+                                    bakiye += item.CH_TUTAR;
+
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Kasa</td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2">@bakiye</td>
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+                                else if (item.CH_ISLEM_TIPI == "-3")
+                                {
+                                    bakiye += item.CH_TUTAR;
+
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Dekont</td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2">@bakiye</td>
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+                                else if (item.CH_ISLEM_TIPI == "-13")
+                                {
+                                    bakiye += item.CH_TUTAR;
+
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Devir</td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2">@bakiye</td>
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+                                else if (item.CH_ISLEM_TIPI == "-12")
+                                {
+
+                                    @foreach (var _item in Model.RivaFaturaSatırs.Where(o => o.FD_FATURA_ID == Model.RivaFaturas.Where(x => x.FT_ID == item.CH_ENTEGRA_ID).FirstOrDefault().FT_ID))
+                                    {
+                                        bakiye += _item.FD_TUTAR;
+                                        <tr>
+                                            <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                            <td class="p-2">Fatura</td>
+                                            <td class="p-2">@_item.FD_STOK_BASLIK</td>
+                                            <td class="p-2">@_item.FD_MIKTAR</td>
+                                            <td class="p-2">@bakiye</td>
+                                            <td class="p-2">@item.CH_ACIKLAMA</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    bakiye += item.CH_TUTAR;
+
+                                    <tr>
+                                        <td class="p-2">@item.CH_ISLEM_TARIHI?.ToString("dd.MM.yyyy")</td>
+                                        <td class="p-2">Tanımlanmamaış İşlem @item.CH_ISLEM_TIPI</td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2"></td>
+                                        <td class="p-2">@bakiye</td>
+                                        <td class="p-2">@item.CH_ACIKLAMA</td>
+                                    </tr>
+                                }
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+    }
+
+
+
+
+
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/print-js"></script>
+<script>
+    window.onload = function () {
+        window.print();
+    };
+
+</script>
+<script>
+    async function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF("p", "mm", "a5"); // A5 boyutunda PDF (Dikey)
+
+        const element = document.getElementById("pdf-content");
+
+        // Yüksek kaliteli canvas oluştur
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#ffffff"
+        });
+
+        const imgData = canvas.toDataURL("image/png");
+
+        // A5 Boyutları
+        const pageWidth = 148; // A5 genişlik (mm)
+        const pageHeight = 210; // A5 yükseklik (mm)
+        const imgWidth = pageWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        let yPosition = 0; // Başlangıç Y konumu
+
+        while (yPosition < imgHeight) {
+            if (yPosition-500 > 0) doc.addPage(); // Yeni sayfa ekle
+
+            doc.addImage(imgData, "PNG", 0, -yPosition, imgWidth, imgHeight);
+            yPosition += pageHeight; // Y konumunu artırarak diğer sayfaya geç
+        }
+
+        doc.save("sayfa.pdf");
+    }
+</script>

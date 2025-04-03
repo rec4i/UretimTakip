@@ -12,7 +12,7 @@
             "commandName": "Project",
             "dotnetRunMessages": true,
             "launchBrowser": true,
-            //"applicationUrl": "http://192.168.1.20",
+            //"applicationUrl": "http://192.168.1.105:7777",
             //"applicationUrl": "http://192.168.1.37",
             //"applicationUrl": "http://172.20.10.2:5231",
             //"applicationUrl": "http://10.10.1.165:5231",

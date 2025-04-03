@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
+@*<div class="row">
     <div class="col-lg-0 col-12" style="opacity: 0;">
         <div class="card bg-primary">
             <div class="card-body">
@@ -18,7 +18,7 @@
     </div>
     <div class="col">
         <div class="d-flex justify-content-center">
-            <img class="img-fluid" src="http://test.yilmaz-ticaret.com/img/orginal.png" alt="Alternate Text" />
+            <img class="img-fluid" src="http://f5yazilim.com/upload/logo/f5logoson.png" alt="Alternate Text" />
         </div>
     </div>
     <div class="col-lg-0 col-12" style="opacity: 0;">
@@ -36,7 +36,7 @@
     </div>
     <div class="col-lg-6 col-12">
         <div id="CariHesaplarCard" class="card bg-primary">
-            <div class="card-body">
+            <div class="card-body" style="font-size:25px">
                 <div class="row">
                     <div class="col text-center">
                         <label class="text-center">
@@ -49,7 +49,7 @@
     </div>
     <div class=" col-lg-6  col-12 ">
         <div class="card bg-primary">
-            <div class="card-body">
+            <div id="StokKartları" class="card-body" style="font-size:25px">
                 <div class="row">
                     <div class="col text-center">
                         <label class="">
@@ -61,12 +61,12 @@
         </div>
     </div>
     <div class="col-lg-6 col-12  ">
-        <div class="card bg-primary">
-            <div class="card-body">
+        <div id="FaturalarDiv" class="card bg-primary">
+            <div class="card-body" style="font-size:25px">
                 <div class="row">
                     <div class="col text-center">
                         <label class="">
-                            <i class="fa fa-dollar"></i>  FATURALAR
+                            <i class="fa fa-file"></i>  FATURALAR
                         </label>
                     </div>
                 </div>
@@ -74,25 +74,68 @@
         </div>
     </div>
     <div class="col-lg-6 col-12  ">
-        <div class="card bg-primary">
-            <div class="card-body">
+        <div id="RaporlarDiv" class="card bg-primary">
+            <div class="card-body" style="font-size:25px">
                 <div class="row">
                     <div class="col text-center">
                         <label class="">
-                            <i class="fa fa-chart-bar"></i>    RAPORLAR
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07" />
+                            </svg>   RAPORLAR
                         </label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="col-lg-6 col-12  ">
+        <div id="SıcakSatışDiv" class="card bg-primary">
+            <div class="card-body" style="font-size:25px">
+                <div class="row">
+                    <div class="col text-center">
+                        <label class="">
+                            <i class="fa fa-chart-bar"></i>    Sıcak Satış
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-12  ">
+        <div id="ButonTasarla" class="card bg-primary">
+            <div class="card-body" style="font-size:25px">
+                <div class="row">
+                    <div class="col text-center">
+                        <label class="">
+                            <i class="fa fa-chart-bar"></i>    Sıcak Satış Ekran Tasarım
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#RaporlarDiv').click(function () {
+            window.location.href = "/Riva/Raporlar"
+        })
         $('#CariHesaplarCard').click(function () {
             window.location.href = "/Riva/Cariler"
         })
-
+        $('#FaturalarDiv').click(function () {
+            window.location.href = "/Riva/Faturalar"
+        })
+        $('#SıcakSatışDiv').click(function () {
+            window.location.href = "/Riva/SıcakSatış"
+        })
+        $('#StokKartları').click(function () {
+            window.location.href = "/Riva/Stoklar"
+        })
+        $('#ButonTasarla').click(function () {
+            window.location.href = "/EkranTasarım/Index"
+        })
+        //SıcakSatışDiv
     })
 
 </script>

@@ -1,0 +1,56 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Profil Adı</label>
+                        <input type="text" class="form-control" name="profilAdı" id="ProfilAdı" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-primary" id="KaydetBtn">
+                                    <i class="fa fa-save"></i> Kaydet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#KaydetBtn').click(function () {
+            var data = new FormData();
+            data.append('ProfilAdı', $('#ProfilAdı').val())
+
+            $.ajax({
+                url: "/EkranTasarım/ProfilOluştur",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                        setTimeout(function () {
+                            window.location.href = "/EkranTasarım/Index"
+                        }, 500)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+        })
+    })
+</script>

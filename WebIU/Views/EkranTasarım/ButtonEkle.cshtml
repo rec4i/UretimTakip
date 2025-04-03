@@ -1,0 +1,115 @@
+﻿@model WebIU.Models.EkranTasarımViewModels.ButtonEkleViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Button Adı</label>
+                        </br>
+                        <label class="text-red">*Boş Bırakılırsa Stok Adını Alır</label>
+                        <input type="text" class="form-control" id="ButtonAdı" name="Button Adı" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Button Rengi</label>
+                        <select class="form-control" id="ButtonRengi">
+                            <option value="danger">Kırmızı</option>
+                            <option value="info">Açık Gri</option>
+                            <option value="secondary">Gri</option>
+                            <option value="warning">Sarı</option>
+                            <option value="success">Yeşil</option>
+                            <option value="primary">Mavi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Riva Stok Adı</label>
+                        </br>
+                        <label class="text-red">*Boş Bırakılırsa Başlık Olarak İşleme Alınır</label>
+                        <select class="form-control" style="width:100%" id="RivaStokId">
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="KaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#KaydetBtn').click(function () {
+            var data = new FormData();
+
+
+            data.append('profilId', @Model.ProfilId)
+            data.append('ParentId', @Model.ParentId)
+            data.append('RivaStokId', $('#RivaStokId').find(':selected').val())
+            data.append('StokAdı', $('#RivaStokId').find(':selected').html())
+            data.append('ButtonRengi', $('#ButtonRengi').find(':selected').val())
+            data.append('ButtonAdı', $('#ButtonAdı').val())
+
+            $.ajax({
+                url: "/EkranTasarım/ButtonEkle",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                        setTimeout(function () {
+                            window.location.href = "/EkranTasarım/ButtonListesi?Id=@Model.ProfilId&ParentId=@Model.ParentId"
+                        }, 500)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+
+        })
+
+
+        $('#RivaStokId').select2({
+            placeholder: 'Bir değer yazın...',
+            ajax: {
+                url: "/Riva/BarkodUrunAraHarf",
+                dataType: 'json',
+                delay: 250, // Arama gecikmesi
+                data: function (params) {
+                    return {
+                        q: params.term // Kullanıcının yazdığı arama terimi
+                    };
+                },
+                processResults: function (data) {
+                    // Gelen veriyi Select2'nin anlayacağı forma dönüştürüyoruz
+                    return {
+                        results: data.data.map(function (item) {
+                            return {
+                                id: item.sK_ID,
+                                text: item.sK_ISIM // Gösterilecek alan
+                            };
+                        })
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1 // Arama yapmadan önce en az 1 karakter girilmesi gerekir
+        });
+    });
+</script>

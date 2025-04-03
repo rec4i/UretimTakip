@@ -3,6 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>04104ca6-b7dc-46ff-aec4-706ce4b43316</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Views\KareKod\EmirEkle.cshtml" />

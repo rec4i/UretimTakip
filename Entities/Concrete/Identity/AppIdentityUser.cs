@@ -35,5 +35,6 @@ namespace Entities.Concrete.Identity
         public bool IsDeleted { get; set; }
         //public int ProfileId { get; set; }
 
+
     }
 }

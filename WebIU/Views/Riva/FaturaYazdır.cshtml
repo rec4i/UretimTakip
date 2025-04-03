@@ -1,0 +1,210 @@
+﻿@{
+    Layout = null;
+}
+@model WebIU.Controllers.RivaController.FaturaYazdırViewModel
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+        /* A4 Kağıdı Boyutu */
+        @Html.Raw(@"
+@page {
+    size: A4; /* Yazdırma için A4 kağıdı boyutu */
+    margin: 0; /* Yazdırma sırasında kenar boşluklarını sıfırla */
+}
+  @media print {
+   body {
+      -webkit-print-color-adjust: exact;
+   }
+ .no-print {
+                            display: none !important;
+                            }
+}
+
+
+")
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .page {
+        width: 210mm;
+       height: 297mm;
+        margin: auto;
+        padding: 5mm;
+        box-sizing: border-box;
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+    }
+
+    /* Tabloyu daha sıkı yapmak için margin düzenlemesi */
+   /* table {
+        margin-top: 20px;
+    }*/
+    table {
+        font-size: 10px; /* Daha küçük bir font boyutu */
+    }
+    @{
+        Html.Raw(@"
+
+            ");
+    }
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<div class="page" id="pdf-content">
+    <div class="div no-print">
+        <div class="col">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button class="btn btn-warning" id="İndir" onclick="downloadPDF()"><i class="fa fa-print"></i> İndir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mx-auto">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>
+                            @*<img src="http://test.yilmaz-ticaret.com/img/orginal.png" class="img" style="max-height:150px;max-width:300px" />*@
+                        </td>
+                        <td colspan="4" class="text-center">
+                            <h3>
+                                Fatura
+                            </h3>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="p-1">Cari Adı :</th>
+                            <th class="p-1">@Model.RivaFatura.FT_UNVAN</th>
+                        </tr>
+                        <tr>
+                            <th class="p-1">Cari Kodu :</th>
+                            <th class="p-1">@Model.Cari.CA_KOD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-2">Evrak No  :</td>
+                            <td class="p-2">@Model.RivaFatura.FT_EVRAK_NO</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2">Genel Tutar :</td>
+                            <td class="p-2">@Model.RivaFatura.FT_GENEL_TOPLAM</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2">Fatura Tarihi </td>
+                            <td class="p-2">@Model.RivaFatura.FT_TARIH.ToString("dd.MM.yyyy") </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col">
+            <div class="table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="p-1">Stok Adı</th>
+                            <th class="p-1">Miktar</th>
+                            <th class="p-1">Birim Fiyat</th>
+                            <th class="p-1">Tutar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.RivaFaturaSatırs)
+                        {
+                            <tr>
+                                <td class="p-2">@item.FD_STOK_BASLIK</td>
+                                <td class="p-2">@item.FD_MIKTAR</td>
+
+                                <td class="p-2">@(item.FD_TUTAR / item.FD_MIKTAR)</td>
+                                <td class="p-2">  @item.FD_TUTAR</td>
+                            </tr>
+
+
+
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align:right"> Genel Tutar :</td>
+                            <td>@Model.RivaFatura.FT_GENEL_TOPLAM</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/print-js"></script>
+<script>
+    window.onload = function () {
+        window.print();
+    };
+
+</script>
+<script>
+    async function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF("p", "mm", "a5"); // A5 boyutunda PDF (Dikey)
+
+        const element = document.getElementById("pdf-content");
+        $('#İndir').attr('hidden', 'true')
+
+        // Yüksek kaliteli canvas oluştur
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#ffffff"
+        });
+        $('#İndir').removeAttr('hidden')
+        const imgData = canvas.toDataURL("image/png");
+
+        // A5 Boyutları
+        const pageWidth = 148; // A5 genişlik (mm)
+        const pageHeight = 210; // A5 yükseklik (mm)
+        const imgWidth = pageWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        let yPosition = 0; // Başlangıç Y konumu
+
+        while (yPosition < imgHeight) {
+            if (yPosition - 500 > 0) doc.addPage(); // Yeni sayfa ekle
+
+            doc.addImage(imgData, "PNG", 0, -yPosition, imgWidth, imgHeight);
+            yPosition += pageHeight; // Y konumunu artırarak diğer sayfaya geç
+        }
+        doc.save("sayfa.pdf");
+     
+
+
+    }
+</script>

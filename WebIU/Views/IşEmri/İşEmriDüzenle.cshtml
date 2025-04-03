@@ -19,14 +19,11 @@
                                 <tr>
                                     <th data-field="id" data-title="id" hidden data-sortable="false"></th>
                                     <th data-field="yapılacakİş.işAdı" data-title="Yapılacaş İş" data-sortable="false"></th>
+                                    <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>
                                     <th data-field="tamamlanmaDurum" data-title="Durum" data-sortable="false"></th>
-
                                     <th data-field="kullanıclacakMiktar" data-title="Kullanılacak Miktar" data-sortable="false"></th>
                                     <th data-field="üretilecekMiktar" data-title="Üretilecek Miktar" data-sortable="false"></th>
-
-
-                                    <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>
-
+                                    <th data-field="DoldurlacakBelgeler" data-title="Doldurlacak Belgeler" data-sortable="false"></th>
                                     <th data-title="Actions" data-sortable="false"></th>
                                 </tr>
                             </thead>
@@ -38,11 +35,275 @@
         </div>
     </div>
 </div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="İşDurumunuDüzenleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">İş Durumunu Düzenle </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="İşDurumunuDüzenleModalBody">
+                <div id="StokDoldurmaDiv">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card card-warning">
+                                <div class="card-header">
+                                    <label>Kullanılan Stok</label>
+                                </div>
+                                <div class="card-body">
+                                    <div id="KullanılanStokDiv">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label>Yeni Stok</label><br />
+                                                                <label>Hedef Kullanım Mitarı : 10,00 KG </label> <br />
+                                                            </div>
+                                                            <div class="col">
+                                                                <label>Lütfen Kullanılan Seriyi Seçiniz</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <input type="text" class="form-control" data-suffix=" KG" data-Mask="Mikar" value="" />
+                                                            </div>
+                                                            <div class="col">
+                                                                <select id="" class="form-control">
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card card-danger">
+                                <div class="card-header">
+                                    <label>Üretilen Stok</label>
+                                </div>
+                                <div class="card-body">
+                                    <div id="ÜretilenStokDiv">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="KullanılanStokKaydetBtn"><i class=" fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="BelgeDoldurModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">Doldurulacak Belgeler</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="BelgeDoldurModalBody">
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-header">
+                                <label>Dolduralcaklar Belgeler</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <table id="DolduralcakBelgeTablo"
+                                               data-toolbar="#DolduralcakBelgeTabloToolBar"
+                                               data-pagination="true"
+                                               data-side-pagination="server"
+                                               data-id-field="id"
+                                               data-page-list="[10, 25, 50, 100, all]"
+                                               data-locale="Tr-tr"
+                                               data-search="true"
+                                               data-show-refresh="true"
+                                               data-show-export="true">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                                    <th data-field="belge.belgeAdı" data-title="Belge Adı " data-sortable="false"></th>
+                                                    <th data-title="Actions" data-sortable="false"></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="BelgeİçerikDüzenleModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="min-width:1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="BelgeİçerikDüzenleModalBodyTitle">Doldurulacak Belgeler</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="BelgeİçerikDüzenleModalBody">
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     $(document).ready(function () {
 
         OrderTablosuDoldur()
+
+        $('#KullanılanStokKaydetBtn').click(function () {
+            var işEmriDurumId = $(this).attr('İşEmriDurumId')
+
+
+            KullanılanStoklar = [];
+            KullanılanLotlar = [];
+            KullanılanStokMiktarları = [];
+
+
+            ÜretilecekStoklar = [];
+            ÜretilecekLotlar = [];
+            ÜretilenStokMiktarları = [];
+
+            $('#KullanılacakStokDiv').each(function () {
+                var StokId = $(this).attr('stokId')
+                var LotNo = $(this).find('select[id="LotNoSelect"]').find(':selected').val()
+                var StokMiktar = $(this).find('input[id="KullanılacakStokİnput"]').val()
+                var datasuffix = $(this).find('input[id="KullanılacakStokİnput"]').attr('data-suffix')
+                KullanılanStoklar.push(StokId)
+                KullanılanLotlar.push(LotNo)
+                KullanılanStokMiktarları.push(StokMiktar.replace(datasuffix, "").trim())
+            })
+
+            $('#ÜretilecekStokDiv').each(function () {
+                var StokId = $(this).attr('stokId')
+                var LotNo = $(this).find('input[id="ÜretilecekLotİnput"]').val()
+                var StokMiktar = $(this).find('input[id="ÜretilecekStokİnput"]').val()
+                var datasuffix = $(this).find('input[id="ÜretilecekStokİnput"]').attr('data-suffix')
+                ÜretilecekStoklar.push(StokId)
+                ÜretilecekLotlar.push(LotNo)
+                ÜretilenStokMiktarları.push(StokMiktar.replace(datasuffix,"").trim())
+            })
+
+
+            console.log(KullanılanStoklar);
+            console.log(KullanılanLotlar);
+            console.log(KullanılanStokMiktarları);
+
+
+            console.log(ÜretilecekStoklar);
+            console.log(ÜretilecekLotlar);
+            console.log(ÜretilenStokMiktarları);
+
+
+            var data = new FormData();
+            data.append('İşEmriDurumId', işEmriDurumId)
+
+            for (var i = 0; i < KullanılanStoklar.length; i++) {
+                data.append('KullanılanStoklar['+i+']', KullanılanStoklar[i])
+            }
+            for (var i = 0; i < KullanılanLotlar.length; i++) {
+                data.append('KullanılanLotlar[' + i + ']', KullanılanLotlar[i])
+            }
+            for (var i = 0; i < KullanılanStokMiktarları.length; i++) {
+                data.append('KullanılanStokMiktarları[' + i + ']', KullanılanStokMiktarları[i].replace(".", ","))
+            }
+
+
+
+
+            for (var i = 0; i < ÜretilecekStoklar.length; i++) {
+                data.append('ÜretilecekStoklar[' + i + ']', ÜretilecekStoklar[i])
+            }
+            for (var i = 0; i < ÜretilecekLotlar.length; i++) {
+                data.append('ÜretilecekLotlar[' + i + ']', ÜretilecekLotlar[i])
+            }
+            for (var i = 0; i < ÜretilenStokMiktarları.length; i++) {
+                data.append('ÜretilenStokMiktarları[' + i + ']', ÜretilenStokMiktarları[i].replace(".",","))
+            }
+
+
+
+
+
+
+            $.ajax({
+                url: "/IşEmri/İşEmriDüzenleStokHareketOluştur",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+
+
+                        successAlert(data.message)
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+
+
+
+
+
+        })
+
     })
     function OrderTablosuDoldur() {
         $('#OrderList').bootstrapTable("destroy")
@@ -50,6 +311,7 @@
             url: "/IşEmri/İşEmriDurumPaginaiton?İşEmriId=@Model",
             columns: [
                 [
+                    {},
                     {},
                     {},
                     {
@@ -61,7 +323,9 @@
                     {
                         formatter:ÜretilecekStokFormatter
                     },
-                    {},
+                    {
+                        formatter: DoldurlacakBelgelerFormatter
+                    },
                     {
                         formatter: ActionFormatter
                     },
@@ -69,6 +333,30 @@
             ],
             onLoadSuccess: afterLoad,
         })
+        function DoldurlacakBelgelerFormatter(value, row) {
+            var data = new FormData();
+            data.append('işId', row["id"])
+            var eklenecekData = ""
+            $.ajax({
+                url: "/IşEmri/İşEmriDurumDoldurulacakBelgeGetir",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        for (var i = 0; i < data.data.length; i++) {
+                            eklenecekData +=" - "+data.data[i].belge.belgeAdı
+                        }
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+            return eklenecekData;
+        }
         function ÜretilecekStokFormatter(value ,row) {
             var data = new FormData();
             data.append('işEmriDurumId', row["id"])
@@ -129,7 +417,13 @@
                 return '<small class="badge badge-secondary"><i class="far fa-clock"></i> Duraklatıldı</small>'
             }
             else if (value == 3) {
-                return '<small class="badge badge-success"><i class="far fa-clock"></i> Tamamlandı</small>'
+                return '<small class="badge badge-success"><i class="far fa-check"></i> Tamamlandı</small>'
+            }
+            else if (value == 4) {
+                return '<small class="badge badge-success"><i class="far fa-clock"></i> Devam Ediyor</small>'
+            }
+            else if (value == 5) {
+                return '<small class="badge badge-secondary"><i class="far fa-clock"></i> Belgeler Bekleniyor</small>'
             }
             else {
                 return "Uygun Durum Bulunamadı"
@@ -138,13 +432,28 @@
         function ActionFormatter(value, row) {
             var value = "";
             value += "<button id='İşEmriDüzenle' TezgahId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-qrcode'></i> İş Durum Düzenle</button> ";
+            value += "<button id='BelgeDoldur' TezgahId='" + row["reçete_Iş_MTMId"] + "' class='btn btn-primary'><i class='fa fa-copy'></i> Belge Doldur</button> ";
             return value
         }
         function afterLoad() {
+            $('*#BelgeDoldur').click(function () {
+                $('#BelgeDoldurModal').modal('show')
+                var İşEmriId = $(this).attr('TezgahId');
+                DolduralacakBelgeTabloDoldur(İşEmriId);
+            })
+            $('*#İşEmriDüzenle').click(function () {
+                $('#İşDurumunuDüzenleModal').modal("show")
+                var İşEmriId = $(this).attr('TezgahId');
+
+
+                $('#KullanılanStokKaydetBtn').attr('İşEmriDurumId', İşEmriId);
+                KullanılacakDoldrulacakStokDivDoldur(İşEmriId)
+                ÜretilecekDoldrulacakStokDivDoldur(İşEmriId)
+                LotNoSelectDoldur()
+            })
             $('*#TezgahSil').click(function () {
                 var data = new FormData();
                 data.append('Id', $(this).attr('TezgahId'))
-
                 Swal.fire({
                     title: ' silinecektir!',
                     text: 'Silmek istediğinizden emin misiniz?',
@@ -188,24 +497,217 @@
                 $('#YeniTezgahDüzenleBtn').attr('TezgahId', $(this).attr('TezgahId'))
 
                 QrTablosuDoldur($(this).attr('TezgahId'))
-                //$.ajax({
-                //    url: "/IşEmri/İşEmriSil",
-                //    type: "POST",
-                //    processData: false,
-                //    contentType: false,
-                //    async: false,
-                //    data: data,
-                //    success: function (data) {
-
-
-                //    },
-                //});
 
             })
 
         }
 
     }
+    function ÜretilecekDoldrulacakStokDivDoldur(İşMtmId) {
+        var data = new FormData();
+        data.append('MtmId', İşMtmId)
+        $.ajax({
+            url: "/Reçete/ÜretilecekStokGetir",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                $('#ÜretilenStokDiv').empty();
+                if (data.status == 1) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        console.log(data.data);
+                        var my_var = ' <div class="row" id="ÜretilecekStokDiv" stokId="' + data.data[i].stok.id + '">' +
+                            '     <div class="col">' +
+                            '         <div class="card">' +
+                            '             <div class="card-body">' +
+                            '                 <div class="row">' +
+                            '                     <div class="col">' +
+                            '                         <label>' + data.data[i].stok.stokAdı + '</label> </br>' +
+                            '                         <label>Hedef Üretim Mitarı :' + data.data[i].üretilecekStokMiktarı + ' ' + data.data[i].stok.birim.birimKodu + ' </label>' +
+                            '                     </div>' +
+                            '                     <div class="col">' +
+                            '                         <label>Lütfen Üretilen Lotu Giriniz</label>' +
+                            '                     </div>' +
+                            '                 </div>' +
+                            '                 <div class="row">' +
+                            '                     <div class="col">' +
+                            '                     <input id="ÜretilecekStokİnput" type="text" class="form-control" data-suffix="  ' + data.data[i].stok.birim.birimKodu + '" data-Mask="Mikar" value="" />' +
+                            '                     </div>' +
+                            '                     <div class="col">' +
+                            '                     <input id="ÜretilecekLotİnput" type="text" class="form-control"   value="" />' +
 
+                            //'                         <select id="ÜretilecekLotNoSelect" kullanılıcakStokId="'+data.data[i].id+'" stokId="' + data.data[i].stok.id + '" class="form-control">' +
+                            //'                         </select>' +
+                            '                     </div>' +
+                            '                 </div>' +
+                            '             </div>' +
+                            '         </div>' +
+                            '     </div>' +
+                            ' </div>';
+
+
+                        $('#ÜretilenStokDiv').append(my_var);
+                    }
+                    DataMask()
+                }
+                else {
+                    errorAlert(data.message)
+                }
+            },
+        });
+
+    }
+    function LotNoSelectDoldur() {
+
+        $('*#LotNoSelect').each(function () {
+            var stokId = $(this).attr('stokId')
+            var thisSelect = $(this)
+            var data = new FormData();
+            data.append('StokId', stokId)
+
+            $.ajax({
+                url: "/IşEmri/StokLotNoGetir",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    thisSelect.empty()
+                    if (data.status == 1) {
+                        if (data.data.length>0) {
+                            for (var i = 0; i < data.data.length; i++) {
+                                thisSelect.append('<option value="' + data.data[i] + '">' + data.data[i] + '</option>')
+                            }
+                        }
+                        else {
+                            thisSelect.append('<option value="0" >' + 'Stokda Lot Bulunamadı'+ '</option>')
+                        }
+
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+        })
+
+
+    }
+
+    function KullanılacakDoldrulacakStokDivDoldur(İşMtmId) {
+        var data = new FormData();
+        data.append('MtmId', İşMtmId)
+        $.ajax({
+            url: "/Reçete/KullanılacakStokGetir",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                $('#KullanılanStokDiv').empty();
+                if (data.status == 1) {
+                    for (var i = 0; i < data.data.length; i++) {
+
+                        var my_var = ' <div class="row" id="KullanılacakStokDiv" stokId="' + data.data[i].stok.id +'">' +
+                            '     <div class="col">' +
+                            '         <div class="card">' +
+                            '             <div class="card-body">' +
+                            '                 <div class="row">' +
+                            '                     <div class="col">' +
+                            '                         <label>' + data.data[i].stok.stokAdı + '</label> </br>' +
+                            '                         <label>Hedef Kullanım Mitarı :' + data.data[i].kullanılacakStokMiktarı + ' ' + data.data[i].stok.birim.birimKodu + ' </label>' +
+                            '                     </div>' +
+                            '                     <div class="col">' +
+                            '                         <label>Lütfen Kullanılan Lotu Seçiniz</label>' +
+                            '                     </div>' +
+                            '                 </div>' +
+                            '                 <div class="row">' +
+                            '                     <div class="col">' +
+                            '                     <input type="text" id="KullanılacakStokİnput" class="form-control" data-suffix="  ' + data.data[i].stok.birim.birimKodu + '" data-Mask="Mikar" value="" />' +
+                            '                     </div>' +
+                            '                     <div class="col">' +
+                            '                         <select id="LotNoSelect" kullanılıcakStokId="' + data.data[i].id +'" stokId="' + data.data[i].stok.id + '"  class="form-control">' +
+                            '                         </select>' +
+                            '                     </div>' +
+                            '                 </div>' +
+                            '             </div>' +
+                            '         </div>' +
+                            '     </div>' +
+                            ' </div>';
+
+                        $('#KullanılanStokDiv').append(my_var);
+                    }
+                    DataMask()
+
+                }
+                else {
+                    errorAlert(data.message)
+                }
+            },
+        });
+
+    }
+
+    function DolduralacakBelgeTabloDoldur(İşMtmId) {
+        $('#DolduralcakBelgeTablo').bootstrapTable("destroy")
+        $('#DolduralcakBelgeTablo').bootstrapTable({
+            url: "/Reçete/ReçeteDoldurlacakBelgePaginaiton?Id=" + İşMtmId,
+            columns: [
+                [
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+            //value += "<button id='OrderConfrimationEditBtn' odrderId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button>";
+            value += "<button id='BelgeyiDoldur' IşId='" + row["id"] + "' belgeAdı='" + row["belge"].belgeAdı + "'  class='btn btn-warning'><i class='fa fa-edit'></i> Belgeyi Doldur</button>";
+            return value
+        }
+        function afterLoad() {
+            $('#BelgeyiDoldur').click(function () {
+                $('#BelgeDoldurModal').modal('hide')
+                $('#BelgeİçerikDüzenleModal').modal('show')
+                $('#BelgeİçerikDüzenleModalBodyTitle').html($(this).attr('belgeAdı'))
+
+                var belgeId = $(this).attr('IşId');
+
+                var data = new FormData();
+                data.append('BelgeId', belgeId)
+
+                $.ajax({
+                    url: "/IşEmri/GetBelgeSoruları",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+
+
+
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                    },
+                });
+
+
+
+            })
+        }
+
+    }
 
 </script>

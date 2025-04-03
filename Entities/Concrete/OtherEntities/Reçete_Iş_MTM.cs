@@ -23,6 +23,9 @@ namespace Entities.Concrete.OtherEntities
         public int? SorumluKullanıcıGrupId { get; set; }
         public SorumluKullanıcıGrup? SorumluKullanıcıGrup { get; set; }
 
+        public int? TezgahId { get; set; }
+        public Tezgah? Tezgah { get; set; }
+
 
         //public int? KullanılacakDepoId { get; set; }
         //public Depo? KullanılacakDepo { get; set; }

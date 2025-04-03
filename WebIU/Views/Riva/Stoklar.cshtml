@@ -1,1 +1,171 @@
-﻿
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 col-5">
+                        <input placeholder="Stok Kodu" class="form-control" id="StokKodu" value="" />
+                    </div>
+                    <div class="col-6 col-5">
+                        <input placeholder="Stok Adı" class="form-control" id="StokAdı" value="" />
+                    </div>
+                    <div class="col-12 col-2 pt-2">
+                        <button id="StokAra" class="btn btn-primary btn-block"><i class="fa fa-search"></i> Stok Ara </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div id="content" class="row">
+    @*<div class="col-12 col-6">
+            <div class="card bg-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col text-center">
+                            <label class="">
+                                Cari Kodu :
+                            </label>
+                            <label class="">
+                                Cari Ünvanı:
+                            </label>
+                            <label class="">
+                                Borç:
+                            </label>
+                            <label class="">
+                                Alacak:
+                            </label>
+                            <label class="">
+                                Bakiye:
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+</div>
+<div id="scroll-trigger"></div>
+
+
+
+<script type="text/javascript">
+    let currentPage = 1; // Mevcut sayfa numarası
+    let isLoading = false; // Şu anda yükleme işlemi yapılıyor mu?
+    $(document).ready(function () {
+        $('#StokAra').click(function () {
+            $('#content').empty();
+            currentPage = 1;
+            loadMoreContent($('#StokKodu').val(), $('#StokAdı').val());
+        })
+    })
+
+
+
+    function loadMoreContent(StokKodu, StokAdı) {
+        if (isLoading) return; // Zaten yükleme yapılıyorsa çık
+        isLoading = true;
+        // Backend API çağrısı
+        $.ajax({
+            url: '/Riva/StoklarInfinity?curPage=' + currentPage + '&StokKodu=' + StokKodu + '&StokAdı=' + StokAdı, // Backend endpoint
+            method: 'GET',
+            success: function (data) {
+                console.log(data.data);
+                // Gelen verileri ekle
+                data.data.forEach(item => {
+                    var bgColor = "primary";
+                    if ((item.sK_GIRIS_MIKTARI - item.sK_CIKIS_MIKTARI) >= 0) {
+                        bgColor = "success"
+                    }
+                    else {
+                        bgColor = "danger"
+
+                    }
+                    var my_var = '  <div class="col-lg-6 col-12">' +
+                        '      <div id="CariCard" cariId="' + item.sK_ID + '" class="card bg-' + bgColor + '">' +
+                        '          <div class="card-body">' +
+                        '              <div class="row">' +
+                        '                  <div class="col">' +
+                        '                      <label class="">' +
+                        '                          Stok Kodu :' + item.sK_KOD +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Stok Adı :' + item.sK_ISIM +
+                        '                      </label> </br>' +
+                        '                      <label class="">' +
+                        '                          Toplam Miktar :  ' + (item.sK_GIRIS_MIKTARI - item.sK_CIKIS_MIKTARI) +
+                        '                      </label> </br>' +
+                        '                  </div>' +
+                        '              </div>' +
+                        '          </div>' +
+                        '      </div>' +
+                        '  </div>';
+                    $('#content').append(
+                        my_var
+                    );
+                    $('div[id="CariCard"][cariId="' + item.sK_ID + '"]').click(function () {
+                        var cariId = $(this).attr('cariId');
+                        console.log(cariId);
+                        window.location.href = "/Riva/StokHareketler?Id=" + cariId
+                    })
+                });
+
+                // Sayfa numarasını artır
+                currentPage++;
+
+                // Daha fazla veri yoksa tetikleyiciyi kaldır
+                if (!data.hasMore) {
+                    $(window).off('scroll', onScrollHandler); // Scroll dinleyicisini kaldır
+                    $('#scroll-trigger').hide(); // Göstergeden kurtul
+                }
+            },
+            error: function () {
+                console.error("Veriler yüklenirken hata oluştu!");
+            },
+            complete: function () {
+                isLoading = false; // İşlem tamamlandı
+            }
+        });
+    }
+
+
+    // Scroll olayını ele al
+    function onScrollHandler() {
+        const scrollTrigger = $('#scroll-trigger').offset().top;
+        const viewportBottom = $(window).scrollTop() + $(window).height();
+
+        // Tetikleme noktasına ulaşıldıysa içerik yükle
+        if (viewportBottom >= scrollTrigger) {
+            loadMoreContent($('#StokKodu').val(), $('#StokAdı').val());
+        }
+    }
+    // İlk scroll olay dinleyicisini başlat
+    $(window).on('scroll', onScrollHandler);
+    // İlk içerik yükleme
+    loadMoreContent($('#StokKodu').val(), $('#StokAdı').val());
+
+    // Sadece test amaçlı
+    const mockApi = (page) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const items = Array.from({ length: 10 }, (_, i) => ({
+                    id: page * 10 + i + 1,
+                    name: `Item ${page * 10 + i + 1}`
+                }));
+                resolve({
+                    data: items,
+                    hasMore: page < 5 // 5 sayfa veriden fazlası yok
+                });
+            }, 1000);
+        });
+    };
+
+    // Gerçek backend yerine mock API kullanımı
+    $.ajax = function (options) {
+        const page = new URL(options.url, "http://localhost").searchParams.get("page");
+        mockApi(Number(page)).then(options.success);
+    };
+</script>

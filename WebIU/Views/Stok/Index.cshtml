@@ -38,7 +38,7 @@
                                     <th data-field="stokAdı" data-title="Stok Adı" data-sortable="false"></th>
                                     <th data-field="birim.birimKodu" data-title="Birim" data-sortable="false"></th>
                                     <th data-field="açıklama" data-title="Açıklama" data-sortable="false"></th>
-                                    <th data-field="stokAdeti" data-title="Stok Adeti" data-sortable="false"></th>
+                                    <th data-field="stokAdeti" data-title="Stok Miktarı" data-sortable="false"></th>
                                     <th data-title="Actions" data-sortable="false"></th>
                                 </tr>
                             </thead>
@@ -362,22 +362,29 @@
         })
         function ActionFormatter(value, row) {
             var value = "";
-            value += "<a href='/Stok/StokDüzenle?StokId=" + row["id"]+"' id='StokDüzenleModalAçBtn' StokId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</a>";
-            value += "<button id='StokSil' StokId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
-            value += "<a href='/Stok/Index?ÜstStokId=" + row["id"] + "&StokKoduHazır=" + row["stokKodu"] +"' StokId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-arrow-right'></i></a>";
+            value += " <a href='/Stok/StokDüzenle?StokId=" + row["id"]+"' id='StokDüzenleModalAçBtn' StokId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</a>";
+            value += " <button id='Hareketler' StokId='" + row["id"] + "' class='btn btn-warning'> Hareketler</button>";
+            value += " <a href='/Stok/Index?ÜstStokId=" + row["id"] + "&StokKoduHazır=" + row["stokKodu"] + "' StokId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-arrow-right'></i></a>";
+            value += " <button id='StokSil' StokId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
 
             return value
         }
         function StokSay(value, row) {
             var ToplamStok = 0;
             for (var i = 0; i < row["stokHarekets"].length; i++) {
-                console.log(row["stokHarekets"][i].faturaBaslık.id);
-                console.log(row["stokHarekets"][i].faturaBaslık.isDeleted);
-                if (row["stokHarekets"][i].faturaBaslık.isDeleted == null) {
-                    continue;
+                try {
+                    if (row["stokHarekets"][i].faturaBaslık.isDeleted == null) {
+                        continue;
+                    }
+                } catch (e) {
+
                 }
-                if (row["stokHarekets"][i].faturaBaslık.isDeleted == true) {
-                    continue;
+                try {
+                    if (row["stokHarekets"][i].faturaBaslık.isDeleted == true) {
+                        continue;
+                    }
+                } catch (e) {
+
                 }
                 if (row["stokHarekets"][i].hareketTipi == 3) {
                     ToplamStok = ToplamStok + row["stokHarekets"][i].adet
@@ -388,11 +395,23 @@
                 if (row["stokHarekets"][i].hareketTipi == 5) {
                     ToplamStok = ToplamStok - row["stokHarekets"][i].adet
                 }
+                if (row["stokHarekets"][i].hareketTipi == 6) {
+                    ToplamStok = ToplamStok - row["stokHarekets"][i].adet
+                }
+                if (row["stokHarekets"][i].hareketTipi == 7) {
+                    ToplamStok = ToplamStok + row["stokHarekets"][i].adet
+                }
             }
             return ToplamStok;
             //
         }
         function afterLoad() {
+
+            $('*#Hareketler').click(function () {
+                var stokId = $(this).attr('stokId')
+                window.open("/Stok/Hareketler?Id=" + stokId)
+
+            })
             $('*#StokSil').click(function () {
 
                 var data = new FormData();

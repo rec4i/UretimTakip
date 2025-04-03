@@ -201,6 +201,7 @@ namespace Entities.Concrete.Contants
         public static class BelgeTasarım
         {
             public const string Index = "Permission.BelgeTasarım.Index";
+            public const string Belgeler = "Permission.BelgeTasarım.Belgeler";
         }
 
         public static class FabrikaMakinaYönetimi

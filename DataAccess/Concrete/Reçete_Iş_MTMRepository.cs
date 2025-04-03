@@ -46,12 +46,14 @@ namespace DataAccess.Concrete
                  .Include("Reçete")
                     .Include("Iş")
                     .Include("SorumluKullanıcıGrup")
+                    .Include("Tezgah")
 
                     .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList()
                     : context.Set<Reçete_Iş_MTM>().Where("IsDeleted == false").Where(filter)
                      .Include("Reçete")
                     .Include("Iş")
                     .Include("SorumluKullanıcıGrup")
+                    .Include("Tezgah")
 
                   .ToList().Skip(Convert.ToInt32(offset)).Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit)).ToList();
                 return entities;

@@ -22,13 +22,25 @@ namespace Entities.Concrete.OtherEntities
         //3 Fatura Alış
         //4 Fatura Satış
         //5 Fatura İade
+        //6 Üretim Stok Kullanımı
+        //7 Üretim Stok Üretimi
         public int? HareketTipi { get; set; }
+
+
         public decimal? Adet { get; set; }
 
         public int? FaturaBaslıkId { get; set; }
         public FaturaBaslık? FaturaBaslık { get; set; }
         public int? CariId { get; set; }
         public Cari? Cari { get; set; }
+
+        public int? İşEmriDurumId { get; set; }
+        public İşEmriDurum? İşEmriDurum { get; set; }
+
+
+
+        public string? LotNo { get; set; }
+        public DateTime? SonKullanmaTarihi { get; set; }
 
     }
 }

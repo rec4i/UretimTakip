@@ -1,0 +1,39 @@
+﻿@model WebIU.Controllers.RivaController.RivaStokHareketViewModel
+
+
+
+<div class="row">
+    <div class="col">
+        <div class="card card-primary">
+            <div class="card-header">
+                <label>Stok Hareketleri</label>
+            </div>
+            <div class="card-body">
+                @{
+                    var miktarBakiye = 0M;
+                }
+                @foreach (var item in Model.StokHarekets)
+                {
+                    miktarBakiye += item.SH_MIKTAR;
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="card bg-secondary">
+                                <div class="card-body">
+                                    <label>Stok Adı : @item.SK_ISIM</label><br />
+                                    <label>
+                                        Miktar : @(item.SH_MIKTAR <0 ?-item.SH_MIKTAR : item.SH_MIKTAR)
+                                    </label><br />
+                                    <label>Birim Fiyat : @((item.SH_TUTAR<0?-item.SH_TUTAR : item.SH_TUTAR) / (item.SH_MIKTAR < 0 ? -item.SH_MIKTAR : item.SH_MIKTAR))</label><br />
+                                    <label>Tutar : @(item.SH_TUTAR<0?-item.SH_TUTAR : item.SH_TUTAR)</label><br />
+                                    <label>Miktar Bakiye : @miktarBakiye.ToString() </label><br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>

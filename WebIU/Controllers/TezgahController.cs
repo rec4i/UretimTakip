@@ -75,7 +75,7 @@ namespace WebIU.Controllers
             var işsentits = _tezgah_Iş_MTMReposiyory.GetAll(o => o.TezgahId == Id);
             foreach (var item in işsentits)
             {
-                _tezgah_Iş_MTMReposiyory.Delete(item,true);
+                _tezgah_Iş_MTMReposiyory.Delete(item, true);
             }
 
             foreach (var item in IşsIds)
@@ -122,6 +122,12 @@ namespace WebIU.Controllers
             return Json(model);
         }
 
+        public IActionResult GetTezgahWithName(string StokName)
+        {
+            var res = _tezgahRepository.GetAll(o => o.TezgahAdı.Contains(StokName));
+            return Json(res);
+
+        }
 
 
 

@@ -1,0 +1,135 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <a href="/EkranTasarım/ProfilOluştur" class="btn btn-primary" id="StokOluşturModalAçBtn"><i class="fa fa-plus"></i> Yeni Profil Oluştur</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <table id="OrderList"
+                               data-toolbar="#OrderListToolBar"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-id-field="id"
+                               data-page-list="[10, 25, 50, 100, all]"
+                               data-locale="Tr-tr"
+                               data-search="true"
+                               data-show-refresh="true"
+                               data-show-export="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="id" data-title="id" hidden data-sortable="false"></th>
+                                    <th data-field="profilAdı" data-title="Profil Adı" data-sortable="false"></th>
+                                    <th data-title="Actions" data-sortable="false"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        OrderTablosuDoldur()
+    })
+
+    function OrderTablosuDoldur() {
+        $('#OrderList').bootstrapTable("destroy")
+        $('#OrderList').bootstrapTable({
+            url: "/EkranTasarım/SıcakSatışButonProfilPagination",
+            columns: [
+                [
+                    {},
+                    {},
+                    {
+                        formatter: ActionFormatter
+                    },
+                ]
+            ],
+            onLoadSuccess: afterLoad,
+        })
+        function ActionFormatter(value, row) {
+            var value = "";
+            value += "<a href='/EkranTasarım/ButtonListesi?Id=" + row["id"] + "' IşId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-arrow-right'></i> İçerik Düzenle</a> ";
+            value += "<a href='/EkranTasarım/ProfilDüzenle?Id=" + row["id"] + "' IşId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</a> ";
+            value += "<button id='IşSil' IşId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+            return value
+        }
+        function afterLoad() {
+
+            $('#IşSil').click(function () {
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+
+                Swal.fire({
+                    title: ' silinecektir!',
+                    text: 'Silmek istediğinizden emin misiniz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: "Geri dön",
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sil'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "/Şantiye/ŞantiyeDelete",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            async: false,
+                            data: data,
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    successAlert(data.message)
+                                }
+                                else {
+                                    errorAlert(data.message)
+                                }
+                                OrderTablosuDoldur()
+                            },
+                        });
+                    }
+                })
+
+            })
+
+
+            $('#IşDüzenleModalAçBtn').click(function () {
+                $('#IşDüzenleModal').modal('show')
+                var data = new FormData();
+                data.append('Id', $(this).attr('IşId'))
+                $('#İşDüzenleBtn').attr('IşId', $(this).attr('IşId'))
+
+                $.ajax({
+                    url: "/Iş/GetIş",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        $('#IşAdıDüzenle').val(data[0].işAdı)
+                        $('#AçıklamaDüzenle').val(data[0].açıklama)
+                    },
+                });
+
+            })
+
+        }
+    }
+</script>

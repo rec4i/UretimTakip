@@ -5,6 +5,7 @@ using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using WebIU.Models;
 using WebIU.Models.HelperModels;
 using WebIU.Models.StokViewModels;
 
@@ -32,6 +33,23 @@ namespace WebIU.Controllers
             _fiyatRepository = fiyatRepository;
             _barkodRepository = barkodRepository;
         }
+
+
+
+        public async Task<IActionResult> Hareketler()
+        {
+            return View();
+        }
+        public IActionResult GetStokHareketPagination(int offset, int limit, List<int> orderStatusId, string search, int StokId)
+        {
+            GenericPaginaitonViewModel<StokHareket> model = new GenericPaginaitonViewModel<StokHareket>();
+            model.rows = _stokHarektiRepository.GetAllIncludedPagination(o => o.StokId == StokId, offset.ToString(), limit.ToString(), search);
+            model.total = _stokHarektiRepository.GetAllIncludedPaginationCount(o => o.StokId == StokId);
+            model.totalNotFiltered = _stokHarektiRepository.GetAllIncludedPaginationCount(o => o.StokId == StokId);
+
+            return Json(model);
+        }
+
 
         public async Task<IActionResult> StokDüzenle(int StokId)
         {
@@ -192,7 +210,7 @@ namespace WebIU.Controllers
             {
                 Stok entity = new Stok();
                 entity.StokAdı = StokAdı;
-                entity.BirimId = BirimId ;
+                entity.BirimId = BirimId;
                 entity.Açıklama = Açıklama;
                 entity.DepoId = DepoId;
                 entity.ÜstStokId = ÜstStokId;

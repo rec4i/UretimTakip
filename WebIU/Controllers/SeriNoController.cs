@@ -2,6 +2,7 @@
 using DataAccess.Concrete;
 using Entities.Concrete.OtherEntities;
 using Microsoft.AspNetCore.Mvc;
+using WebIU.Models;
 using WebIU.Models.CariViewModels;
 using WebIU.Models.HelperModels;
 using WebIU.Models.SeriNoViewModels;
@@ -13,11 +14,29 @@ namespace WebIU.Controllers
         private readonly IFaturaSeriRepository _faturaSeriRepository;
         private readonly IÖdemeSeriRepository _ödemeSeriRepository;
         private readonly IProgramŞirketGrupRepository _programŞirketGrupRepository;
-        public SeriNoController(IFaturaSeriRepository faturaSeriRepository, IÖdemeSeriRepository ödemeSeriRepository, IProgramŞirketGrupRepository programŞirketGrupRepository)
+        private readonly IStokLotNoRepository _stokLotNoRepository;
+        public SeriNoController(IFaturaSeriRepository faturaSeriRepository, IÖdemeSeriRepository ödemeSeriRepository, IProgramŞirketGrupRepository programŞirketGrupRepository, IStokLotNoRepository stokLotNoRepository)
         {
             _faturaSeriRepository = faturaSeriRepository;
             _ödemeSeriRepository = ödemeSeriRepository;
             _programŞirketGrupRepository = programŞirketGrupRepository;
+            _stokLotNoRepository = stokLotNoRepository;
+        }
+
+        public IActionResult StokLotNoOluştur()
+        {
+
+
+            return View();
+        }
+        public async Task<IActionResult> StokLotNoPaginaiton(int offset, int limit, string search)
+        {
+
+            GenericPaginaitonViewModel<StokLotNo> model = new GenericPaginaitonViewModel<StokLotNo>();
+            model.rows = _stokLotNoRepository.GetAllIncludedPagination(null, null, offset.ToString(), limit.ToString(), search);
+            model.total = _stokLotNoRepository.GetAllIncludedPaginationCount();
+            model.totalNotFiltered = _stokLotNoRepository.GetAllIncludedPaginationCount();
+            return Json(model);
         }
 
         public IActionResult FaturaSeriNoTanım()

@@ -1,0 +1,102 @@
+﻿<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    })
+      function BarkodTableDoldur() {
+      $('#BarkodTable').bootstrapTable("destroy")
+      $('#BarkodTable').bootstrapTable({
+          url: "/Stok/BarkodPagination?StokId=@Model.Stok.Id",
+          columns: [
+              [
+                  {},
+                  {},
+                  {
+                      formatter: ActionFormatter
+                  },
+              ]
+          ],
+          onLoadSuccess: afterLoad,
+      })
+      function ActionFormatter(value, row) {
+          var value = "";
+          value += "<button id='StokDüzenleModalAçBtn' StokId='" + row["id"] + "' class='btn btn-warning'><i class='fa fa-edit'></i> Düzenle</button>";
+          value += "<button id='StokSil' StokId='" + row["id"] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+          value += "<a href='/Stok/Index?ÜstStokId=" + row["id"] + "&StokKoduHazır=" + row["stokKodu"] +"' StokId='" + row["id"] + "' class='btn btn-primary'><i class='fa fa-arrow-right'></i></a>";
+
+          return value
+      }
+      function StokSay(value, row) {
+          var ToplamStok = 0;
+          console.log(row["stokHarekets"])
+          for (var i = 0; i < row["stokHarekets"].length; i++) {
+              //row["stokHarekets"][i].hareketTipi
+              if (row["stokHarekets"][i].hareketTipi == 1) {
+                  ToplamStok = ToplamStok + row["stokHarekets"][i].adet
+              }
+              if (row["stokHarekets"][i].hareketTipi == 2) {
+                  ToplamStok = ToplamStok - row["stokHarekets"][i].adet
+              }
+          }
+          return ToplamStok;
+          //
+      }
+      function afterLoad() {
+          $('*#StokSil').click(function () {
+
+              var data = new FormData();
+              data.append('Id', $(this).attr('StokId'))
+
+              Swal.fire({
+                  title: ' silinecektir!',
+                  text: 'Silmek istediğinizden emin misiniz?',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  cancelButtonText: "Geri dön",
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Sil'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      $.ajax({
+                          url: "/Stok/StokSil",
+                          type: "POST",
+                          processData: false,
+                          contentType: false,
+                          async: false,
+                          data: data,
+                          success: function (data) {
+                              if (data.status == 1) {
+                                  successAlert(data.message)
+                              }
+                              else {
+                                  errorAlert(data.message)
+                              }
+                              BarkodTableDoldur()
+                          },
+                      });
+                  }
+              })
+
+          })
+
+
+      }
+
+  }
+</script>

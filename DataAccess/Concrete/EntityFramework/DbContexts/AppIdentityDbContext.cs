@@ -145,18 +145,24 @@ namespace DataAccess.Concrete.EntityFramework.DbContexts
         public DbSet<SorumluKullanıcıGrup> SorumluKullanıcıGrups { get; set; }
         public DbSet<SorumluKullanıcı> SorumluKullanıcıs { get; set; }
 
+        private DbSet<SıcakSatışHızlıButon> SıcakSatışHızlıButons { get; set; }
+        private DbSet<SıcakSatışButonProfil> SıcakSatışButonProfils { get; set; }
+        private DbSet<SıcakSatışAyar> SıcakSatışAyars { get; set; }
 
 
-        //SorumluKullanıcıGrup
-        //FaturaSeri
-        //ÖdemeSeri
-        //Ödeme
-        //Kasa
-        //KasaKoduTanım
+        private DbSet<Belge> Belges { get; set; }
+        private DbSet<BelgeSoru> BelgeSorus { get; set; }
+        private DbSet<BelgeCevap> BelgeCevaps { get; set; }
+        private DbSet<BelgeSeçenekCevap> BelgeSeçenekCevaps { get; set; }
+        private DbSet<BelgeSoruSeçenek> BelgeSoruSeçeneks { get; set; }
 
 
+        private DbSet<RivaFatura> RivaFaturas { get; set; }
+        private DbSet<RivaFaturaSatır> RivaFaturaSatırs { get; set; }
 
+        private DbSet<StokLotNo> StokLotNos { get; set; }
 
+        private DbSet<Reçete_İş_MTM_DoldurlacakDöküman> Reçete_İş_MTM_DoldurlacakDökümen { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.MenuItemSeed();

@@ -214,7 +214,7 @@ namespace WebIU.Controllers
         }
 
 
-        public async Task<IActionResult> FaturaOlustur(string[] StokIds, string[] Fiyats, string[] Kdv, string[] Miktars, int CariId, int FaturaTuru, string FaturaNo, int SeriNoId, int SeriNo, int DepoId)
+        public async Task<IActionResult> FaturaOlustur(string[] StokIds, string[] Fiyats, string[] Kdv, string[] Miktars, string[] LotNo, string[] LotSonKullanmaTarihi, int CariId, int FaturaTuru, string FaturaNo, int SeriNoId, int SeriNo, int DepoId)
         {
             var userGroup = await _programŞirketGrupRepository.GetUserGroupId();
 
@@ -259,6 +259,7 @@ namespace WebIU.Controllers
 
             for (int i = 0; i < StokIds.Length; i++)
             {
+                FaturaDetay AddedFaturaDetay = new FaturaDetay();
                 try
                 {
                     FaturaDetay faturaDetay = new FaturaDetay();
@@ -267,7 +268,7 @@ namespace WebIU.Controllers
                     faturaDetay.StokId = Convert.ToInt32(StokIds[i]);
                     faturaDetay.KdvOranı = Convert.ToDecimal(Kdv[i]);
                     faturaDetay.FaturaBaslıkId = faturaBaslık.Id;
-                    _faturaDetayRepository.Add(faturaDetay);
+                    AddedFaturaDetay = _faturaDetayRepository.Add(faturaDetay);
                 }
                 catch (Exception ex)
                 {
@@ -291,7 +292,14 @@ namespace WebIU.Controllers
                     stokHareket.DepoId = DepoId;
                     stokHareket.CariId = CariId;
                     stokHareket.FaturaBaslıkId = faturaBaslık.Id;
-                    _stokHarektiRepository.Add(stokHareket);
+                    stokHareket.LotNo = LotNo[i];
+                    stokHareket.SonKullanmaTarihi = Convert.ToDateTime(LotSonKullanmaTarihi[i]);
+                    var addedEntity = _stokHarektiRepository.Add(stokHareket);
+
+                    var addedFaturaDetay = _faturaDetayRepository.Get(o => o.Id == AddedFaturaDetay.Id);
+                    addedFaturaDetay.StokHareketId = addedEntity.Id;
+                    _faturaDetayRepository.Update(addedFaturaDetay);
+
                 }
                 catch (Exception ex)
                 {

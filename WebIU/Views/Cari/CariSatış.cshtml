@@ -165,6 +165,8 @@
                                                                     <th data-field="Fiyat" data-title="Fiyat" data-sortable="false"></th>
                                                                     <th data-field="Kdv" data-title="Kdv" data-sortable="false"></th>
                                                                     <th data-field="ToplamTutar" data-title="Toplam Tutar" data-sortable="false"></th>
+                                                                    <th data-field="LotNo" data-title="Lot No" data-sortable="false"></th>
+                                                                    <th data-field="LotSonKullanmaTarihi" data-visible="false" data-sortable="false"></th>
                                                                     <th data-title="Actions" data-sortable="false"></th>
                                                                 </tr>
                                                             </thead>
@@ -344,9 +346,60 @@
 
                 <div class="row">
                     <div class="col">
+                        <label>Lot No :</label>
+                        <input type="text" id="LotNo" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Son Kullanma Tarihi :</label>
+                        <input type="date" id="SonKullanmaTarihi" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
                         <div class="d-flex flex-row-reverse">
                             <div class="p-2">
                                 <button class="btn btn-warning" id="SatırEkleKaydetBtn"><i class="fa fa-save"></i> Kaydet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="LotNoGirModal" aria-labelledby="GenericModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="GenericModalTitle">Lot No Gir</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="LotNoGirModalBody">
+                <div class="row">
+                    <div class="col">
+                        <label>Lot No:</label>
+                        <input type="text" id="Lot No" data-Mask="decimal" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Son Kullanma Tarihi:</label>
+                        <input type="datetime" id="SonKullanmaTarihi" data-Mask="decimal" class="form-control" value="" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="d-flex flex-row-reverse">
+                            <div class="p-2">
+                                <button class="btn btn-warning" id="LotNoGirKaydetButton"><i class="fa fa-save"></i> Kaydet</button>
                             </div>
                         </div>
                     </div>
@@ -366,6 +419,16 @@
         };
     }
     $(document).ready(function () {
+
+        //$('#LotNoGirKaydetButton').click(function () {
+        //    $('#OrderList').bootstrapTable("updateRow", {
+        //        index: 1,
+        //        row: {
+        //            LotNo:10
+        //        }
+        //    })
+        //})
+
         $('#DepoSeçBtn').click(function () {
 
             $('#DepoAraModal').modal('show')
@@ -416,6 +479,8 @@
                 data.append("Fiyats[]", tabloİçeriği[i].Fiyat)
                 data.append("Kdv[]", tabloİçeriği[i].Kdv)
                 data.append("Miktars[]", tabloİçeriği[i].Miktar)
+                data.append("LotNo[]", tabloİçeriği[i].LotNo)
+                data.append("LotSonKullanmaTarihi[]", tabloİçeriği[i].LotSonKullanmaTarihi)
             }
             data.append("CariId", @Model.Cari.Id)
             data.append("FaturaTuru", @Model.FaturaTürü)
@@ -597,6 +662,8 @@
                                 Miktar: $('#Miktar').val(),
                                 Fiyat: $('#birimFiyat').val(),
                                 Kdv: $('#KdvOranı').val(),
+                                LotNo: $('#LotNo').val(),
+                                LotSonKullanmaTarihi: $('#SonKullanmaTarihi').val(),
                                 ToplamTutar: new Intl.NumberFormat('tr-TR', {
                                     minimumFractionDigits: 2,
                                     maximumFractionDigits: 2
@@ -718,6 +785,11 @@
                 var StokId = $(this).attr('StokId')
 
 
+                $('#birimFiyat').val('')
+                $('#KdvOranı').val('')
+                $('#Miktar').val('')
+                $('#LotNo').val('')
+                $('#SonKullanmaTarihi').val('')
                 var kod = $(this).val();
                 var data = new FormData();
                 data.append('StokId', StokId)
@@ -731,7 +803,6 @@
                     data: data,
                     success: function (data) {
                         if (data.status == 1) {
-                            console.log(data.data);
                             $('#birimFiyat').val(data.data.geçerliFiyat)
                             $('#KdvOranı').val(data.data.geçerliKdvOranı)
                         }
@@ -763,6 +834,9 @@
                       {},
                       {},
                       {},
+                      {},
+                      {
+                      },
                       {
                          formatter: ActionFormatter,
                       },
@@ -773,11 +847,15 @@
           function ActionFormatter(value, row) {
               var value = "";
               value += "<button id='StokSil' stokId='" + row['StokId'] + "' class='btn btn-danger'><i class='fa fa-trash'></i></button>";
+              //value += " <button id='LotNoGir' stokId='" + row['StokId'] + "' class='btn btn-primary'><i class='fa fa-edit'></i> Lot No Gir</button>";
 
               return value;
           }
            function afterLoad() {
-
+               //LotNoGirModal
+               $('#LotNoGir').click(function () {
+                   $('#LotNoGirModal').modal('show')
+               })
               $('#StokSil').click(function () {
                   var StokId = $(this).attr('stokId')
                   $('#OrderList').bootstrapTable('remove', {

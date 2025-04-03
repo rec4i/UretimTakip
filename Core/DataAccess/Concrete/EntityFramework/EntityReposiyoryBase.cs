@@ -12,6 +12,7 @@ using Tools.Concrete.HelperClasses.BusinessHelpers;
 using Tools.Concrete.HelperTools.BusinessHelpers;
 using Tools.Concrete.HelperTools.BusinessHelpers.Extensions;
 using System.Linq.Dynamic.Core;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Core.DataAccess.Concrete.EntityFramework
 {
@@ -70,7 +71,7 @@ namespace Core.DataAccess.Concrete.EntityFramework
         {
             using (var context = new TContext())
             {
-                return context.Set<TEntity>().Count();
+                return context.Set<TEntity>().Where("IsDeleted == false").Count();
             }
         }
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
@@ -95,7 +96,7 @@ namespace Core.DataAccess.Concrete.EntityFramework
         {
             using (var context = new TContext())
             {
-                var entities = context.Set<TEntity>().TableFilter(filterQueryStringModel).ToList();
+                var entities = context.Set<TEntity>().TableFilter(filterQueryStringModel).Where("IsDeleted == false").ToList();
                 return entities;
             }
         }
@@ -103,10 +104,47 @@ namespace Core.DataAccess.Concrete.EntityFramework
         {
             using (var context = new TContext())
             {
-                return context.Set<TEntity>().TableFilter_WithoutSkipping(filterQueryStringModel).Count();
+                return context.Set<TEntity>().TableFilter_WithoutSkipping(filterQueryStringModel).Where("IsDeleted == false").Count();
+            }
+        }
+        public List<TEntity> GetAllIncluded(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        {
+            using (var context = new TContext())
+            {
+                IQueryable<TEntity> queryable = context.Set<TEntity>();
+                if (filter != null)
+                    queryable = queryable.Where(filter);
+                queryable = include(queryable);
+                return queryable.Where("IsDeleted == false").ToList();
             }
         }
 
+        public List<TEntity> GetAllIncludedPagination(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, string offset = null, string limit = null, string search = null)
+        {
+            using (var context = new TContext())
+            {
+                IQueryable<TEntity> queryable = context.Set<TEntity>();
+                if (filter != null)
+                    queryable = queryable.Where(filter);
+                queryable = queryable.Skip(Convert.ToInt32(offset));
+                if (include != null)
+                    queryable = include(queryable);
+                queryable = queryable.Take(Convert.ToInt32(Convert.ToInt32(limit) == 0 ? int.MaxValue : limit));
+                return queryable.Where("IsDeleted == false").ToList();
+            }
+        }
+
+
+        public int GetAllIncludedPaginationCount(Expression<Func<TEntity, bool>> filter = null, string offset = null, string limit = null, string search = null)
+        {
+            using (var context = new TContext())
+            {
+                var entities = filter == null
+                    ? context.Set<TEntity>().Where("IsDeleted == false").ToList().Count()
+                    : context.Set<TEntity>().Where("IsDeleted == false").Where(filter).ToList().Count();
+                return entities;
+            }
+        }
 
 
     }

@@ -1,0 +1,1737 @@
+﻿@model WebIU.Models.RivaViewModels.SıcakSatışViewModel
+
+@{
+    Layout = "/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<style>
+    .body {
+        background-color: white;
+    }
+
+    .square-btn {
+        max-width: 100px; /* Genişlik */
+        max-height: 70px; /* Yükseklik */
+        min-width: 100px; /* Genişlik */
+        min-height: 70px; /* Yükseklik */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .square-1-btn {
+        max-width: 100px; /* Genişlik */
+        max-height: 100px; /* Yükseklik */
+        min-width: 100px; /* Genişlik */
+        min-height: 100px; /* Yükseklik */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .table td, .table th {
+        font-size: 16px;
+        font-weight: bolder;
+        padding: 1px !important; /* Hücre içindeki boşluğu azalt */
+    }
+
+    .overlay {
+        position: fixed; /* Div her zaman ekranın üstünde görünür */
+        top: 0; /* Üstten sıfır mesafede başlasın */
+        left: 0; /* Soldan sıfır mesafede başlasın */
+        width: 100%; /* Ekranın tamamını kapsasın */
+        height: 100%; /* Ekranın tamamını kapsasın */
+        background: rgba(0, 0, 0, 0.5); /* Yarı saydam bir arka plan */
+        z-index: 9999; /* Diğer öğelerin üstünde görünmesi için yüksek bir z-index */
+    }
+
+    .row {
+        flex: 0 0 auto; /* Satırların boyutlarını otomatik olarak ayarlayın */
+    }
+
+    .table-body {
+        display: block; /* Tablo gövdesini blok yap */
+        max-height: 42vh; /* Gövdeye maksimum yüksekliği ayarla */
+        overflow-y: auto; /* Taşma durumunda dikey kaydırma çubuğu ekle */
+        width: 100%; /* Genişliği tam olarak kaplasın */
+    }
+
+    .table-header {
+        display: table; /* Başlığı tablo gibi tut */
+        width: 100%; /* Genişliği tam kaplasın */
+        table-layout: fixed; /* Sütun genişliklerini sabit tut */
+    }
+
+    .table-footer {
+        display: table; /* Başlığı tablo gibi tut */
+        width: 100%; /* Genişliği tam kaplasın */
+        table-layout: fixed; /* Sütun genişliklerini sabit tut */
+    }
+
+    .table-body tr {
+        display: table; /* Gövde satırlarını tablo gibi tut */
+        width: 100%; /* Genişliği tam kaplasın */
+        table-layout: fixed; /* Sütun genişliklerini sabit tut */
+    }
+
+    .fit-text {
+        font-size: clamp(10px, 2vw, 16px); /* Minimum 10px, maksimum 16px arası dinamik boyut */
+    }
+
+    .special-button {
+        order: -1; /* Bu butonu en başa yerleştirir */
+    }
+
+    .hg-button {
+        font-size: 24px !important; /* Yazı boyutunu artır */
+        padding: 25px !important; /* Buton iç boşluğunu artır */
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-keyboard/3.8.26/index.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-keyboard/3.8.26/css/index.css" />
+<!-- Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+
+<div id="container" style=" background-color: white;">
+    <div class="modal fade" id="ÖdemeAlModal" tabindex="-1" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="keyboardModalLabel">Ödeme Al</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-x"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-10">
+                            <input type="text" id="TekSeferlikCariİnput" class="form-control" CariKod="" name="name" value="" disabled />
+                        </div>
+                        <div class="col-2">
+                            <button id="CariAraButon" class="btn btn-primary"><i class="fa fa-search"></i> Cari Ara</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="d-flex justify-content-around">
+                                        <button class="btn btn-primary square-btn fit-text" krediTutarı="0" id="KrediKasaButon">Kredi Kasa </button>
+                                        <button class="btn btn-primary square-btn fit-text" nakitTutarı="0" id="NakitKasaButon">Nakit Kasa </button>
+                                        <button class="btn btn-primary square-btn fit-text" cariTutarı="0" id="CariKasaButon">Cari Kasa </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Toplam Tutar:</label>
+                                    <input type="text" class="form-control" id="ÖdemeAlToplamTutar" name="name" value="" disabled />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Kalan Tutar:</label>
+                                    <input type="text" class="form-control" id="ÖdemeAlKalanTutar" name="name" value="" disabled />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Ödenecek Tutar:</label>
+                                    <input type="text" class="form-control" name="name" value="" id="ÖdenecekTutar" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col">
+                                    <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                        <button class="btn btn-secondary square-btn" id="ÖdemeAlÇarpı"><i class="fa fa-x"></i></button>
+                                        <button class="btn btn-secondary square-btn" id="ÖdemeAlVirgül">,</button>
+                                        <button class="btn btn-secondary square-btn" id="ÖdemeAlSil"><i class="fa fa-arrow-circle-left"></i></button>
+                                    </div>
+                                    <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlYedi">7</button>
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlSekiz">8</button>
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlDokuz">9</button>
+                                    </div>
+                                    <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlDört">4</button>
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlBeş">5</button>
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlAltı">6</button>
+                                    </div>
+                                    <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlBir">1</button>
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlİki">2</button>
+                                        <button class="btn btn-secondary square-btn text-lg" id="ÖdemeAlÜç">3</button>
+                                    </div>
+
+                                    <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                        <button class="btn btn-secondary square-btn" id="ÖdemeAlSıfır">0</button>
+                                        <button class="btn btn-secondary square-btn" id="ÖdemeAlÇiftSıfır">00</button>
+                                        <button class="btn btn-secondary square-btn" id="ÖdemeAlKaydet"><i class="fa fa-check-circle"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="row"></div>
+                    <div class="row"></div>
+                    <div class="row">
+                        <div class="col">
+                            <button style="height:10vh" id="FişiKapatBtn" class="btn btn-warning btn-block"><i class="fa fa-save"></i> FİŞİ KAPAT</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="AyarlarModal" tabindex="-1" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="keyboardModalLabel">Sıcak Satış Ayarları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-x"></i></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col">
+                            <label>Hızlı Buton Profili</label>
+                            <select class="form-control " id="HızlıButonProfilSelect">
+                                @foreach (var item in Model.SıcakSatışButonProfils)
+                                {
+                                    <option value="@item.Id">@item.ProfilAdı</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Fişlerin Kesileceği Cari Kodu</label>
+                            <input type="text" class="form-control" id="AyarCariKodu" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Nakit Kasa Kodu</label>
+                            <input type="text" class="form-control" id="NakitKasaKodu" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Kredi Kasa Kodu</label>
+                            <input type="text" class="form-control" id="KrediKasaKodu" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Termal Yazıcı İp Adresi</label>
+                            <input type="text" class="form-control" id="TermalYazıcıIpAdresi" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Riva Db Yolu</label>
+                            <input type="text" class="form-control" id="RivaDbYolu" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Riva Kullanıcı Adı</label>
+                            <input type="text" class="form-control" id="RivaKullanıcıAdı" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Riva Şifre</label>
+                            <input type="text" class="form-control" id="RivaŞifre" value="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex flex-row-reverse">
+                                <div class="p-2">
+                                    <button id="AyarKaydetBtn" class="btn btn-warning"><i class="fa fa-save"></i> Kaydet</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="SatırDüzenleModal" tabindex="-1" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="keyboardModalLabel">Satır Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-x"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Birim Fiyat</label>
+                                    <input type="text" id="SatırDüzenleBirimFiyat" düzeltiecekData="true" düzeltmeSeçili="false" class="form-control" value="" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Miktar</label>
+                                    <input type="text" id="SatırDüzenleMiktar" düzeltiecekData="true" düzeltmeSeçili="false" class="form-control" value="" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>İskonto</label>
+                                    <input type="text" id="SatırDüzenleİskonto" düzeltiecekData="true" düzeltmeSeçili="false" class="form-control" value="" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Kdv</label>
+                                    <input type="text" id="SatırDüzenleKdv" düzeltiecekData="true" düzeltmeSeçili="false" class="form-control" value="" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                <button class="btn btn-secondary square-btn" id="SatırDüzenleÇarpı"><i class="fa fa-x"></i></button>
+                                <button class="btn btn-secondary square-btn" id="SatırDüzenleVirgül">,</button>
+                                <button class="btn btn-secondary square-btn" id="SatırDüzenleSil"><i class="fa fa-arrow-circle-left"></i></button>
+                            </div>
+                            <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleYedi">7</button>
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleSekiz">8</button>
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleDokuz">9</button>
+                            </div>
+                            <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleDört">4</button>
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleBeş">5</button>
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleAltı">6</button>
+                            </div>
+                            <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleBir">1</button>
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleİki">2</button>
+                                <button class="btn btn-secondary square-btn text-lg" id="SatırDüzenleÜç">3</button>
+                            </div>
+
+                            <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                                <button class="btn btn-secondary square-btn" id="SatırDüzenleSıfır">0</button>
+                                <button class="btn btn-secondary square-btn" id="SatırDüzenleÇiftSıfır">00</button>
+                                <button class="btn btn-secondary square-btn" id="SatırDüzenleKaydet"><i class="fa fa-check-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>Toplam Tutar</label>
+                            <input type="text" id="Kdv" disabled class="form-control" value="" />
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="CariAraModal" tabindex="-1" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="keyboardModalLabel">Cari Ara</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-x"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="text" class="input form-control" id="CariAraKodİnput">
+                                </div>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary input-group-text" id="CariKlavyeAçBtn" data-container="body">
+                                        <i class="fa fa-keyboard"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="simple-keyboard overlay CariAraKlavyeDiv" id="CariAraKlavyeDiv" hidden></div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Cari Kodu</th>
+                                            <th>Cari Adı</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="CariAraTbody" stokBarkodEşle="false" eşlenecekBarkod="">
+                                        <tr>
+                                            <td colspan="6" class="text-center">Hiç Veri Bulunamadı</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ÜrünAraModal" tabindex="-1" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="min-width:1000px!important">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="keyboardModalLabel">Ürün Ara</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-x"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="text" class="input form-control" id="UrunBarkodAramaİnput">
+                                </div>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-secondary input-group-text" id="KlavyeAçBtn" data-container="body">
+                                        <i class="fa fa-keyboard"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="simple-keyboard overlay StokAra" id="Klavye" hidden></div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Ürün Kodu</th>
+                                            <th>Ürün Adı</th>
+                                            <th>Birim</th>
+                                            <th>Kdv</th>
+                                            <th>Fiyat</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ÜrünAraTbody" stokBarkodEşle="false" eşlenecekBarkod="">
+                                        <tr>
+                                            <td colspan="6" class="text-center">Hiç Veri Bulunamadı</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div class="card card-primary">
+                <div class="card-body">
+                    <div class="container-fluid" style="position: relative; height: 90vh;">
+                        <div class="row" style="position: absolute; top: 0; width: 100%; ">
+                            <div class="col">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover">
+                                        <thead style="background-color:lightgray;" class="table-header">
+                                            <tr>
+                                                <th style="width:45px!important">S. No</th>
+                                                <th style="width:300px !important">Ürün Adı</th>
+                                                <th style="width:65px !important"> Miktar</th>
+                                                <th style="width:65px !important"> Birim F.</th>
+                                                <th style="width:65px !important">İskonto</th>
+                                                <th style="width:65px !important">KDV</th>
+                                                <th style="width:65px !important">T. TUTAR</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-body" id="ÜrünlerSatırlarTbody">
+                                            @*@for (int i = 0; i < 10; i++)
+                                                {
+                                                    <tr ÜrünAdı="Kapı Filitilili mastiki" ÜrünId="1" miktar="2" iskonto="0" kdv="20" BirimFiyat="250" id="ÜrünSatır" seçili="false">
+                                                        <td id="SeriNo" style="width:45px !important">@(i+1)</td>
+                                                        <td id="ÜrünAdı" style="width:300px !important">Kapı Filitilili mastiki</td>
+                                                        <td id="Miktar" style="width:65px !important">2</td>
+                                                        <td id="İskonto" style="width:65px !important">%0</td>
+                                                        <td id="Kdv" style="width:65px !important">%20</td>
+                                                        <td GenelTutar="500" id="GenelTutar" style="width:65px !important">500₺</td>
+                                                    </tr>
+                                                }*@
+
+
+                                        </tbody>
+                                        <tfoot class="table-footer" style="background-color:aqua;">
+                                            <tr>
+                                                <td colspan="1">Genel Toplam:</td>
+                                                <td id="GenelToplam" colspan="6"><input data-mask="decimal" disabled class="form-control form-control-sm" /></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="position: absolute; bottom: 0; width: 100%; min-height: 42vh; max-height: 42vh;">
+                            <div class="col-12">
+                                <input type="text" class="form-control" placeholder="Barkod Arama :" autocomplete="off" style="background-color:blanchedalmond; width:100%" id="BarkodAramaİnput" value="" />
+                            </div>
+                        </div>
+                        <div id="HızlıButonlarDiv" class="row overflow-auto" style="position: absolute; bottom: 0; width: 100%; min-height: 32vh; max-height: 32vh; gap: 5px;">
+                            @*<div class="col">
+                                    <button class="btn btn-primary square-btn fit-text">Kapı Fitili Matistiki</button>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card card-primary">
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-primary square-btn" id="ÜstSatırGeçBtn"><i class="fa fa-arrow-up"></i></button>
+                    <button class="btn btn-success square-btn" data-bs-toggle="modal" data-bs-target="#ÜrünAraModal">FİYAT GÖR</button>
+                    <button class="btn btn-danger square-btn" id="BelgeİptalBtn">BELGE İPTAL</button>
+                </div>
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-primary square-btn" id="AltSatırGeçBtn"><i class="fa fa-arrow-down"></i></button>
+                    <button class="btn btn-success square-btn" id="ÜrünTekrar">ÜRÜN TEKRAR</button>
+                    <button class="btn btn-danger square-btn" id="SatırSilBtn">SATIR SİL</button>
+
+                </div>
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-primary square-btn"></button>
+                    <button id="toggle-fullscreen" class="btn btn-success square-btn">TAM EKRAN</button>
+                    <button class="btn btn-danger square-btn"></button>
+                </div>
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-warning square-btn" id="SatırDüzeltBtn">SATIR DÜZELT</button>
+                    <button class="btn btn-success square-btn" id="AyarlarModalAçBtn">AYARLAR</button>
+                    <button class="btn btn-danger square-btn" id="AramaAlanıSil">Arama Alanı Sil</button>
+                </div>
+
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-secondary square-btn" id="Çarpı">ARA</button>
+                    <button class="btn btn-secondary square-btn" id="Virgül">,</button>
+                    <button class="btn btn-secondary square-btn" id="Sil"><i class="fa fa-arrow-circle-left"></i></button>
+                </div>
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-secondary square-btn text-lg" id="Yedi">7</button>
+                    <button class="btn btn-secondary square-btn text-lg" id="Sekiz">8</button>
+                    <button class="btn btn-secondary square-btn text-lg" id="Dokuz">9</button>
+                </div>
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-secondary square-btn text-lg" id="Dört">4</button>
+                    <button class="btn btn-secondary square-btn text-lg" id="Beş">5</button>
+                    <button class="btn btn-secondary square-btn text-lg" id="Altı">6</button>
+                </div>
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-secondary square-btn text-lg" id="Bir">1</button>
+                    <button class="btn btn-secondary square-btn text-lg" id="İki">2</button>
+                    <button class="btn btn-secondary square-btn text-lg" id="Üç">3</button>
+                </div>
+
+                <div class=" text-center m-1 d-flex justify-content-center" style="gap: 5px;">
+                    <button class="btn btn-secondary square-btn" id="Sıfır">0</button>
+                    <button class="btn btn-secondary square-btn" id="ÇiftSıfır">00</button>
+                    <button class="btn btn-success square-btn" id="ÖdemeAlButton"><i class="fa fa-check-circle"></i></button>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <input data-mask="decimal" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Declare the keyboard variable
+    const Keyboard = window.SimpleKeyboard.default;
+
+    const CariAraKeyboard = new Keyboard('.CariAraKlavyeDiv',{
+    layout: {
+    default: [
+      '" 1 2 3 4 5 6 7 8 9 0 * - # {bksp}',
+      "{tab} q w e r t y u ı o p ğ ü [ ]",
+      "{lock} a s d f g h j k l ş i , {enter}",
+      "{shift} < z x c v b n m ö ç . | $ € {shift}",
+      ".com @("@") {space}",
+    ],
+    shift: [
+      "é ! ' ^ + % & / ( ) = ? _ ~ {bksp}",
+      "{tab} Q W E R T Y U I O P Ğ Ü { }",
+      "{lock} A S D F G H J K L Ş İ ; {enter}",
+      "{shift} > Z X C V B N M Ö Ç : \\ ` ´ {shift}",
+      ".com @("@") {space}",
+    ],
+  },
+    onChange: input => CariAraonChange(input),
+    onKeyPress: button => CariAraonKeyPress(button)
+});
+
+function CariAraonChange(input) {
+    document.querySelector("#CariAraKodİnput").value = input;
+}
+function CariAraonKeyPress(button) {
+    if (button == "{enter}") {
+        CariAra($('#CariAraKodİnput').val())
+    }
+ }
+
+    const myKeyboard = new Keyboard('.StokAra',{
+        layout: {
+        default: [
+          '" 1 2 3 4 5 6 7 8 9 0 * - # {bksp}',
+          "{tab} q w e r t y u ı o p ğ ü [ ]",
+          "{lock} a s d f g h j k l ş i , {enter}",
+          "{shift} < z x c v b n m ö ç . | $ € {shift}",
+          ".com @("@") {space}",
+        ],
+        shift: [
+          "é ! ' ^ + % & / ( ) = ? _ ~ {bksp}",
+          "{tab} Q W E R T Y U I O P Ğ Ü { }",
+          "{lock} A S D F G H J K L Ş İ ; {enter}",
+          "{shift} > Z X C V B N M Ö Ç : \\ ` ´ {shift}",
+          ".com @("@") {space}",
+        ],
+
+        },
+
+        onChange: input => onChange(input),
+        onKeyPress: button => onKeyPress(button)
+    });
+
+    function onChange(input) {
+        document.querySelector("#UrunBarkodAramaİnput").value = input;
+    }
+    function onKeyPress(button) {
+        if (button == "{enter}") {
+            UrunAramaTabloDoldur($('#UrunBarkodAramaİnput').val())
+        }
+    }
+    //$('#ÜrünAraModal').on('shown.bs.modal', function () {
+    //    $('#UrunBarkodAramaİnput').val("")
+    //    myKeyboard.clearInput("UrunBarkodAramaİnput");
+    //});
+    $(document).ready(function () {
+        $('#ÜrünAraModal').on('shown.bs.modal', function () {
+            $("#UrunBarkodAramaİnput").val(""); // Gerçek inputu temizle
+            myKeyboard.setInput(""); // Simple Keyboard içeriğini temizle
+        });
+    })
+
+</script>
+<script type="text/javascript">
+    var satırlar = [];
+
+    $(document).ready(function () {
+
+        $('#CariAraButon').click(function () {
+            $('#CariAraModal').modal('show')
+        })
+        document.querySelectorAll("input").forEach(input => {
+            input.setAttribute("autocomplete", "off");
+            input.setAttribute("autocorrect", "off");
+            input.setAttribute("autocapitalize", "off");
+            input.setAttribute("spellcheck", "false");
+        });
+
+        $('#AramaAlanıSil').click(function () {
+            $('#BarkodAramaİnput').val('')
+        })
+
+        $('#FişiKapatBtn').click(function () {
+
+            Swal.fire({
+                title: 'Fiş Yazdır',
+                text: 'Fiş Yazdırmak İstediğimizden eminmisiniz?',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: "Hayır",
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Evet'
+            }).then((result) => {
+                var FişYazdırılsınmı = false;
+                if (result.isConfirmed) {
+                    FişYazdırılsınmı = true
+                }
+                var data = new FormData();
+                for (var i = 0; i < satırlardecimal.length; i++) {
+                    data.append('satırlar[' + i + '].GenelTutar', satırlardecimal[i].GenelTutar)
+                    data.append('satırlar[' + i + '].birimFiyat', satırlardecimal[i].birimFiyat)
+                    data.append('satırlar[' + i + '].iskonto', satırlardecimal[i].iskonto)
+                    data.append('satırlar[' + i + '].kdv', satırlardecimal[i].kdv)
+                    data.append('satırlar[' + i + '].miktar', satırlardecimal[i].miktar)
+                    data.append('satırlar[' + i + '].ürünId', satırlardecimal[i].ürünId)
+                }
+
+                data.append('KrediÖdeme', $('#KrediKasaButon').attr('KrediTutarı'))
+                data.append('NakitÖdeme', $('#NakitKasaButon').attr('NakitTutarı'))
+                data.append('CariÖdeme', $('#CariKasaButon').attr('CariTutarı'))
+                data.append('CariKodu', $('#TekSeferlikCariİnput').attr('CariKodu'))
+                data.append('FişYazılsınmı', FişYazdırılsınmı)
+
+                $.ajax({
+                    url: "/Riva/FişKapat",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        if (data.status == 1) {
+                            successAlert(data.message)
+                            AyarlarıDoldur()
+                            $('#ÜrünlerSatırlarTbody').empty();
+                            genelToplamHesapla()
+                            $('#ÖdemeAlModal').modal('hide')
+                            AyarlarıDoldur()
+                        }
+                        else {
+                            errorAlert(data.message)
+                        }
+                    },
+                });
+            })
+
+
+        })
+
+
+
+        $('#ÖdemeAlButton').click(function () {
+            $('#ÖdemeAlModal').modal('show')
+            AyarlarıDoldur()
+            var ToplamTutar = 0;
+
+            for (var i = 0; i < satırlar.length; i++) {
+
+                var BirimFiyat = parseFloat(satırlar[i].birimFiyat)
+                var miktar = parseFloat(satırlar[i].miktar)
+                var Kdv = parseFloat(satırlar[i].kdv)
+                var İskonto = parseFloat(satırlar[i].iskonto)
+
+                var iskontoluBirimFiyat = parseFloat(BirimFiyat) - (parseFloat(BirimFiyat) / 100 * parseFloat(İskonto))
+                var GenelTutar = ((parseFloat(iskontoluBirimFiyat) * parseFloat(miktar))) + (parseFloat(iskontoluBirimFiyat) * parseFloat(miktar) * parseFloat(Kdv) / 100);
+                ToplamTutar += GenelTutar
+            }
+            $('#ÖdemeAlToplamTutar').val(parseFloat(ToplamTutar).toFixed(2))
+            $('#ÖdemeAlKalanTutar').val(parseFloat(ToplamTutar).toFixed(2))
+
+            $('#NakitKasaButon').attr('NakitTutarı', 0)
+            $('#NakitKasaButon').html("Nakit Kasa")
+
+
+            $('#KrediKasaButon').attr('KrediTutarı', 0)
+            $('#KrediKasaButon').html("Kredi Kasa")
+
+            $('#CariKasaButon').attr('CariTutarı', 0)
+            $('#CariKasaButon').html("Cari Kasa")
+        })
+        $('#KrediKasaButon').click(function () {
+            var kalanTutar = $('#ÖdemeAlKalanTutar').val()
+            var ödenecekTutar = $('#ÖdenecekTutar').val()
+            var krediTutarı = $(this).attr('KrediTutarı')
+            var toplamTutar = $('#ÖdemeAlToplamTutar').val()
+
+            if (ödenecekTutar <= 0) {
+
+                $('#KrediKasaButon').attr('KrediTutarı', (parseFloat(toplamTutar)).toFixed(2))
+                $('#KrediKasaButon').html("Kredi Kasa <br/> " + (parseFloat(toplamTutar)).toFixed(2).toString())
+
+                $('#NakitKasaButon').attr('NakitTutarı', '')
+                $('#NakitKasaButon').html("Nakit Kasa <br/> ")
+
+
+                $('#CariKasaButon').attr('CariTutarı', '')
+                $('#CariKasaButon').html("Cari Kasa <br/> ")
+
+
+                $('#ÖdemeAlKalanTutar').val("0.00")
+                $('#ÖdenecekTutar').val("")
+
+            }
+            else {
+
+                if (parseFloat(kalanTutar) >= parseFloat(ödenecekTutar)) {
+                    $(this).attr('KrediTutarı', (parseFloat(krediTutarı) + parseFloat(ödenecekTutar)).toFixed(2))
+                    $(this).html("Kredi Kasa <br/> " + (parseFloat(krediTutarı) + parseFloat(ödenecekTutar)).toFixed(2).toString())
+
+                    $('#ÖdemeAlKalanTutar').val((parseFloat(kalanTutar) - parseFloat(ödenecekTutar)).toFixed(2))
+                    $('#ÖdenecekTutar').val("")
+                }
+                else {
+                    errorAlert("Kalan Tutar Ödenecek Tutardan Az Olamaz !")
+                }
+            }
+
+
+
+        })
+        $('#NakitKasaButon').click(function () {
+            var kalanTutar = $('#ÖdemeAlKalanTutar').val()
+            var ödenecekTutar = $('#ÖdenecekTutar').val()
+            var krediTutarı = $(this).attr('NakitTutarı')
+            var toplamTutar = $('#ÖdemeAlToplamTutar').val()
+
+            if (ödenecekTutar <= 0) {
+
+                $('#KrediKasaButon').attr('KrediTutarı', '')
+                $('#KrediKasaButon').html("Kredi Kasa <br/> ")
+
+                $('#NakitKasaButon').attr('NakitTutarı', (parseFloat(toplamTutar)).toFixed(2))
+                $('#NakitKasaButon').html("Nakit Kasa <br/> " + (parseFloat(toplamTutar)).toFixed(2).toString())
+
+
+                $('#CariKasaButon').attr('CariTutarı', '')
+                $('#CariKasaButon').html("Cari Kasa <br/> ")
+
+
+                $('#ÖdemeAlKalanTutar').val("0.00")
+                $('#ÖdenecekTutar').val("")
+
+            }
+            else {
+
+                if (parseFloat(kalanTutar) >= parseFloat(ödenecekTutar)) {
+                    $(this).attr('NakitTutarı', parseFloat(krediTutarı) + parseFloat(ödenecekTutar).toFixed(2))
+                    $(this).html("Nakit Kasa <br/> " + (parseFloat(krediTutarı) + parseFloat(ödenecekTutar)).toFixed(2).toString())
+
+                    $('#ÖdemeAlKalanTutar').val((parseFloat(kalanTutar) - parseFloat(ödenecekTutar)).toFixed(2))
+                    $('#ÖdenecekTutar').val("")
+                }
+                else {
+                    errorAlert("Kalan Tutar Ödenecek Tutardan Az Olamaz !")
+                }
+            }
+
+
+
+
+        })
+        $('#CariKasaButon').click(function () {
+            var kalanTutar = $('#ÖdemeAlKalanTutar').val()
+            var ödenecekTutar = $('#ÖdenecekTutar').val()
+            var krediTutarı = $(this).attr('CariTutarı')
+            var toplamTutar = $('#ÖdemeAlToplamTutar').val()
+
+            if (ödenecekTutar <= 0) {
+
+                $('#KrediKasaButon').attr('KrediTutarı', '')
+                $('#KrediKasaButon').html("Kredi Kasa <br/> ")
+
+                $('#NakitKasaButon').attr('NakitTutarı', '')
+                $('#NakitKasaButon').html("Nakit Kasa <br/> ")
+
+
+                $('#CariKasaButon').attr('CariTutarı', (parseFloat(toplamTutar)).toFixed(2))
+                $('#CariKasaButon').html("Cari Kasa <br/> " + (parseFloat(toplamTutar)).toFixed(2).toString())
+
+
+                $('#ÖdemeAlKalanTutar').val("0.00")
+                $('#ÖdenecekTutar').val("")
+
+            }
+            else {
+                if (parseFloat(kalanTutar) >= parseFloat(ödenecekTutar)) {
+                    $(this).attr('CariTutarı', (parseFloat(krediTutarı) + parseFloat(ödenecekTutar)).toFixed(2))
+                    $(this).html("Cari Kasa <br/> " + (parseFloat(krediTutarı) + parseFloat(ödenecekTutar)).toFixed(2).toString())
+
+                    $('#ÖdemeAlKalanTutar').val((parseFloat(kalanTutar) - parseFloat(ödenecekTutar)).toFixed(2))
+                    $('#ÖdenecekTutar').val("")
+                }
+                else {
+                    errorAlert("Kalan Tutar Ödenecek Tutardan Az Olamaz !")
+                }
+            }
+
+
+
+        })
+    })
+    $(document).ready(function () {
+        $('#ÖdemeAlSil').click(function () {
+            var oldval = $('#ÖdenecekTutar').val()
+            var newVal = "";
+            for (var i = 0; i < oldval.length - 1; i++) {
+                newVal = newVal + oldval[i];
+            }
+            $('#ÖdenecekTutar').val(newVal);
+        })
+        $('#ÖdemeAlVirgül').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + ".";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlÇarpı').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "*";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlÇiftSıfır').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "00";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlSıfır').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "0";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlDokuz').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "9";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlSekiz').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "8";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlYedi').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "7";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlAltı').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "6";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlBeş').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "5";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlDört').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "4";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlÜç').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "3";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlİki').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "2";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        $('#ÖdemeAlBir').click(function () {
+            var selectedİnputVal = $('#ÖdenecekTutar').val()
+            selectedİnputVal = selectedİnputVal + "1";
+            $('#ÖdenecekTutar').val(selectedİnputVal)
+        })
+        //ÖdenecekTutar
+    })
+
+
+    function HızlıButonDoldur(ParentId) {
+        var data = new FormData();
+        data.append("ParentId", ParentId)
+        $.ajax({
+            url: "/Riva/HızlıButonGetir",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                if (data.status == 1) {
+                    $('#HızlıButonlarDiv').empty();
+                    for (var i = 0; i < data.data.length; i++) {
+                        var my_var = '<div class="col">' +
+                            '     <button dataId="' + data.data[i].id + '" parentId="' + data.data[i].parentId + '" stokId="' + data.data[i].rivaStokId + '" class="btn btn-' + data.data[i].butonRengi + ' square-btn fit-text" id="HızlıSatışBtn" >' + data.data[i].butonAdı + '</button>' +
+                            ' </div>';
+                        $('#HızlıButonlarDiv').append(my_var);
+                        $('button[id="HızlıSatışBtn"][dataId="' + data.data[i].id + '"]').click(function () {
+                            if ($(this).attr('stokId') == "0" || $(this).attr('stokId') == "null" || $(this).attr('stokId') == null || $(this).attr('stokId') == undefined || $(this).attr('stokId') == "undefined") {
+                                HızlıButonDoldur($(this).attr('dataId'))
+                                var geriButton = '<div class="col">' +
+                                    '     <button  parentId="' + $(this).attr('parentId') + '"  class="btn btn-primary square-btn fit-text" id="HızlıSatışGeriBtn" ><i class="fa fa-arrow-left"></i></button>' +
+                                    ' </div>';
+                                $('#HızlıButonlarDiv').prepend(geriButton);
+                                $('button[id="HızlıSatışGeriBtn"][parentId="' + $(this).attr('parentId') + '"]').click(function () {
+                                    HızlıButonDoldur($(this).attr('parentId'))
+                                })
+                            }
+                            else {
+                                var stokId = $(this).attr('stokId')
+                                var data = new FormData();
+                                data.append("Id", stokId)
+                                $.ajax({
+                                    url: "/Riva/StokGetirId",
+                                    type: "POST",
+                                    processData: false,
+                                    contentType: false,
+                                    async: false,
+                                    data: data,
+                                    success: function (data) {
+                                        if (data.status == 1) {
+                                            var satırData = data.data[0];
+                                            var satırString = satırStringOluştur(satırData.sK_ID, satırData.sK_ISIM, 1, 0, satırData.sK_SATIS_KDV_ORANI, satırData.sK_STF_A)
+                                            $('#ÜrünlerSatırlarTbody').append(satırString)
+                                            genelToplamHesapla();
+                                            $('#ÜrünSatır').click(function () {
+                                                if ($(this).attr('seçili') == "false") {
+                                                    $('#ÜrünSatır').each(function () {
+                                                        $(this).removeAttr('style', '')
+                                                        $(this).attr('seçili', 'false')
+                                                    })
+                                                    $(this).attr('style', 'background-color:yellow;')
+                                                    $(this).attr('seçili', 'true')
+                                                }
+                                            })
+                                            DataMask()
+                                        }
+                                        else {
+                                            errorAlert(data.message)
+                                        }
+                                    },
+                                });
+
+
+
+
+                            }
+                        })
+                    }
+                }
+                else {
+                    errorAlert(data.message)
+                }
+            },
+        });
+    }
+
+    function AyarlarıDoldur() {
+        var data = new FormData();
+        $.ajax({
+            url: "/Riva/AyarGetir",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                console.log(data.data);
+                if (data.status == 1) {
+                    if (data.data != null) {
+                        $('#HızlıButonProfilSelect').val(data.data.hızlıButonProfilId)
+                        $('#AyarCariKodu').val(data.data.cariKodu)
+                        $('#TermalYazıcıIpAdresi').val(data.data.termalYazıcıIpAdresi)
+                        $('#KrediKasaKodu').val(data.data.krediKasaKodu)
+                        $('#NakitKasaKodu').val(data.data.nakitKasaKodu)
+                        $('#RivaDbYolu').val(data.data.rivaDbYolu)
+                        $('#TekSeferlikCariİnput').val(data.data.cariKodu)
+                        $('#TekSeferlikCariİnput').attr('CariKodu', data.data.cariKodu)
+                        $('#RivaKullanıcıAdı').val(data.data.rivaUser)
+                        $('#RivaŞifre').val(data.data.rivaPass)
+                    }
+
+                }
+                else {
+                    errorAlert(data.message)
+                }
+            },
+        });
+    }
+    $(document).ready(function () {
+        HızlıButonDoldur()
+        AyarlarıDoldur()
+        $('#AyarKaydetBtn').click(function () {
+            var data = new FormData();
+            data.append('HızlıButonProfilId', $('#HızlıButonProfilSelect').val())
+            data.append('CariKodu', $('#AyarCariKodu').val())
+            data.append('TermalYazıcıIpAdresi', $('#TermalYazıcıIpAdresi').val())
+            data.append('NakitKasaKodu', $('#NakitKasaKodu').val())
+            data.append('KrediKasaKodu', $('#KrediKasaKodu').val())
+            data.append('RivaDbYolu', $('#RivaDbYolu').val())
+
+            data.append('RivaKullancıAdı', $('#RivaKullanıcıAdı').val())
+            data.append('RivaŞifre', $('#RivaŞifre').val())
+
+
+            $.ajax({
+                url: "/Riva/AyarKaydet",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if (data.status == 1) {
+                        successAlert(data.message)
+                        AyarlarıDoldur()
+                    }
+                    else {
+                        errorAlert(data.message)
+                    }
+                },
+            });
+        })
+    })
+
+
+    function genelToplamHesapla() {
+        satırlar = [];
+        satırlardecimal = [];
+        var toplamTutar = 0;
+        var counter = 0;
+        $('#ÜrünSatır').each(function () {
+            counter++;
+            var satır = {
+                ürünId: $(this).attr("ÜrünId"),
+                miktar: $(this).find('input[data-Id="miktar"]').val().replace(".", "").replace(",", "."),
+                iskonto: $(this).attr("iskonto"),
+                kdv: $(this).attr("kdv"),
+                birimFiyat: $(this).find('input[data-Id="birimFiyat"]').val().replace(".", "").replace(",", "."),
+                GenelTutar: $(this).find('input[data-Id="birimFiyat"]').val().replace(".", "").replace(",", ".") * $(this).find('input[data-Id="miktar"]').val().replace(".", "").replace(",", "."),
+            }
+            var satırdecimal = {
+                ürünId: $(this).attr("ÜrünId"),
+                miktar: $(this).find('input[data-Id="miktar"]').val(),
+                iskonto: $(this).attr("iskonto"),
+                kdv: $(this).attr("kdv"),
+                birimFiyat: $(this).find('input[data-Id="birimFiyat"]').val(),
+                GenelTutar: $(this).find('input[data-Id="birimFiyat"]').val().replace(".", "").replace(",", ".") * $(this).find('input[data-Id="miktar"]').val().replace(".", "").replace(",", "."),
+            }
+            var iskontoluBirimFiyat = parseFloat(satır.birimFiyat) - (parseFloat(satır.birimFiyat) / 100 * parseFloat(satır.iskonto))
+            var GenelTutar = (parseFloat(iskontoluBirimFiyat) * parseFloat(satır.miktar)) + (parseFloat(iskontoluBirimFiyat) * parseFloat(satır.miktar)) * parseFloat(satır.kdv) / 100;
+            $(this).find('#SeriNo').html(counter)
+            satırlar.push(satır)
+            satırlardecimal.push(satırdecimal)
+            toplamTutar += parseFloat(GenelTutar)
+        })
+        console.log(satırlar);
+        $('#GenelToplam').html(satırInputOlustur(toplamTutar.toString().replace(".", ","), "GenelTutar"))
+    }
+    $(document).on("keydown", function () {
+        if ($('#ÜrünAraModal').hasClass('show')) {
+
+        }
+        else if ($('#SatırDüzenleModal').hasClass('show')) {
+
+        }
+        else if ($('#AyarlarModal').hasClass('show')) {
+
+        }
+        else if ($('#ÖdemeAlModal').hasClass('show')) {
+
+        }
+        else {
+            $("#BarkodAramaİnput").focus();
+        }
+        //ÖdemeAlModal
+    });
+    function satırStringOluştur(ürünId, ÜrünAdı, miktar, İskonto, Kdv, BirimFiyat) {
+        var iskontoluBirimFiyat = parseFloat(BirimFiyat) - (parseFloat(BirimFiyat) / 100 * parseFloat(İskonto))
+        var GenelTutar = iskontoluBirimFiyat * parseFloat(miktar) + (iskontoluBirimFiyat * parseFloat(miktar)) * parseFloat(Kdv) / 100;
+        var my_var = '<tr ÜrünAdı="' + ÜrünAdı + '" ÜrünId="' + ürünId + '" miktar="' + miktar + '" iskonto="' + İskonto + '" kdv="' + Kdv + '" BirimFiyat="' + BirimFiyat + '" id="ÜrünSatır" seçili="false">' +
+            '    <td id="SeriNo" style="width:45px !important"></td>' +
+            '    <td id="ÜrünAdı" style="width:300px !important">' + ÜrünAdı + '</td>' +
+            '    <td id="Miktar" style="width:65px !important">' + satırInputOlustur(miktar.toString().replace(".", ","), "miktar") + '</td>' +
+            '    <td id="BirimFiyat" style="width:65px !important">' + satırInputOlustur(BirimFiyat.toString().replace(".", ","), "birimFiyat") + '</td>' +
+            '    <td id="İskonto" style="width:65px !important">%' + İskonto + '</td>' +
+            '    <td id="Kdv" style="width:65px !important">%' + Kdv + '</td>' +
+            '    <td id="Tutar" style="width:65px !important">' + satırInputOlustur(GenelTutar.toString().replace(".", ","), "GenelTutar") + '</td>' +
+            '</tr>';
+        return my_var;
+    }
+    function satırInputOlustur(value, id, prefix) {
+        return ' <input data-mask="decimal" data-Id="' + id + '" disabled class="form-control form-control-sm" value="' + value + '" />'
+    }
+    $(document).ready(function () {
+        $('#AyarlarModalAçBtn').click(function () {
+            $('#AyarlarModal').modal('show')
+        })
+
+        $('#SatırDüzenleSil').click(function () {
+            var oldval = $('[düzeltmeSeçili="true"]').val()
+            var newVal = "";
+            for (var i = 0; i < oldval.length - 1; i++) {
+                newVal = newVal + oldval[i];
+            }
+            $('[düzeltmeSeçili="true"]').val(newVal);
+        })
+
+        $('#SatırDüzenleVirgül').click(function () {
+            var $selectedInput = $('[düzeltmeseçili="true"]'); // Doğrudan değişkene atayarak tekrar kullanabiliriz
+            var selectedInputVal = $selectedInput.val() || ""; // Eğer değer yoksa boş string ata
+            selectedInputVal += "."; // Nokta ekleme
+            $selectedInput.val(selectedInputVal).trigger('input'); // Değişikliği tetikle
+        })
+
+        $('#SatırDüzenleÇarpı').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "*";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleÇiftSıfır').click(function () {
+            var selectedİnputVal = $('[düzeltmeseçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "00";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+
+        $('#SatırDüzenleSıfır').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "0";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleDokuz').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "9";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleSekiz').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "8";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleYedi').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "7";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleAltı').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "6";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleBeş').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "5";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleDört').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "4";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleÜç').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "3";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleİki').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "2";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('#SatırDüzenleBir').click(function () {
+            var selectedİnputVal = $('[düzeltmeSeçili="true"]').val()
+            selectedİnputVal = selectedİnputVal + "1";
+            $('[düzeltmeSeçili="true"]').val(selectedİnputVal)
+        })
+        $('input[düzeltiecekData="true"]').each(function () {
+            var thisInput = $(this)
+            thisInput.click(function () {
+                console.log(thisInput.attr('düzeltmeSeçili'));
+                $('input[düzeltiecekData="true"][düzeltmeSeçili="true"]').each(function () {
+                    $(this).attr('düzeltmeSeçili', "false");
+                    $(this).removeAttr('style')
+                })
+                thisInput.attr('düzeltmeSeçili', "true");
+                thisInput.attr('style', "background-color:yellow;")
+            })
+
+        })
+
+        $('#BelgeİptalBtn').click(function () {
+            $('#ÜrünlerSatırlarTbody').empty();
+            genelToplamHesapla()
+        })
+
+        $('#SatırDüzenleKaydet').click(function () {
+            var seçiliSatırSeriNo = $(this).attr('seçiliSatırSeriNo')
+            var düzenlenecekSatır = null
+            $('tr[id="ÜrünSatır"]').each(function () {
+                if ($(this).find('td[id="SeriNo"]').html() == seçiliSatırSeriNo) {
+                    düzenlenecekSatır = $(this)
+                }
+            })
+
+            var ürünId = düzenlenecekSatır.attr('ÜrünId')
+            var ÜrünAdı = düzenlenecekSatır.attr('ÜrünAdı')
+            var miktar = düzenlenecekSatır.attr('Miktar')
+            var iskonto = düzenlenecekSatır.attr('İskonto')
+            var kdv = düzenlenecekSatır.attr('Kdv')
+            var birimFiyat = düzenlenecekSatır.attr('birimFiyat')
+
+
+            var satırString = satırStringOluştur(ürünId, ÜrünAdı, $('#SatırDüzenleMiktar').val(), $('#SatırDüzenleİskonto').val(), $('#SatırDüzenleKdv').val(), $('#SatırDüzenleBirimFiyat').val())
+            düzenlenecekSatır.replaceWith(satırString);
+            genelToplamHesapla();
+            $('#ÜrünSatır').click(function () {
+                if ($(this).attr('seçili') == "false") {
+                    $('#ÜrünSatır').each(function () {
+                        $(this).removeAttr('style', '')
+                        $(this).attr('seçili', 'false')
+                    })
+                    $(this).attr('style', 'background-color:yellow;')
+                    $(this).attr('seçili', 'true')
+
+                }
+            })
+            DataMask()
+            $('#SatırDüzenleModal').modal('hide')
+
+        })
+
+        $('#SatırDüzeltBtn').click(function () {
+            var seçiliSatır = $('tr[id="ÜrünSatır"][seçili="true"]')
+            if (seçiliSatır.length == 0 || seçiliSatır === undefined) {
+                errorAlert("Lütfen Bir Satır Seçiniz");
+            }
+            else {
+                $('#SatırDüzenleKaydet').attr('seçiliSatırSeriNo', seçiliSatır.find('td[id="SeriNo"]').html())
+                $('#SatırDüzenleBirimFiyat').val(seçiliSatır.attr("BirimFiyat"))
+                $('#SatırDüzenleİskonto').val(seçiliSatır.attr("iskonto"))
+                $('#SatırDüzenleKdv').val(seçiliSatır.attr("Kdv"))
+                $('#SatırDüzenleMiktar').val(seçiliSatır.attr("Miktar"))
+                $('#SatırDüzenleModal').modal('show')
+            }
+        })
+
+        $('#ÜrünTekrar').click(function () {
+            var selectedRow = $('tr[id="ÜrünSatır"][seçili="true"]');
+
+            var ÜrünId = selectedRow.attr('ÜrünId')
+            var ÜrünAdı = selectedRow.attr('ÜrünAdı')
+            var miktar = selectedRow.attr("miktar");
+            var iskonto = selectedRow.attr("iskonto");
+            var kdv = selectedRow.attr("kdv");
+            var BirimFiyat = selectedRow.attr("BirimFiyat");
+
+
+            $('#ÜrünlerSatırlarTbody').append(satırStringOluştur(ÜrünId, ÜrünAdı, 1, iskonto, kdv, BirimFiyat))
+            genelToplamHesapla();
+            $('#ÜrünSatır').click(function () {
+                if ($(this).attr('seçili') == "false") {
+                    $('#ÜrünSatır').each(function () {
+                        $(this).removeAttr('style', '')
+                        $(this).attr('seçili', 'false')
+                    })
+                    $(this).attr('style', 'background-color:yellow;')
+                    $(this).attr('seçili', 'true')
+
+                }
+            })
+            DataMask()
+        })
+        $('#UrunBarkodAramaİnput').on("keydown", function (event) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                UrunAramaTabloDoldur($(this).val())
+            }
+        });
+        $('#BarkodAramaİnput').on('keypress', function (e) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                console.log($(this).val());
+                $('#ÜrünAraTbody').attr('eşlenecekbarkod', $(this).val())
+                UrunAramaTabloDoldur($(this).val())
+            }
+        })
+        $('#CariAraKodİnput').on("keydown", function (event) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                CariAra($(this).val())
+            }
+        });
+        $('#CariAraKodİnput').on('keypress', function (e) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                CariAra($(this).val())
+            }
+        })
+        //CariKlavyeAçBtn
+        $('#KlavyeAçBtn').click(function () {
+            if ($('#Klavye').attr('hidden') !== undefined) {
+                $('#Klavye').removeAttr('hidden')
+            }
+            else {
+                $('#Klavye').attr('hidden', "true")
+            }
+        })
+        $('#CariKlavyeAçBtn').click(function () {
+            if ($('#CariAraKlavyeDiv').attr('hidden') !== undefined) {
+                $('#CariAraKlavyeDiv').removeAttr('hidden')
+            }
+            else {
+                $('#CariAraKlavyeDiv').attr('hidden', "true")
+            }
+        })
+        $('#SatırSilBtn').click(function () {
+            var selectedRow = $('tr[id="ÜrünSatır"][seçili="true"]');
+            var nextRow = selectedRow.next();
+            selectedRow.remove();
+            nextRow.attr('style', 'background-color:yellow;')
+            nextRow.attr('seçili', 'true')
+            genelToplamHesapla();
+        })
+
+        $('#ÜrünSatır').click(function () {
+            if ($(this).attr('seçili') == "false") {
+                $('#ÜrünSatır').each(function () {
+                    $(this).removeAttr('style', '')
+                    $(this).attr('seçili', 'false')
+                })
+                $(this).attr('style', 'background-color:yellow;')
+                $(this).attr('seçili', 'true')
+
+            }
+        })
+
+        $('#Sil').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            var newVal = "";
+            for (var i = 0; i < oldval.length - 1; i++) {
+                newVal = newVal + oldval[i];
+            }
+            $('#BarkodAramaİnput').val(newVal);
+        })
+        $('#Virgül').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + ",";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Çarpı').click(function () {
+            UrunAramaTabloDoldur($('#BarkodAramaİnput').val())
+            //$('#BarkodAramaİnput').focus();
+            //var oldval = $('#BarkodAramaİnput').val();
+            //oldval = oldval + "*";
+            //$('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Yedi').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "7";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Sekiz').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "8";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Dokuz').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "9";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Dört').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "4";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Beş').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "5";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Altı').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "6";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Bir').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "1";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#İki').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "2";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Üç').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "3";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#Sıfır').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "0";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+        $('#ÇiftSıfır').click(function () {
+            $('#BarkodAramaİnput').focus();
+            var oldval = $('#BarkodAramaİnput').val();
+            oldval = oldval + "00";
+            $('#BarkodAramaİnput').val(oldval);
+        })
+
+        //setInterval(function () {
+
+        //}, 200); // Her 100 milisaniyede bir input'a focus atıyoruz
+
+        $('#ÜstSatırGeçBtn').click(function () {
+            var selectedRow = $('tr[id="ÜrünSatır"][seçili="true"]');
+            var nextRow = selectedRow.prev();
+            if (selectedRow.length == 0) {
+                prevRow = $('tr[id="ÜrünSatır"]').first();
+                prevRow.attr('style', 'background-color:yellow;')
+                prevRow.attr('seçili', 'true')
+            }
+            if (selectedRow.is(':first-child')) {
+
+            } else {
+                selectedRow.removeAttr('style')
+                selectedRow.attr('seçili', 'false')
+
+                nextRow.attr('style', 'background-color:yellow;')
+                nextRow.attr('seçili', 'true')
+            }
+
+
+        })
+        $('#AltSatırGeçBtn').click(function () {
+            var selectedRow = $('tr[id="ÜrünSatır"][seçili="true"]');
+            var prevRow = selectedRow.next();
+            console.log("Alt Satır");
+
+            if (selectedRow.length == 0) {
+                prevRow = $('tr[id="ÜrünSatır"]').last();
+                prevRow.attr('style', 'background-color:yellow;')
+                prevRow.attr('seçili', 'true')
+            }
+            if (selectedRow.is(':last-child')) {
+
+            } else {
+                selectedRow.removeAttr('style', '')
+                selectedRow.attr('seçili', 'false')
+
+                prevRow.attr('style', 'background-color:yellow;')
+                prevRow.attr('seçili', 'true')
+            }
+
+        })
+
+
+
+        const container = document.getElementById("container");
+        const toggleButton = $("#toggle-fullscreen");
+
+        toggleButton.on("click", function () {
+            if (!document.fullscreenElement) {
+                // Tam ekran moduna geç
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.mozRequestFullScreen) { // Firefox
+                    container.mozRequestFullScreen();
+                } else if (container.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) { // IE/Edge
+                    container.msRequestFullscreen();
+                }
+                toggleButton.text("Tam Ekrandan Çık");
+            } else {
+                // Tam ekran modundan çık
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+                toggleButton.text("Tam Ekran");
+            }
+        });
+    });
+
+    function CariAra(arananKelime) {
+        //CariAraTbody
+
+        var data = new FormData();
+        data.append('Aranan', arananKelime)
+        $.ajax({
+            url: "/Riva/CariAra",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+
+                $('#CariAraTbody').empty();
+                if (data.status == 1) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        var myHtml = ' <tr>' +
+                            '     <td>' + data.data[i].cA_KOD + '</td>' +
+                            '     <td>' + data.data[i].cA_UNVAN + '</td>' +
+                            '     <td><button data=\'' + JSON.stringify(data.data[i]) + '\'  cariId="' + data.data[i].cA_ID + '" class="btn btn-primary" id="SeçBtn">SEÇ</button></td>' +
+                            ' </tr>';
+
+                        $('#CariAraTbody').append(myHtml);
+                        $('button[cariId="' + data.data[i].cA_ID + '"]').click(function () {
+                            var satırData = JSON.parse($(this).attr('data'))
+                            $('#TekSeferlikCariİnput').val(satırData.cA_UNVAN)
+                            $('#TekSeferlikCariİnput').attr('CariKodu', satırData.cA_KOD)
+                        })
+                    }
+
+
+                    //successAlert(data.message)
+                }
+                else {
+                    errorAlert(data.message)
+                }
+            },
+        });
+    }
+
+    function UrunAramaTabloDoldur(arananKelime) {
+
+        var data = new FormData();
+        data.append('Barkod', arananKelime)
+        $.ajax({
+            url: "/Riva/BarkodUrunAra",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            async: false,
+            data: data,
+            success: function (data) {
+
+                $('#ÜrünAraTbody').empty();
+                if (data.status == 1) {
+
+                    if (data.data.length <= 0) {
+                        var myHtml = '<tr>' +
+                            '    <td class="text-center" colspan="6">Hiç Veri Bulunamadı</td>' +
+                            '</tr>';
+
+                        $('#ÜrünAraTbody').append(myHtml);
+                        if (!$('#ÜrünAraModal').hasClass('show')) {
+                            Swal.fire({
+                                title: ' Ürün Bulunamadı',
+                                text: 'Barkodu Eşlemek İstiyormusunuz ? ',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                cancelButtonText: "Haır",
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Evet'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $('#ÜrünAraModal').modal('show')
+                                    $('#ÜrünAraTbody').attr('stokBarkodEşle', true)
+                                    //$('#ÜrünAraTbody').attr('eşlenecekBarkod', $('#BarkodAramaİnput').val())
+                                }
+                            })
+                        }
+
+                        $('#BarkodAramaİnput').val('')
+
+                    }
+                    else {
+                        for (var i = 0; i < data.data.length; i++) {
+                            var myHtml = ' <tr>' +
+                                '     <td>' + data.data[i].sK_KOD + '</td>' +
+                                '     <td>' + data.data[i].sK_ISIM + '</td>' +
+                                '     <td>' + data.data[i].sK_OLCU1_BIRIM + '</td>' +
+                                '     <td>' + data.data[i].sK_SATIS_KDV_ORANI + '</td>' +
+                                '     <td>' + data.data[i].sK_STF_A + '</td>' +
+                                '     <td><button data=\'' + JSON.stringify(data.data[i]) + '\'  stokId="' + data.data[i].sK_ID + '" class="btn btn-primary" id="SeçBtn">SEÇ</button></td>' +
+                                ' </tr>';
+
+                            $('#ÜrünAraTbody').append(myHtml);
+                            $('button[stokId="' + data.data[i].sK_ID + '"]').click(function () {
+                                var satırData = JSON.parse($(this).attr('data'))
+
+                                if ($('#ÜrünAraTbody').attr('stokBarkodEşle') == "true") {
+                                    var data = new FormData();
+                                    data.append('StokId', satırData.sK_ID)
+                                    data.append('Barkod', $('#ÜrünAraTbody').attr('eşlenecekbarkod'))
+                                    $.ajax({
+                                        url: "/Riva/StokBarkodEşle",
+                                        type: "POST",
+                                        processData: false,
+                                        contentType: false,
+                                        async: false,
+                                        data: data,
+                                        success: function (data) {
+                                            if (data.status == 1) {
+                                                successAlert(data.message)
+                                            }
+                                            else {
+                                                errorAlert(data.message)
+                                            }
+                                        },
+                                    });
+                                    $('#ÜrünAraTbody').attr('stokBarkodEşle', false)
+                                }
+                                else {
+
+                                }
+
+
+
+                                var satırString = satırStringOluştur(satırData.sK_ID, satırData.sK_ISIM, 1, 0, satırData.sK_SATIS_KDV_ORANI, satırData.sK_STF_A)
+
+                                $('#ÜrünlerSatırlarTbody').append(satırString)
+                                genelToplamHesapla();
+                                $('#ÜrünSatır').click(function () {
+                                    if ($(this).attr('seçili') == "false") {
+                                        $('#ÜrünSatır').each(function () {
+                                            $(this).removeAttr('style', '')
+                                            $(this).attr('seçili', 'false')
+                                        })
+                                        $(this).attr('style', 'background-color:yellow;')
+                                        $(this).attr('seçili', 'true')
+
+                                    }
+                                })
+                                DataMask()
+                            })
+                        }
+                        $('#ÜrünAraModal').modal('show')
+                        $('#BarkodAramaİnput').val('')
+
+                    }
+
+
+
+                    //successAlert(data.message)
+                }
+                else {
+                    errorAlert(data.message)
+                }
+            },
+        });
+
+    }
+
+
+</script>

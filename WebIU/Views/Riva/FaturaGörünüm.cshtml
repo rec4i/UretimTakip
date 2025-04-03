@@ -1,5 +1,94 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model WebIU.Controllers.RivaController.FaturaGörünümViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Evrak No :</label>
+                        <input disabled type="text" class="form-control" name="EvrakNo" id="EvrakNo" value="@Model.FaturaBaşlık.FT_EVRAK_NO" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Cari Kodu :</label>
+                        <input disabled type="text" class="form-control" name="CariKodu" id="CariKodu" value="@Model.RivaCari.CA_KOD" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Cari Adı :</label>
+                        <input disabled type="text" class="form-control" name="CariAdı" id="CariAdı" value="@Model.RivaCari.CA_UNVAN" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Toplam Tutar :</label>
+                        <input disabled type="text" class="form-control" name="ToplamTutar" id="ToplamTutar" value="@Model.FaturaBaşlık.FT_GENEL_TOPLAM" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Kalem Sayısı :</label>
+                        <input disabled type="text" class="form-control" name="KalemSayısı" id="kalemSayısı" value="@Model.FaturaBaşlık.FT_KALEM_SAYISI" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-2 pt-2">
+                        <button id="Yazdır" class="btn btn-lg btn-warning btn-block"><i class="fa fa-print"></i> Yazdır </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card card-primary">
+            <div class="card-header">
+                <label>Fatura Satırları</label>
+            </div>
+            <div class="card-body">
+                @foreach (var item in Model.FaturaDetayDtos)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <div class="card bg-secondary">
+                                <div class="card-body">
+                                    <label>Stok Adı : @item.FD_STOK_BASLIK</label><br />
+                                    <label>
+                                        Miktar : @item.FD_MIKTAR
+                                        @if (item.FD_OLCU_BIRIMI == "1")
+                                        {
+                                            @("Adet")
+                                        }
+                                    </label><br />
+                                    <label>Birim Fiyat : @(item.FD_TUTAR / item.FD_MIKTAR)</label><br />
+                                    <label>Tutar : @item.FD_TUTAR</label><br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#Yazdır').click(function () {
+
+            window.open("/Riva/FaturaYazdır?EvrakNo=@Model.FaturaBaşlık.FT_EVRAK_NO");
+
+
+
+        })
+    })
+
+</script>

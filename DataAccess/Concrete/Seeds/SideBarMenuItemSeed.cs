@@ -43,6 +43,7 @@ namespace DataAccess.Concrete.Seeds
                 //new SideBarMenuItem{Id=33,Name="Transactions",IsParent=false,ParentId=32,IconCss = "nav-icon fa-solid fa-right-from-bracket",Url = "/Transaction/AllTransactions",Row=12},
 
                 new SideBarMenuItem{Id=34,Name="Announcement",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-right-from-bracket",Url = "#",Row=12},
+                new SideBarMenuItem{Id=35,Name="Announcement List",IsParent=false,ParentId=34,IconCss = "nav-icon fa-solid fa-right-from-bracket",Url = "/Announcement/AnnouncementList",Row=12},
 
 
                 new SideBarMenuItem{Id=61,Name="Üretim",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
@@ -51,8 +52,6 @@ namespace DataAccess.Concrete.Seeds
                 new SideBarMenuItem{Id=88,Name="Sorumlu Kullanıcılar",IsParent=false,ParentId=61,IconCss = "nav-icon far fa-circle text-info",Url = "/SorumluKullanıcı/Index",Row=3},
                 new SideBarMenuItem{Id=64,Name="Iş",IsParent=false,ParentId=61,IconCss = "nav-icon far fa-circle text-info",Url = "/Iş/Index",Row=4},
                 new SideBarMenuItem{Id=65,Name="Iş Emri",IsParent=false,ParentId=61,IconCss = "nav-icon fa-solid fa-receipt",Url = "/IşEmri/Index",Row=1},
-
-
 
 
 
@@ -88,7 +87,8 @@ namespace DataAccess.Concrete.Seeds
 
 
                new SideBarMenuItem{Id=66,Name="Belge Tasarımı",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
-               new SideBarMenuItem{Id=67,Name="Tasarlanmış Belgeler",IsParent=false,ParentId=66,IconCss = "nav-icon far fa-circle text-info",Url = "/BelgeTasarım/Index",Row=1},
+               new SideBarMenuItem{Id=67,Name="Tasarlanmış Belgeler",IsParent=false,ParentId=66,IconCss = "nav-icon far fa-circle text-info",Url = "/BelgeTasarım/Belgeler",Row=1},
+               //new SideBarMenuItem{Id=67,Name="Tasarlanmış Belgeler",IsParent=false,ParentId=66,IconCss = "nav-icon far fa-circle text-info",Url = "/BelgeTasarım/Index",Row=1},
 
 
 
@@ -131,6 +131,9 @@ namespace DataAccess.Concrete.Seeds
 
                 new SideBarMenuItem{Id=85,Name="Kasa",IsParent=true,ParentId=null,IconCss = "nav-icon fa-solid fa-user-group",Url = "#",Row=3},
                 new SideBarMenuItem{Id=86,Name="Kasa",IsParent=false,ParentId=85,IconCss = "nav-icon far fa-circle text-info",Url = "/Kasa/Index",Row=1},
+               
+                
+                
                 //88
 
             };

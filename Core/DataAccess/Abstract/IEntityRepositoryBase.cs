@@ -1,5 +1,6 @@
 ﻿using Entities.Abstract;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,10 @@ namespace Core.DataAccess.Abstract
         int Count();
         List<TEntity> GetWithTableFilter(FilterQueryStringModel filterQueryStringModel);
         int GetWithTableFilterCount(FilterQueryStringModel filterQueryStringModel);
+
+        List<TEntity> GetAllIncluded(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
+        List<TEntity> GetAllIncludedPagination(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, string offset = null, string limit = null, string search = null);
+        int GetAllIncludedPaginationCount(Expression<Func<TEntity, bool>> filter = null, string offset = null, string limit = null, string search = null);
 
     }
 }

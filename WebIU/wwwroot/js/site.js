@@ -87,9 +87,16 @@ $('#select-all').click(function (event) {
         });
     }
 });
+$(document).ready(function () {
+    DataMask()
+})
 function DataMask() {
     $('[data-Mask="currency"]').inputmask({ 'alias': 'currency', radixPoint: ',', negative: false, rightAlign: true, 'removeMaskOnSubmit': true });
     $('[data-Mask="decimal"]').inputmask({ 'alias': 'currency', radixPoint: ',', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
+    $('[data-Mask="withdot"]').inputmask({ 'alias': 'decimal', radixPoint: '.', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
+
+
+
     $('[data-Mask="numeric"]').inputmask({ 'alias': 'numeric', negative: false, rightAlign: false, 'removeMaskOnSubmit': true });
     $('[data-Mask="biggerThanZero"]').inputmask('numeric', { min: 1, rightAlign: false });
     $('[data-Mask="biggerThanEqualZero"]').inputmask('numeric', { min: 0, rightAlign: false });
@@ -182,6 +189,23 @@ function DataMask() {
             return value >= 0 && value <= 24;
         }
     });
+
+    $('[data-Mask="Mikar"]').each(function () {
+        var prefixValue = $(this).attr('data-prefix') || ''; // Eğer data-prefix tanımlı değilse boş string kullan
+        var suffixValue = $(this).attr('data-suffix') || ''; // Eğer data-prefix tanımlı değilse boş string kullan
+        $(this).inputmask({
+            'alias': 'numeric',
+            prefix: prefixValue,
+            suffix: suffixValue,
+            radixPoint: '.',
+            negative: false,
+            rightAlign: false,
+            digits: 5, 
+            digitsOptional: false, 
+            'removeMaskOnSubmit': true
+        });
+    });
+
 }
 $(document).ready(function () {
     $('[data-Mask="currency"]').inputmask({ 'alias': 'currency', radixPoint: ',', negative: false, rightAlign: true, 'removeMaskOnSubmit': true });
